@@ -2,7 +2,7 @@
 
 image::images/screen.png[]
 
-This is a POC UI project that provides a connection between your Docker queries and your Docker Host. You can easily request basic Docker queries provided by https://docs.docker.com/engine/reference/api/docker_remote_api_v1.22/[Docker Remote API], on the Rapid Dashboard.  Since it is built as poc and you may look more functional UI, there is one called  https://github.com/crosbymichael/dockerui[Docker UI] that can satisfy your needs. On the other hand, you're always welcome to add more specs into this project.
+This is a POC UI project that provides a connection between your Docker queries and your Docker Host. You can easily request basic Docker queries provided by https://docs.docker.com/engine/reference/api/docker_remote_api_v1.22/[Docker Remote API], on the Rapid Dashboard.  Since it is built based on the REST queries and you may look for a more functional UI, there is one which I _recommend_, called  https://github.com/crosbymichael/dockerui[Docker UI] that can satisfy your needs. On the other hand, you're always welcome to add more specs into this project.
 
 === How it works
 
