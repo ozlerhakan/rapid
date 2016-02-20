@@ -34,12 +34,6 @@
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a class="navbar-brand" href="http://blackrockdigital.github.io/startbootstrap-sb-admin-2/pages/index.html">RAPID v0.1 - Kodcu.com</a>
             </div>
             <!-- /.navbar-header -->
@@ -104,11 +98,15 @@
             var dt = new Date();
             var time = dt.getHours() + ":" + dt.getMinutes();
             console.log(result[2]);
+            var encodedURI = result[2].replace(/\{/g, '%7B')
+                                      .replace(/\}/g, '%7D')
+                                      .replace(/\]/g, '%5D')
+                                      .replace(/\[/g, '%5B');
 
             if (result[1].toLowerCase() == "get") {
 
                 $.ajax({
-                    url: ROOT + result[2],
+                    url: ROOT + encodedURI,
                     method: "GET",
                     dataType: "json",
                     success: function (data) {
@@ -124,7 +122,7 @@
             else if (result[1].toLowerCase() == "post") {
                 $.ajax({
                     type: "POST",
-                    url: ROOT + result[2],
+                    url: ROOT + encodedURI,
                     accept: {
                         json: 'application/json'
                     },
@@ -144,7 +142,7 @@
             else if (result[1].toLowerCase() == "delete") {
                $.ajax({
                    type: "DELETE",
-                   url: ROOT + result[2],
+                   url: ROOT + encodedURI,
                    dataType: 'json',
                    success: function (data) {
                        console.log($.type(data));
