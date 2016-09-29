@@ -15,7 +15,7 @@ You have probably good feelings about this project, plus you want to try it out.
 If your docker host runs via docker machine, go into it using `$docker-machine ssh` and run the command.
 2. then open your browser to `http://<docker-host-ip>:8080`
 
-3. and start requests! I just mentioned that you can request basic queries so, there they are:
+3. and start requests! I just mentioned that you can request basic queries so, here they are:
 
 ----
 GET /containers/json
