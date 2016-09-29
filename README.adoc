@@ -2,7 +2,7 @@
 
 image::images/screen.png[]
 
-This is a POC UI project that provides a connection between your Docker queries and your Docker Host. You can easily request basic Docker queries provided by https://docs.docker.com/engine/reference/api/docker_remote_api_v1.22/[Docker Remote API], on the Rapid Dashboard.  Since it is built based on the REST queries and you may look for a more functional UI, there is one which I _recommend_, called  https://github.com/crosbymichael/dockerui[Docker UI] that can satisfy your needs. On the other hand, you're always welcome to add more specs into this project.
+This is a POC UI project that provides a connection between your Docker queries and your Docker Host. You can easily request basic Docker queries provided by https://docs.docker.com/engine/reference/api/docker_remote_api/[Docker Remote API], on the Rapid Dashboard.  Since it is built based on the REST queries and you may look for a more functional UI, there is one which I _recommend_, called  https://github.com/crosbymichael/dockerui[Docker UI] that can satisfy your needs. On the other hand, you're always welcome to add more specs into this project.
 
 === How it works
 
@@ -15,7 +15,7 @@ You have probably good feelings about this project, plus you want to try it out.
 If your docker host runs via docker machine, go into it using `$docker-machine ssh` and run the command.
 2. then open your browser to `http://<docker-host-ip>:8080`
 
-3. and start requests! I just mentioned that you can request basic queries so what are they:
+3. and start requests! I just mentioned that you can request basic queries so, there they are:
 
 ----
 GET /containers/json
@@ -58,7 +58,7 @@ POST /networks/(id)/disconnect
 DELETE /networks/(id)
 ----
 
-Just double-check the https://docs.docker.com/engine/reference/api/docker_remote_api_v1.22/[docker api site] because you need to interact with JSON documents If you use some of them. 
+Just double-check the https://docs.docker.com/engine/reference/api/docker_remote_api/[docker api site] because you need to interact with JSON documents If you use some of them. 
 
 == License
 
