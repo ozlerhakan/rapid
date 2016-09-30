@@ -38,15 +38,15 @@ public abstract class DockerClient {
         this.init();
     }
 
-    private void init (){
+    private void init() {
         originalUri = URI.create(DEFAULT_UNIX_ENDPOINT);
         sanitizeUri = UnixFactory.sanitizeUri(originalUri);
 
         final RegistryBuilder<ConnectionSocketFactory> registryBuilder =
                 RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("https", SSLConnectionSocketFactory.getSocketFactory())
-                .register("http", PlainConnectionSocketFactory.getSocketFactory())
-                .register("unix", new UnixFactory(originalUri));
+                        .register("https", SSLConnectionSocketFactory.getSocketFactory())
+                        .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                        .register("unix", new UnixFactory(originalUri));
 
         final PoolingHttpClientConnectionManager cm =
                 new PoolingHttpClientConnectionManager(registryBuilder.build());
