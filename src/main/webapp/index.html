@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset=utf-8 />
-    <title>RAPID for Docker Remote API - Kodcu.com</title>
+    <title>RAPID for Docker Remote API</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -27,14 +27,14 @@
         left: 0;
     }
     </style>
-    <link rel="stylesheet" href="/source/css/xcode.css">
-    <script src="/source/js/highlight.pack.js"></script>
+    <link rel="stylesheet" href="./source/css/xcode.css">
+    <script src="./source/js/highlight.pack.js"></script>
 </head>
 <body>
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <a class="navbar-brand" href="https://github.com/ozlerhakan/rapid">RAPID v0.1</a>
+                <a class="navbar-brand" href="https://github.com/ozlerhakan/rapid">Rapid Dashboard</a>
             </div>
             <!-- /.navbar-header -->
         </nav>
@@ -43,10 +43,10 @@
                 <div class="col-lg-8" style="margin-top: 10px;">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-search-o fa-search"></i>Query Area + Message Body</div>
+                            <i class="fa fa-bar-search-o fa-search"></i>Query area</div>
                         <div class="panel-body">
                               <div class="input-group custom-search-form">          
-                                <input type="text" class="form-control query" name="query" value="" placeholder="GET /containers/json?all=1">
+                                <input type="text" class="form-control query" style="height: 34px;" name="query" value="" placeholder="GET /containers/json?all=1">
                                 <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="panel panel-default" id="panelDoc">
                         <div class="panel-heading">
-                            <div id="remove" style="float: right; cursor:pointer;"><span style="margin-right: 5px;">Clear All</span><i class="fa fa-times"></i></div>
+                            <div id="remove" style="float: right; cursor:pointer;"><span style="margin-right: 5px;">Clear all</span><i class="fa fa-times"></i></div>
                             <i class="fa fa-clock-o fa-fw"></i>Responses</div>
                         <div class="panel-body">
                             <ul class="timeline"></ul>
