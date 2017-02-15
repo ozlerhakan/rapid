@@ -34,10 +34,10 @@ public class Volume extends DockerClient {
     @GET
     @Path("{id}")
     public String inspectVolume(
-            @PathParam("id") String name)
+            @PathParam("id") String id)
             throws IOException, ExecutionException, InterruptedException {
 
-        WebTarget target = resource().path("volumes").path(name);
+        WebTarget target = resource().path("volumes").path(id);
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
@@ -48,12 +48,30 @@ public class Volume extends DockerClient {
     @DELETE
     @Path("{id}")
     public String deleteVolume(
-            @PathParam("id") String name)
+            @PathParam("id") String id,
+            @DefaultValue("false") @QueryParam("force") boolean force)
             throws IOException, ExecutionException, InterruptedException {
 
-        WebTarget target = resource().path("volumes").path(name);
+        WebTarget target = resource().path("volumes").path(id).queryParam("force", force);
 
         Response response = deleteResponse(target);
+        String entity = response.readEntity(String.class);
+        response.close();
+        return entity;
+    }
+
+    @POST
+    @Path("prune")
+    public String pruneVolume(
+            @QueryParam("filters") String filters)
+            throws IOException, ExecutionException, InterruptedException {
+
+        WebTarget target = resource().path("volumes");
+
+        if (Objects.nonNull(filters))
+            target = target.queryParam("filters", filters);
+
+        Response response = postResponse(target);
         String entity = response.readEntity(String.class);
         response.close();
         return entity;
