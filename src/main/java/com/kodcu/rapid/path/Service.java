@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -23,12 +25,12 @@ public class Service extends DockerClient {
 
     @GET
     public String listServices(@QueryParam("filters") String filters)
-            throws ExecutionException, InterruptedException {
+            throws ExecutionException, InterruptedException, UnsupportedEncodingException {
 
         WebTarget target = resource().path("services");
 
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", filters);
+            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);

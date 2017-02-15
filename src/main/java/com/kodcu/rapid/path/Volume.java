@@ -7,6 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -23,7 +24,7 @@ public class Volume extends DockerClient {
 
         WebTarget target = resource().path("volumes");
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", filters);
+            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
@@ -69,7 +70,7 @@ public class Volume extends DockerClient {
         WebTarget target = resource().path("volumes");
 
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", filters);
+            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);

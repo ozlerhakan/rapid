@@ -75,7 +75,7 @@ public class Image extends DockerClient {
         if (limit != 0)
             target = target.queryParam("limit", limit);
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", filters);
+            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
@@ -146,7 +146,7 @@ public class Image extends DockerClient {
         WebTarget target = resource().path("images").path("prune");
 
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", filters);
+            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);

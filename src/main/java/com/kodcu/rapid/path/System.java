@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Hakan on 2/12/2016.
  */
 @Path("")
-public class Misc extends DockerClient {
+public class System extends DockerClient {
 
     @POST
     @Path("auth")

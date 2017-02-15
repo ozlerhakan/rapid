@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -72,7 +73,7 @@ public class Network extends DockerClient {
         WebTarget target = resource().path("networks");
 
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", filters);
+            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
