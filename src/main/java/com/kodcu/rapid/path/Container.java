@@ -314,7 +314,7 @@ public class Container extends DockerClient {
         return entity;
     }
 
-    @DELETE
+    @POST
     @Path("prune")
     public String prune(
             @QueryParam("filter") String filter)
@@ -326,7 +326,7 @@ public class Container extends DockerClient {
         if (Objects.nonNull(filter))
             target = target.queryParam("filter", filter);
 
-        Response response = deleteResponse(target);
+        Response response = postResponse(target);
         String entity = response.readEntity(String.class);
         response.close();
         return entity;
