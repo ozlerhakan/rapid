@@ -145,8 +145,8 @@ public class Container extends DockerClient {
                 .path(containerId)
                 .path("start");
 
-        if (Objects.nonNull(detachKeys))
-            target = target.queryParam("detachKeys", detachKeys);
+//        if (Objects.nonNull(detachKeys))
+//            target = target.queryParam("detachKeys", detachKeys);
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
