@@ -3,7 +3,12 @@ package com.kodcu.rapid.path;
 import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.JsonObject;
-import javax.ws.rs.*;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -34,10 +39,10 @@ public class Network extends DockerClient {
     @GET
     @Path("{id}")
     public String inspectNetwork(
-            @PathParam("id") String name)
+            @PathParam("id") String id)
             throws IOException, ExecutionException, InterruptedException {
 
-        WebTarget target = resource().path("networks").path(name);
+        WebTarget target = resource().path("networks").path(id);
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
@@ -48,10 +53,10 @@ public class Network extends DockerClient {
     @DELETE
     @Path("{id}")
     public String deleteNetwork(
-            @PathParam("id") String name)
+            @PathParam("id") String id)
             throws IOException, ExecutionException, InterruptedException {
 
-        WebTarget target = resource().path("networks").path(name);
+        WebTarget target = resource().path("networks").path(id);
 
         Response response = deleteResponse(target);
         String entity = response.readEntity(String.class);
@@ -60,8 +65,24 @@ public class Network extends DockerClient {
     }
 
     @POST
+    @Path("prune")
+    public String pruneNetwork(@QueryParam("filters") String filters)
+            throws IOException, ExecutionException, InterruptedException {
+
+        WebTarget target = resource().path("networks");
+
+        if (Objects.nonNull(filters))
+            target = target.queryParam("filters", filters);
+
+        Response response = postResponse(target);
+        String entity = response.readEntity(String.class);
+        response.close();
+        return entity;
+    }
+
+    @POST
     @Path("{id}/connect")
-    public String connect2Network(
+    public String connectToNetwork(
             @PathParam("id") String id,
             JsonObject content)
             throws IOException, ExecutionException, InterruptedException {
@@ -76,7 +97,7 @@ public class Network extends DockerClient {
 
     @POST
     @Path("{id}/disconnect")
-    public String disconnect2Network(
+    public String disconnectToNetwork(
             @PathParam("id") String id,
             JsonObject content)
             throws IOException, ExecutionException, InterruptedException {
