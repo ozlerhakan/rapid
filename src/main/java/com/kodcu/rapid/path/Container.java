@@ -22,19 +22,13 @@ public class Container extends DockerClient {
     public String getContainers(
             @DefaultValue("false") @QueryParam("all") String all,
             @QueryParam("limit") int limit,
-            @QueryParam("since") String since,
-            @QueryParam("before") String before,
-            @QueryParam("size") String size,
+            @DefaultValue("false") @QueryParam("size") String size,
             @QueryParam("filters") String filters) throws IOException, ExecutionException, InterruptedException {
 
-        WebTarget target = resource().path("containers").path("json").queryParam("all", all);
+        WebTarget target = resource().path("containers").path("json").queryParam("all", all).queryParam("size", size);
 
         if (limit != 0)
             target = target.queryParam("limit", limit);
-        if (Objects.nonNull(since))
-            target = target.queryParam("since", since);
-        if (Objects.nonNull(before))
-            target = target.queryParam("before", before);
         if (Objects.nonNull(size))
             target = target.queryParam("size", size);
         if (Objects.nonNull(filters))
@@ -48,6 +42,7 @@ public class Container extends DockerClient {
 
     @GET
     @Path("{id}/json")
+    // inspect
     public String getContainer(
             @PathParam("id") String containerId,
             @DefaultValue("false") @QueryParam("size") String size)
@@ -203,15 +198,13 @@ public class Container extends DockerClient {
     @Path("{id}/kill")
     public String killContainer(
             @PathParam("id") String containerId,
-            @QueryParam("signal") String signal)
+            @DefaultValue("SIGKILL") @QueryParam("signal") String signal)
             throws IOException, ExecutionException, InterruptedException {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
-                .path("kill");
-
-        if (Objects.nonNull(signal))
-            target = target.queryParam("signal", signal);
+                .path("kill")
+                .queryParam("signal", signal);
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
@@ -245,10 +238,8 @@ public class Container extends DockerClient {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
-                .path("rename");
-
-        if (Objects.nonNull(name))
-            target = target.queryParam("name", name);
+                .path("rename")
+                .queryParam("name", name);
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
@@ -318,6 +309,41 @@ public class Container extends DockerClient {
                 .queryParam("force", force);
 
         Response response = deleteResponse(target);
+        String entity = response.readEntity(String.class);
+        response.close();
+        return entity;
+    }
+
+    @DELETE
+    @Path("prune")
+    public String prune(
+            @QueryParam("filter") String filter)
+            throws IOException, ExecutionException, InterruptedException {
+
+        WebTarget target = resource().path("containers")
+                .path("prune");
+
+        if (Objects.nonNull(filter))
+            target = target.queryParam("filter", filter);
+
+        Response response = deleteResponse(target);
+        String entity = response.readEntity(String.class);
+        response.close();
+        return entity;
+    }
+
+    @HEAD
+    @Path("{id}/archive")
+    public String archiveInfo(
+            @PathParam("id") String containerId,
+            @QueryParam("path") String path) throws ExecutionException, InterruptedException {
+
+        WebTarget target = resource().path("containers")
+                .path(containerId)
+                .path("archive")
+                .queryParam("path", path);
+
+        Response response = headResponse(target);
         String entity = response.readEntity(String.class);
         response.close();
         return entity;
