@@ -94,5 +94,9 @@ public abstract class DockerClient {
         return target.request().async().method("DELETE").get();
     }
 
+    protected Response headResponse(WebTarget target) throws ExecutionException, InterruptedException {
+        return target.request().async().method("HEAD").get();
+    }
+
 
 }
