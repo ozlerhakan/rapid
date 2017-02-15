@@ -61,6 +61,16 @@ public class System extends DockerClient {
     }
 
     @GET
+    @Path("system/df")
+    public String df() throws IOException, ExecutionException, InterruptedException {
+        WebTarget target = resource().path("system").path("df");
+        Response response = getResponse(target);
+        String entity = response.readEntity(String.class);
+        response.close();
+        return entity;
+    }
+
+    @GET
     @Path("events")
     public String events(
             @QueryParam("since") String since,
