@@ -1,3 +1,6 @@
 .idea
 target
-rapid.iml
+java.rapid.iml
+react/node_modules/
+react/dist/
+src/main/webapp/dist/
