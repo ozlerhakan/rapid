@@ -1,0 +1,47 @@
+{
+  "name": "rapid",
+  "version": "1.0.0",
+  "description": "rapid ui",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:webpack": "node_modules/webpack/bin/webpack.js --watch --config webpack.config.js",
+    "build": "npm run clean && npm run build:webpack"
+  },
+  "babel": {
+    "presets": [
+      "react",
+      "es2015"
+    ]
+  },
+  "keywords": [
+    "docker",
+    "react",
+    "ui"
+  ],
+  "author": "Hakan Ozler",
+  "contributors": [
+    {
+      "name": "Goksel Pirnal"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-ace": "^4.1.4",
+    "react-bootstrap": "^0.30.7",
+    "react-dom": "^15.4.2",
+    "react-fontawesome": "^1.5.0",
+    "react-split-pane": "^0.1.57",
+    "react-treebeard": "^1.1.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "webpack": "^2.2.1"
+  }
+}
