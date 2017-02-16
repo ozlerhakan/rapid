@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8/>
+    <title>RAPID for Docker Remote API</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Bootstrap Core CSS -->
+    <link href="./source/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Timeline CSS -->
+    <link href="./source/css/timeline.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="./source/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="./source/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- jQuery -->
+    <script src="./source/js/jquery-1.12.0.min.js"></script>
+    <script src="./source/js/jquery-migrate-1.2.1.min.js"></script>
+    <style type="text/css" media="screen">
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="./source/css/xcode.css">
+    <script src="./source/js/highlight.pack.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="https://github.com/ozlerhakan/java.rapid">Rapid Dashboard</a>
+        </div>
+        <!-- /.navbar-header -->
+    </nav>
+    <div id="door">
+        <div class="panel-left" id="left">
+            <div id="editor"></div>
+        </div>
+        <div class="panel-right" id="right">
+            <div class="panel-body">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="./source/js/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/xcode");
+    editor.getSession().setMode("ace/mode/text");
+    editor.$blockScrolling = Infinity;
+
+    $('#remove').click(function () {
+        removeAll();
+    });
+    $(".btn").click(function () {
+
+        var ROOT = "/docker";
+        var q = $(".query").val();
+        var regex = /^([a-zA-Z]+) (\/.{4,})$/i;
+
+        var invertOrNot;
+        var size = $('.timeline').children().size();
+        if (size % 2 == 0) {
+            invertOrNot = '';
+        }
+        else {
+            invertOrNot = 'class="timeline-inverted"';
+        }
+
+        if (regex.test(q)) {
+            var result = regex.exec(q);
+            var dt = new Date();
+            var time = dt.getHours() + ":" + dt.getMinutes();
+            console.log(result[2]);
+            var encodedURI = result[2].replace(/\{/g, '%7B')
+                .replace(/\}/g, '%7D')
+                .replace(/\]/g, '%5D')
+                .replace(/\[/g, '%5B');
+
+            if (result[1].toLowerCase() == "get") {
+
+                $.ajax({
+                    url: ROOT + encodedURI,
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log($.type(data));
+                        successMessage(invertOrNot, "GET", data, time, result);
+                    },
+                    error: function (xhr, text) {
+                        console.log(xhr);
+                        message(invertOrNot, "danger", "fa-bomb", "GET", xhr.responseText, time, result);
+                    }
+                });
+            }
+            else if (result[1].toLowerCase() == "post") {
+                $.ajax({
+                    type: "POST",
+                    url: ROOT + encodedURI,
+                    accept: {
+                        json: 'application/json'
+                    },
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    data: editor.getValue(),
+                    success: function (data) {
+                        console.log($.type(data));
+                        successMessage(invertOrNot, "POST", data, time, result);
+                    },
+                    error: function (xhr, text) {
+                        console.log(xhr);
+                        message(invertOrNot, "danger", "fa-bomb", "POST", xhr.responseText, time, result);
+                    }
+                });
+            }
+            else if (result[1].toLowerCase() == "delete") {
+                $.ajax({
+                    type: "DELETE",
+                    url: ROOT + encodedURI,
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log($.type(data));
+                        successMessage(invertOrNot, "DELETE", data, time, result);
+                    },
+                    error: function (xhr, text) {
+                        console.log(xhr);
+                        message(invertOrNot, "danger", "fa-bomb", "DELETE", xhr.responseText, time, result);
+                    }
+                });
+            }
+        }
+    });
+
+    function successMessage(invertOrNot, method, data, time, result) {
+        var jsonStr;
+        if ($.type(data) === "string") {
+            var sanitizeData = data.replace(/\\"/g, "'").replace(/\\n/g, "").replace(/\\/g, "");
+            var jsonEval = eval("(" + sanitizeData + ")");
+            jsonStr = JSON.stringify(jsonEval, null, 2);
+        }
+        else {
+            jsonStr = JSON.stringify(data, null, 2);
+        }
+        message(invertOrNot, "success", "fa-check", method, jsonStr, time, result);
+    }
+
+    function message(invertOrNot, badged, icon, method, msg, time, result) {
+        var hasBody;
+        if (editor.getValue().trim() != "") {
+            hasBody = '<p>Message Body: <br><pre><code class="json" id="msgblock">' + editor.getValue().trim() + '</code></pre></p>';
+        }
+        else
+            hasBody = '<p hidden><br><pre hidden><code class="json" id="msgblock"></code></pre></p>';
+
+        var content =
+            '<li ' + invertOrNot + ' >' +
+            '<div class="timeline-badge ' + badged + '" onclick="scroll2Top()" style="cursor: pointer;"><i class="fa ' + icon + '"></i>' +
+            '</div>' +
+            '<div class="timeline-panel" id="panel">' +
+            '<div class="timeline-heading" id="time-heading" >' +
+            '<h4 class="timeline-title" style="cursor: pointer;" id="title-query">' + method + ' ' + result[2] + '</h4>' +
+            '<p><small class="text-muted"><i class="fa fa-clock-o"></i> ' + time + '</small>' +
+            '</p>' +
+            '</div>' +
+            '<div class="timeline-body" id="msg">' + hasBody + '' +
+            '<p>Result: <br><pre><code class="json">' + msg + '</code></pre></p>' +
+            '</div>' +
+            '</div>' +
+            '</li>';
+
+        $(".timeline").prepend(content);
+        highlightCode();
+        triggerHeading();
+    }
+
+    function highlightCode() {
+        $("#panelDoc").find('pre').children("code").each(function () {
+            if (!$(this).hasClass("hljs")) {
+                hljs.highlightBlock(this);
+            }
+        });
+    }
+
+    function triggerHeading() {
+        $("#title-query").on('click', function () {
+            var query = $(this).parent().parent().find("h4").text();
+            $("input").attr('value', query);
+            var body = $(this).parent().parent().find("#msgblock").text();
+            editor.setValue(body, 1);
+        });
+    }
+
+    function scroll2Top() {
+        $("body").scrollTop(0);
+    }
+
+    function removeAll() {
+        $('.timeline').empty()
+    }
+</script>
+</body>
+</html>
