@@ -1,0 +1,40 @@
+package com.kodcu.rapid.util;
+
+import javax.json.JsonObject;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+
+/**
+ * Created by hakan on 07/01/2017.
+ */
+public abstract class Networking {
+
+    private Networking() {
+    }
+
+    public static Response getResponse(WebTarget target) throws ExecutionException, InterruptedException {
+        return target.request(APPLICATION_JSON_TYPE).async().method("GET").get();
+    }
+
+    public static Response postResponse(WebTarget target, JsonObject content) throws ExecutionException, InterruptedException {
+        return target.request(APPLICATION_JSON_TYPE).async().method("POST", Entity.entity(content, MediaType.APPLICATION_JSON)).get();
+    }
+
+    public static Response postResponse(WebTarget target, String content) throws ExecutionException, InterruptedException {
+        return target.request(APPLICATION_JSON_TYPE).async().method("POST", Entity.entity(content, MediaType.APPLICATION_JSON)).get();
+    }
+
+    public static Response postResponse(WebTarget target) throws ExecutionException, InterruptedException {
+        return target.request(APPLICATION_JSON_TYPE).async().method("POST").get();
+    }
+
+    public static Response deleteResponse(WebTarget target) throws ExecutionException, InterruptedException {
+        return target.request().async().method("DELETE").get();
+    }
+}

@@ -1,6 +1,7 @@
 package com.kodcu.rapid.app;
 
 import com.kodcu.rapid.path.*;
+import com.kodcu.rapid.path.System;
 import com.kodcu.rapid.provider.JsonProvider;
 
 import javax.ws.rs.ApplicationPath;
@@ -20,7 +21,7 @@ public class AppConfig extends Application {
         resources.add(Image.class);
         resources.add(Volume.class);
         resources.add(Network.class);
-        resources.add(Misc.class);
+        resources.add(System.class);
         resources.add(JsonProvider.class);
         return resources;
     }

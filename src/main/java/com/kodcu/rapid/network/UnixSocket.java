@@ -195,12 +195,7 @@ public class UnixSocket extends Socket {
 
     @Override
     public void setKeepAlive(final boolean on) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setKeepAlive(on);
-            }
-        });
+        setSocketOption(() -> inner.setKeepAlive(on));
     }
 
     @Override
@@ -235,7 +230,7 @@ public class UnixSocket extends Socket {
             while (sleeping) {
                 try {
                     wait(lingerTime * (long) 1000);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
                 sleeping = false;
             }
@@ -258,7 +253,7 @@ public class UnixSocket extends Socket {
     @Override
     public String toString() {
         if (addr != null) {
-            return ((UnixSocketAddress) addr).toString();
+            return addr.toString();
         }
         return inner.toString();
     }

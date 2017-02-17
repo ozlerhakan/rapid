@@ -2,7 +2,9 @@ package com.kodcu.rapid.path;
 
 import com.kodcu.rapid.config.DockerClient;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.ws.rs.*;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
@@ -19,7 +21,7 @@ public class Container extends DockerClient {
 
     @GET
     @Path("json")
-    public String getContainers(
+    public JsonStructure listContainers(
             @DefaultValue("false") @QueryParam("all") String all,
             @QueryParam("limit") int limit,
             @DefaultValue("false") @QueryParam("size") String size,
@@ -29,13 +31,16 @@ public class Container extends DockerClient {
 
         if (limit != 0)
             target = target.queryParam("limit", limit);
-        if (Objects.nonNull(size))
-            target = target.queryParam("size", size);
         if (Objects.nonNull(filters))
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+
+        JsonStructure entity;
+        if (response.getStatus() == 200)
+            entity = response.readEntity(JsonArray.class);
+        else
+            entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
@@ -43,7 +48,7 @@ public class Container extends DockerClient {
     @GET
     @Path("{id}/json")
     // inspect
-    public String getContainer(
+    public JsonObject inspectContainer(
             @PathParam("id") String containerId,
             @DefaultValue("false") @QueryParam("size") String size)
             throws IOException, ExecutionException, InterruptedException {
@@ -53,14 +58,14 @@ public class Container extends DockerClient {
                 .queryParam("size", size);
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @GET
     @Path("{id}/top")
-    public String getContainerTopProcess(
+    public JsonObject containerTopProcess(
             @PathParam("id") String containerId,
             @DefaultValue("-ef") @QueryParam("ps_args") String ps)
             throws IOException, ExecutionException, InterruptedException {
@@ -70,7 +75,7 @@ public class Container extends DockerClient {
                 .queryParam("ps", ps);
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
@@ -79,7 +84,6 @@ public class Container extends DockerClient {
     @Path("{id}/logs")
     public String getContainerLogs(
             @PathParam("id") String containerId,
-            @DefaultValue("false") @QueryParam("follow") String follow,
             @DefaultValue("false") @QueryParam("stdout") String stdout,
             @DefaultValue("false") @QueryParam("stderr") String stderr,
             @DefaultValue("0") @QueryParam("since") String since,
@@ -89,7 +93,8 @@ public class Container extends DockerClient {
 
         WebTarget target = resource().path("containers").path(containerId).path("logs");
 
-        target = target.queryParam("follow", follow)
+        // follow = false always
+        target = target.queryParam("follow", false)
                 .queryParam("stdout", stdout)
                 .queryParam("stderr", stderr)
                 .queryParam("since", since)
@@ -116,33 +121,15 @@ public class Container extends DockerClient {
         return entity;
     }
 
-    @GET
-    @Path("{id}/stats")
-    public String exportContainer(
-            @PathParam("id") String containerId,
-            @DefaultValue("true") @QueryParam("stream") String stream)
-            throws IOException, ExecutionException, InterruptedException {
-
-        WebTarget target = resource().path("containers")
-                .path(containerId)
-                .path("stats")
-                .queryParam("stream", stream);
-
-        Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return entity;
-    }
-
     @POST
     @Path("{id}/start")
     public String startContainer(
-            @PathParam("id") String containerId,
+            @PathParam("id") String id,
             @QueryParam("detachKeys") String detachKeys)
             throws IOException, ExecutionException, InterruptedException {
 
         WebTarget target = resource().path("containers")
-                .path(containerId)
+                .path(id)
                 .path("start");
 
 //        if (Objects.nonNull(detachKeys))
@@ -334,7 +321,7 @@ public class Container extends DockerClient {
 
     @HEAD
     @Path("{id}/archive")
-    public String archiveInfo(
+    public String archiveContainer(
             @PathParam("id") String containerId,
             @QueryParam("path") String path) throws ExecutionException, InterruptedException {
 
@@ -352,7 +339,7 @@ public class Container extends DockerClient {
 
     @POST
     @Path("create")
-    public String getContainers(
+    public JsonObject createContainer(
             @QueryParam("name") String name, JsonObject content) throws IOException, ExecutionException, InterruptedException {
 
         WebTarget target = resource().path("containers").path("create");
@@ -361,7 +348,7 @@ public class Container extends DockerClient {
             target = target.queryParam("name", name);
 
         Response response = postResponse(target, content);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
