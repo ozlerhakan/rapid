@@ -31,7 +31,6 @@ export default {
                 {name: 'List processes running inside a container'},
                 {name: 'Get container logs'},
                 {name: 'Get changes on a container’s filesystem'},
-                {name: 'Get container stats based on resource usage'},
                 {name: 'Start a container'},
                 {name: 'Stop a container'},
                 {name: 'Kill a container'},
