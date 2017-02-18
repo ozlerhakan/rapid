@@ -266,22 +266,6 @@ public class Container extends DockerClient {
         return entity;
     }
 
-    @POST
-    @Path("{id}/wait")
-    public String waitContainer(
-            @PathParam("id") String containerId)
-            throws IOException, ExecutionException, InterruptedException {
-
-        WebTarget target = resource().path("containers")
-                .path(containerId)
-                .path("wait");
-
-        Response response = postResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return entity;
-    }
-
     @DELETE
     @Path("{id}")
     public String deleteContainer(
@@ -303,7 +287,7 @@ public class Container extends DockerClient {
 
     @POST
     @Path("prune")
-    public String prune(
+    public JsonObject prune(
             @QueryParam("filter") String filter)
             throws IOException, ExecutionException, InterruptedException {
 
@@ -314,7 +298,7 @@ public class Container extends DockerClient {
             target = target.queryParam("filter", filter);
 
         Response response = postResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
