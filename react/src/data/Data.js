@@ -38,7 +38,6 @@ export default {
                 {name: 'Rename a container'},
                 {name: 'Pause a container'},
                 {name: 'Unpause a container'},
-                {name: 'Wait for a container'},
                 {name: 'Remove a container'},
                 {name: 'Delete stopped containers'}
             ]

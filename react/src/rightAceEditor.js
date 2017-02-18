@@ -8,6 +8,14 @@ import 'brace/mode/json';
 import 'brace/theme/github';
 
 class RightAceEditor extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount(){
+        this.inRightAceEditor.editor.session.setUseWorker(false);
+    }
+
     render() {
         return <AceEditor
             mode="json"
@@ -18,6 +26,7 @@ class RightAceEditor extends React.Component {
             readOnly
             fontSize={14}
             maxLines={50}
+            ref={(input) => this.inRightAceEditor = input}
         />
     }
 }
