@@ -1,0 +1,42 @@
+/**
+ * Created by hakan on 13/02/2017.
+ */
+import React from 'react'
+import AceEditor from 'react-ace';
+
+import 'brace/mode/json';
+import 'brace/theme/github';
+
+class ResultEditor extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        this.aceEditor.editor.session.setUseWorker(false);
+    }
+
+    setResult(result) {
+        if (typeof result == 'object') {
+            result = JSON.stringify(result, null, 4);
+        }
+        this.aceEditor.editor.session.setValue(result, this.aceEditor.editor.getCursorPosition());
+    }
+
+    render() {
+        return <AceEditor
+            mode="json"
+            theme="github"
+            name="view_unique_json"
+            width="100%"
+            height="100%"
+            readOnly
+            wrapEnabled
+            editorProps={{$blockScrolling: Infinity}}
+            fontSize={14}
+            ref={(input) => this.aceEditor = input}
+        />
+    }
+}
+
+export default ResultEditor;

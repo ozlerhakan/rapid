@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from 'react-dom';
-import HomePage from './homePage';
-
+import HomePage from './components/HomePage';
 
 ReactDOM.render(
     <HomePage />,

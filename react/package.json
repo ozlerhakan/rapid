@@ -4,8 +4,12 @@
   "description": "rapid ui",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:webpack": "node_modules/webpack/bin/webpack.js --watch --config webpack.config.js",
-    "build": "npm run clean && npm run build:webpack"
+    "clean:prod": "rimraf ../src/main/webapp/**",
+    "clean:dev": "rimraf ./dist",
+    "build:prod": "npm run clean:prod && cross-env NODE_ENV=prod node_modules/webpack/bin/webpack.js --config webpack.config.js",
+    "build:dev": "npm run clean:dev && cross-env NODE_ENV=dev node_modules/webpack/bin/webpack.js --watch --config webpack.config.js ",
+    "serve": "cross-env NODE_ENV=dev node_modules/.bin/webpack-dev-server",
+    "docker": "npm run build:prod && cd .. && docker run --rm -v ~/.m2:/root/.m2 -v $(PWD):/rapid -w /rapid -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 maven:3-jdk-8 mvn jetty:run"
   },
   "babel": {
     "presets": [
@@ -32,7 +36,8 @@
     "react-dom": "^15.4.2",
     "react-fontawesome": "^1.5.0",
     "react-split-pane": "^0.1.57",
-    "react-treebeard": "^1.1.4"
+    "react-treebeard": "^1.1.4",
+    "whatwg-fetch": "^2.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
@@ -41,7 +46,13 @@
     "babel-preset-env": "^1.1.8",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.22.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^1.0.6",
+    "express": "^4.13.3",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-dev-middleware": "^1.4.0",
+    "webpack-dev-server": "^2.4.0",
+    "webpack-hot-middleware": "^2.6.0"
   }
 }
