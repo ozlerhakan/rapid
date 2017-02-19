@@ -52,50 +52,58 @@ public class Image extends DockerClient {
 
     @GET
     @Path("{id}/json")
-    public String inspectImage(@PathParam("id") String id) {
+    public JsonObject inspectImage(@PathParam("id") String id) {
 
         WebTarget target = resource().path("images").path(id).path("json");
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @GET
     @Path("{id}/history")
-    public String historyImage(@PathParam("id") String id) {
+    public JsonStructure historyImage(@PathParam("id") String id) {
 
         WebTarget target = resource().path("images").path(id).path("history");
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+
+        JsonStructure entity;
+        if (response.getStatus() == 200)
+            entity = response.readEntity(JsonArray.class);
+        else
+            entity = response.readEntity(JsonObject.class);
+
         response.close();
         return entity;
     }
 
     @GET
     @Path("search")
-    public String searchImages(@QueryParam("term") String term,
-                               @QueryParam("limit") int limit,
+    public JsonStructure searchImages(@QueryParam("term") String term,
+                               @DefaultValue("25") @QueryParam("limit") int limit,
                                @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
-        WebTarget target = resource().path("images").path("search").queryParam("term", term);
+        WebTarget target = resource().path("images").path("search").queryParam("term", term).queryParam("limit", limit);
 
-        if (limit != 0)
-            target = target.queryParam("limit", limit);
         if (Objects.nonNull(filters))
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonStructure entity;
+        if (response.getStatus() == 200)
+            entity = response.readEntity(JsonArray.class);
+        else
+            entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @POST
     @Path("commit")
-    public String commitImage(
+    public JsonObject commitImage(
             @QueryParam("container") String container,
             @QueryParam("repo") String repo,
             @QueryParam("tag") String tag,
@@ -121,7 +129,7 @@ public class Image extends DockerClient {
             target = target.queryParam("changes", changes);
 
         Response response = postResponse(target, content);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
@@ -134,12 +142,8 @@ public class Image extends DockerClient {
             @QueryParam("tag") String tag) {
 
         WebTarget target = resource().path("images")
-                .path(id).path("tag");
-
-        if (Objects.nonNull(tag))
-            target = target.queryParam("tag", tag);
-        if (Objects.nonNull(repo))
-            target = target.queryParam("repo", repo);
+                .path(id).path("tag")
+                .queryParam("tag", tag).queryParam("repo", repo);
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
@@ -165,7 +169,7 @@ public class Image extends DockerClient {
 
     @DELETE
     @Path("{id}")
-    public String deleteImage(
+    public JsonArray deleteImage(
             @PathParam("id") String id,
             @DefaultValue("false") @QueryParam("force") String force,
             @DefaultValue("false") @QueryParam("noprune") String noprune) {
@@ -176,17 +180,24 @@ public class Image extends DockerClient {
                 .queryParam("noprune", noprune);
 
         Response response = deleteResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonArray entity = response.readEntity(JsonArray.class);
         response.close();
         return entity;
     }
 
     @POST
     @Path("create")
-    public String createImage(@QueryParam("fromImage") String fromImage) {
+    public String createImage(@QueryParam("fromImage") String fromImage,
+                              @QueryParam("repo") String repo,
+                              @QueryParam("tag") String tag) {
 
         WebTarget target = resource().path("images").path("create")
                 .queryParam("fromImage", fromImage);
+
+        if (Objects.nonNull(tag))
+            target = target.queryParam("tag", tag);
+        if (Objects.nonNull(repo))
+            target = target.queryParam("repo", repo);
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);

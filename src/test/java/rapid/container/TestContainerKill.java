@@ -24,7 +24,7 @@ public class TestContainerKill extends ContainerConfig {
             "  \"OpenStdin\": false,\n" +
             "  \"StdinOnce\": false,\n" +
             "  \"Cmd\": [\n" +
-            "  \"sleep\",\"10000\""+
+            "  \"sleep\",\"10000\"" +
             "  ],\n" +
             "  \"Entrypoint\": \"\",\n" +
             "  \"Image\": \"ubuntu\"" +
@@ -45,7 +45,7 @@ public class TestContainerKill extends ContainerConfig {
         assertEquals(200, start.getStatus());
         start.close();
 
-        final Response kill = postResponse(target("containers").path(containerId).path("kill").queryParam("signal","KILL"));
+        final Response kill = postResponse(target("containers").path(containerId).path("kill").queryParam("signal", "KILL"));
         // return body is empty
         assertEquals(200, start.getStatus());
         start.close();

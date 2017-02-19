@@ -1,5 +1,6 @@
 package rapid.container;
 
+import org.junit.After;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -7,6 +8,8 @@ import org.junit.runners.MethodSorters;
 import javax.json.JsonObject;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+
+import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -162,9 +165,9 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
     private static String id = "";
 
     @Test
-    public void shouldCreateContainer() {
+    public void shouldCreateContainer() throws ExecutionException, InterruptedException {
         final WebTarget target = target("containers").path("create").queryParam("name", "haci");
-        Response response = postResponse(target, body);
+        Response response = postAsycResponse(target, body);
 
         // ubuntu:latest neeeded
         assertEquals(200, response.getStatus());
@@ -176,9 +179,9 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
     }
 
     @Test
-    public void shouldDeleteContainer() {
+    public void shouldDeleteContainer() throws ExecutionException, InterruptedException {
         final WebTarget target = target("containers").path(id).queryParam("v", true).queryParam("force", true);
-        Response response = deleteResponse(target);
+        Response response = deleteAsycResponse(target);
 
         // ubuntu:latest neeeded
         assertEquals(200, response.getStatus());

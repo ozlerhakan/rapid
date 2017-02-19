@@ -46,4 +46,14 @@ public class TestContainerList extends ContainerConfig {
         assertThat(obj.containsKey("SizeRw"), is(true));
         response.close();
     }
+
+    @Test
+    public void shouldListContainersWithLimit() {
+        final Response response = getResponse(target("containers").path("json").queryParam("limit", 1));
+        assertEquals(200, response.getStatus());
+        final JsonArray responseContent = response.readEntity(JsonArray.class);
+        int expected = 1;
+        assertEquals(expected, responseContent.size());
+        response.close();
+    }
 }
