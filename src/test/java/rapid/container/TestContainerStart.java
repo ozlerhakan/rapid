@@ -17,7 +17,6 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by hakan on 16/02/2017.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestContainerStart extends ContainerConfig {
 
     private static String body = "{\n" +
@@ -38,9 +37,9 @@ public class TestContainerStart extends ContainerConfig {
             "}";
 
     @Test
-    public void shouldStartContainer() throws ExecutionException, InterruptedException {
+    public void shouldStartContainer()  {
         final WebTarget create = target("containers").path("create").queryParam("name", "joedoe");
-        Response createResponse = Networking.postResponse(create, body);
+        Response createResponse = postResponse(create, body);
 
         // ubuntu:latest neeeded
         assertEquals(200, createResponse.getStatus());
@@ -48,17 +47,17 @@ public class TestContainerStart extends ContainerConfig {
         createResponse.close();
         final String containerId = responseContent.getJsonString("Id").getString();
 
-        final Response start = Networking.postResponse(target("containers").path(containerId).path("start"));
+        final Response start = postResponse(target("containers").path(containerId).path("start"));
         assertEquals(200, start.getStatus());
         start.close();
 
-        final Response restart = Networking.postResponse(target("containers").path(containerId).path("restart"));
+        final Response restart = postResponse(target("containers").path(containerId).path("restart"));
         // return body is empty
         assertEquals(200, start.getStatus());
         start.close();
 
         final WebTarget delete = target("containers").path(containerId).queryParam("v", true).queryParam("force", true);
-        Response stopped = Networking.deleteResponse(delete);
+        Response stopped = deleteResponse(delete);
         // return body is empty
         assertEquals(200, stopped.getStatus());
         stopped.close();

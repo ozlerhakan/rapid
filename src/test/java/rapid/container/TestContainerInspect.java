@@ -19,13 +19,13 @@ import static org.junit.Assert.assertThat;
 public class TestContainerInspect extends ContainerConfig {
 
     @Test
-    public void inspectContainer() throws Exception {
+    public void inspectContainer() {
         final Response listContainers = target("containers").path("json").request(MediaType.APPLICATION_JSON).get();
         final JsonArray containers = listContainers.readEntity(JsonArray.class);
         final JsonObject container = (JsonObject) containers.get(0);
         final JsonString expectedId = container.getJsonString("Id");
 
-        Response inspect = Networking.getResponse(target("containers").path(expectedId.getString()).path("json"));
+        Response inspect = getResponse(target("containers").path(expectedId.getString()).path("json"));
         assertEquals(200, inspect.getStatus());
 
         final JsonObject actualContainer  = inspect.readEntity(JsonObject.class);

@@ -15,7 +15,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by hakan on 16/02/2017.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestContainerKill extends ContainerConfig {
 
     private static String body = "{\n" +
@@ -36,9 +35,9 @@ public class TestContainerKill extends ContainerConfig {
             "}";
 
     @Test
-    public void shouldKillContainer() throws ExecutionException, InterruptedException {
+    public void shouldKillContainer() {
         final WebTarget create = target("containers").path("create").queryParam("name", "killjoe");
-        Response createResponse = Networking.postResponse(create, body);
+        Response createResponse = postResponse(create, body);
 
         // ubuntu:latest neeeded
         assertEquals(200, createResponse.getStatus());
@@ -46,17 +45,17 @@ public class TestContainerKill extends ContainerConfig {
         final String containerId = responseContent.getJsonString("Id").getString();
         createResponse.close();
 
-        final Response start = Networking.postResponse(target("containers").path(containerId).path("start"));
+        final Response start = postResponse(target("containers").path(containerId).path("start"));
         assertEquals(200, start.getStatus());
         start.close();
 
-        final Response kill = Networking.postResponse(target("containers").path(containerId).path("kill").queryParam("signal","KILL"));
+        final Response kill = postResponse(target("containers").path(containerId).path("kill").queryParam("signal","KILL"));
         // return body is empty
         assertEquals(200, start.getStatus());
         start.close();
 
         final WebTarget target = target("containers").path(containerId).queryParam("v", true).queryParam("force", true);
-        Response response = Networking.deleteResponse(target);
+        Response response = deleteResponse(target);
 
     }
 

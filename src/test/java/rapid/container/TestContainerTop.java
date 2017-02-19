@@ -17,13 +17,13 @@ import static org.junit.Assert.assertEquals;
 public class TestContainerTop extends ContainerConfig {
 
     @Test
-    public void inspectContainer() throws Exception {
-        final Response listContainers = target("containers").path("json").request(MediaType.APPLICATION_JSON).get();
+    public void inspectContainer() {
+        final Response listContainers = getResponse(target("containers").path("json"));
         final JsonArray containers = listContainers.readEntity(JsonArray.class);
         final JsonObject container = (JsonObject) containers.get(0);
         final JsonString expectedId = container.getJsonString("Id");
 
-        Response top = Networking.getResponse(target("containers").path(expectedId.getString()).path("top"));
+        Response top = getResponse(target("containers").path(expectedId.getString()).path("top"));
         assertEquals(200, top.getStatus());
 
         final JsonObject actualContainer = top.readEntity(JsonObject.class);

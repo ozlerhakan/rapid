@@ -25,7 +25,7 @@ public class TestContainerList extends ContainerConfig {
 
     @Test
     public void shouldListRunningContainers() {
-        final Response response = target("containers").path("json").request(MediaType.APPLICATION_JSON).get();
+        final Response response = getResponse(target("containers").path("json"));
         assertEquals(200, response.getStatus());
         final JsonArray responseContent = response.readEntity(JsonArray.class);
         int expected = 1;
@@ -35,7 +35,7 @@ public class TestContainerList extends ContainerConfig {
 
     @Test
     public void shouldListAllContainers() {
-        final Response response = target("containers").path("json").queryParam("all", true).request(MediaType.APPLICATION_JSON).get();
+        final Response response = getResponse(target("containers").path("json").queryParam("all", true));
         assertEquals(200, response.getStatus());
         final JsonArray responseContent = response.readEntity(JsonArray.class);
         int expected = 1;
@@ -45,7 +45,7 @@ public class TestContainerList extends ContainerConfig {
 
     @Test
     public void shouldListContainersWithSize() {
-        final Response response = target("containers").path("json").queryParam("size", true).request(MediaType.APPLICATION_JSON).get();
+        final Response response = getResponse(target("containers").path("json").queryParam("size", true));
         assertEquals(200, response.getStatus());
         final JsonArray responseContent = response.readEntity(JsonArray.class);
         int expected = 1;

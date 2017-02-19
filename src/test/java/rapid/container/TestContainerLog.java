@@ -17,13 +17,13 @@ import static org.junit.Assert.assertEquals;
 public class TestContainerLog extends ContainerConfig {
 
     @Test
-    public void inspectContainer() throws Exception {
+    public void inspectContainer() {
         final Response listContainers = target("containers").path("json").request(MediaType.APPLICATION_JSON).get();
         final JsonArray containers = listContainers.readEntity(JsonArray.class);
         final JsonObject container = (JsonObject) containers.get(0);
         final JsonString expectedId = container.getJsonString("Id");
 
-        Response log = Networking.getResponse(target("containers").path(expectedId.getString()).path("logs"));
+        Response log = getResponse(target("containers").path(expectedId.getString()).path("logs"));
         assertEquals(200, log.getStatus());
     }
 }

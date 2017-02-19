@@ -172,9 +172,9 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
     private static String id = "";
 
     @Test
-    public void shouldCreateContainer() throws ExecutionException, InterruptedException {
+    public void shouldCreateContainer() {
         final WebTarget target = target("containers").path("create").queryParam("name", "haci");
-        Response response = Networking.postResponse(target, body);
+        Response response = postResponse(target, body);
 
         // ubuntu:latest neeeded
         assertEquals(200, response.getStatus());
@@ -186,9 +186,9 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
     }
 
     @Test
-    public void shouldDeleteContainer() throws ExecutionException, InterruptedException {
+    public void shouldDeleteContainer() {
         final WebTarget target = target("containers").path(id).queryParam("v", true).queryParam("force", true);
-        Response response = Networking.deleteResponse(target);
+        Response response = deleteResponse(target);
 
         // ubuntu:latest neeeded
         assertEquals(200, response.getStatus());
