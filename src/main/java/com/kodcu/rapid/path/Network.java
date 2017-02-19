@@ -11,10 +11,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.deleteResponse;
+import static com.kodcu.rapid.util.Networking.getResponse;
+import static com.kodcu.rapid.util.Networking.postResponse;
 
 /**
  * Created by Hakan on 2/12/2016.
@@ -24,8 +27,7 @@ public class Network extends DockerClient {
 
     @GET
     public String getNetwork(
-            @QueryParam("filters") String filters)
-            throws IOException, ExecutionException, InterruptedException {
+            @QueryParam("filters") String filters) {
 
         WebTarget target = resource().path("networks");
         if (Objects.nonNull(filters))
@@ -40,8 +42,7 @@ public class Network extends DockerClient {
     @GET
     @Path("{id}")
     public String inspectNetwork(
-            @PathParam("id") String id)
-            throws IOException, ExecutionException, InterruptedException {
+            @PathParam("id") String id) {
 
         WebTarget target = resource().path("networks").path(id);
 
@@ -54,8 +55,7 @@ public class Network extends DockerClient {
     @DELETE
     @Path("{id}")
     public String deleteNetwork(
-            @PathParam("id") String id)
-            throws IOException, ExecutionException, InterruptedException {
+            @PathParam("id") String id) {
 
         WebTarget target = resource().path("networks").path(id);
 
@@ -67,8 +67,7 @@ public class Network extends DockerClient {
 
     @POST
     @Path("prune")
-    public String pruneNetwork(@QueryParam("filters") String filters)
-            throws IOException, ExecutionException, InterruptedException {
+    public String pruneNetwork(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("networks");
 
@@ -85,8 +84,7 @@ public class Network extends DockerClient {
     @Path("{id}/connect")
     public String connectToNetwork(
             @PathParam("id") String id,
-            JsonObject content)
-            throws IOException, ExecutionException, InterruptedException {
+            JsonObject content) {
 
         WebTarget target = resource().path("networks").path(id).path("connect");
 
@@ -100,8 +98,7 @@ public class Network extends DockerClient {
     @Path("{id}/disconnect")
     public String disconnectToNetwork(
             @PathParam("id") String id,
-            JsonObject content)
-            throws IOException, ExecutionException, InterruptedException {
+            JsonObject content) {
 
         WebTarget target = resource().path("networks").path(id).path("disconnect");
 
@@ -113,8 +110,7 @@ public class Network extends DockerClient {
 
     @POST
     @Path("create")
-    public String createNetwork(JsonObject content)
-            throws IOException, ExecutionException, InterruptedException {
+    public String createNetwork(JsonObject content) {
 
         WebTarget target = resource().path("networks").path("create");
 

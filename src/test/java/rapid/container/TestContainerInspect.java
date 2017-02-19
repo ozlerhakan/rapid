@@ -1,6 +1,5 @@
 package rapid.container;
 
-import com.kodcu.rapid.util.Networking;
 import org.junit.Test;
 
 import javax.json.JsonArray;
@@ -9,9 +8,7 @@ import javax.json.JsonString;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 /**
  * Created by hakan on 17/02/2017.

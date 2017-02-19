@@ -11,18 +11,12 @@ import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.concurrent.ExecutionException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 /**
  * Created by Hakan on 2/11/2016.
@@ -68,34 +62,6 @@ public abstract class DockerClient {
     protected WebTarget resource() {
         final WebTarget target = client.target(sanitizeUri);
         return target;
-    }
-
-
-    protected Response getResponse(WebTarget target) {
-        try {
-            return target.request(APPLICATION_JSON_TYPE).async().method("GET").get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    protected Response postResponse(WebTarget target, JsonObject content) throws ExecutionException, InterruptedException {
-        return target.request(APPLICATION_JSON_TYPE).async().method("POST", Entity.entity(content, MediaType.APPLICATION_JSON)).get();
-    }
-
-    protected Response postResponse(WebTarget target) throws ExecutionException, InterruptedException {
-        return target.request(APPLICATION_JSON_TYPE).async().method("POST").get();
-    }
-
-    protected Response deleteResponse(WebTarget target) throws ExecutionException, InterruptedException {
-        return target.request().async().method("DELETE").get();
-    }
-
-    protected Response headResponse(WebTarget target) throws ExecutionException, InterruptedException {
-        return target.request().async().method("HEAD").get();
     }
 
 

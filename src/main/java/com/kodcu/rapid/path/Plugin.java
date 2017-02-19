@@ -13,7 +13,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.deleteResponse;
+import static com.kodcu.rapid.util.Networking.getResponse;
+import static com.kodcu.rapid.util.Networking.postResponse;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -22,8 +25,7 @@ import java.util.concurrent.ExecutionException;
 public class Plugin extends DockerClient {
 
     @GET
-    public String listPlugins()
-            throws ExecutionException, InterruptedException {
+    public String listPlugins() {
 
         WebTarget target = resource().path("plugins");
 
@@ -35,8 +37,7 @@ public class Plugin extends DockerClient {
 
     @GET
     @Path("privileges")
-    public String privilegedPlugins(@QueryParam("filters") String filters)
-            throws ExecutionException, InterruptedException {
+    public String privilegedPlugins(@QueryParam("filters") String filters) {
 
         WebTarget target = resource().path("plugins").path("privileges");
 
@@ -48,8 +49,7 @@ public class Plugin extends DockerClient {
 
     @GET
     @Path("{id}/json")
-    public String inspectPlugin(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String inspectPlugin(@PathParam("id") String id) {
 
         WebTarget target = resource().path("plugins").path(id).path("json");
 
@@ -62,8 +62,7 @@ public class Plugin extends DockerClient {
     @DELETE
     @Path("{id}")
     public String deletePlugin(@PathParam("id") String id,
-                               @DefaultValue("false") @QueryParam("force") boolean force)
-            throws ExecutionException, InterruptedException {
+                               @DefaultValue("false") @QueryParam("force") boolean force) {
 
         WebTarget target = resource().path("plugins").path(id).queryParam("force", force);
 
@@ -76,8 +75,7 @@ public class Plugin extends DockerClient {
     @POST
     @Path("{id}/enable")
     public String enablePlugin(@PathParam("id") String id,
-                               @DefaultValue("0") @QueryParam("timeout") int timeout)
-            throws ExecutionException, InterruptedException {
+                               @DefaultValue("0") @QueryParam("timeout") int timeout) {
 
         WebTarget target = resource().path("plugins").path(id).path("enable").queryParam("timeout", timeout);
 
@@ -89,8 +87,7 @@ public class Plugin extends DockerClient {
 
     @POST
     @Path("{id}/disable")
-    public String disablePlugin(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String disablePlugin(@PathParam("id") String id) {
 
         WebTarget target = resource().path("plugins").path(id).path("disable");
 
@@ -104,8 +101,7 @@ public class Plugin extends DockerClient {
     @Path("pull")
     public String pullPlugin(@QueryParam("remote") String remote,
                              @QueryParam("name") String name,
-                             JsonObject content)
-            throws ExecutionException, InterruptedException {
+                             JsonObject content) {
 
         WebTarget target = resource().path("plugins").path("pull");
 
@@ -122,8 +118,7 @@ public class Plugin extends DockerClient {
 
     @POST
     @Path("{id}/push")
-    public String pushPlugin(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String pushPlugin(@PathParam("id") String id) {
 
         WebTarget target = resource().path("plugins").path(id).path("push");
 
@@ -138,8 +133,7 @@ public class Plugin extends DockerClient {
     public String upgradePlugin(
             @PathParam("id") String id,
             @QueryParam("remote") String remote,
-            JsonObject content)
-            throws ExecutionException, InterruptedException {
+            JsonObject content) {
 
         WebTarget target = resource().path("plugins").path(id).path("upgrade");
 

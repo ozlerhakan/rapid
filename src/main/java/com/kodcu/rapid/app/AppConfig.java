@@ -1,7 +1,10 @@
 package com.kodcu.rapid.app;
 
-import com.kodcu.rapid.path.*;
+import com.kodcu.rapid.path.Container;
+import com.kodcu.rapid.path.Image;
+import com.kodcu.rapid.path.Network;
 import com.kodcu.rapid.path.System;
+import com.kodcu.rapid.path.Volume;
 import com.kodcu.rapid.provider.JsonProvider;
 
 import javax.ws.rs.ApplicationPath;

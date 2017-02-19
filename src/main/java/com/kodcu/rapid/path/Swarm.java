@@ -11,7 +11,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.getResponse;
+import static com.kodcu.rapid.util.Networking.postResponse;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -20,8 +22,7 @@ import java.util.concurrent.ExecutionException;
 public class Swarm extends DockerClient {
 
     @GET
-    public String inspectSwarm()
-            throws ExecutionException, InterruptedException {
+    public String inspectSwarm() {
 
         WebTarget target = resource().path("swarm");
         Response response = getResponse(target);
@@ -32,8 +33,7 @@ public class Swarm extends DockerClient {
 
     @POST
     @Path("init")
-    public String initSwarm(JsonObject content)
-            throws ExecutionException, InterruptedException {
+    public String initSwarm(JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("init");
         Response response = postResponse(target, content);
@@ -44,8 +44,7 @@ public class Swarm extends DockerClient {
 
     @POST
     @Path("join")
-    public String joinSwarm(JsonObject content)
-            throws ExecutionException, InterruptedException {
+    public String joinSwarm(JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("join");
         Response response = postResponse(target, content);
@@ -56,8 +55,7 @@ public class Swarm extends DockerClient {
 
     @POST
     @Path("leave")
-    public String leaveSwarm(@DefaultValue("false") @QueryParam("force") boolean force)
-            throws ExecutionException, InterruptedException {
+    public String leaveSwarm(@DefaultValue("false") @QueryParam("force") boolean force) {
 
         WebTarget target = resource().path("swarm").path("leave").queryParam("force", force);
         Response response = postResponse(target);
@@ -74,8 +72,7 @@ public class Swarm extends DockerClient {
             @DefaultValue("false") @QueryParam("rotateWorkerToken") boolean rotateWorkerToken,
             @DefaultValue("false") @QueryParam("rotateManagerToken") boolean rotateManagerToken,
             @DefaultValue("false") @QueryParam("rotateManagerUnlockKey") boolean rotateManagerUnlockKey,
-            JsonObject content)
-            throws ExecutionException, InterruptedException {
+            JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("update")
                 .queryParam("rotateWorkerToken", rotateWorkerToken)
@@ -93,8 +90,7 @@ public class Swarm extends DockerClient {
 
     @GET
     @Path("unlockkey")
-    public String unluckKeySwarm()
-            throws ExecutionException, InterruptedException {
+    public String unluckKeySwarm() {
 
         WebTarget target = resource().path("swarm").path("unlockkey");
         Response response = getResponse(target);
@@ -105,8 +101,7 @@ public class Swarm extends DockerClient {
 
     @POST
     @Path("unlock")
-    public String unlockSwarm(JsonObject content)
-            throws ExecutionException, InterruptedException {
+    public String unlockSwarm(JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("unlock");
         Response response = postResponse(target, content);

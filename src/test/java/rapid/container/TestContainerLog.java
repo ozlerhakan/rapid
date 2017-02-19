@@ -1,6 +1,5 @@
 package rapid.container;
 
-import com.kodcu.rapid.util.Networking;
 import org.junit.Test;
 
 import javax.json.JsonArray;

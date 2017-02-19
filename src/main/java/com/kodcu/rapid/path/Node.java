@@ -14,7 +14,10 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.deleteResponse;
+import static com.kodcu.rapid.util.Networking.getResponse;
+import static com.kodcu.rapid.util.Networking.postResponse;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -23,8 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class Node extends DockerClient {
 
     @GET
-    public String listNodes(@QueryParam("filters") String filters)
-            throws ExecutionException, InterruptedException, UnsupportedEncodingException {
+    public String listNodes(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("nodes");
 
@@ -39,8 +41,7 @@ public class Node extends DockerClient {
 
     @GET
     @Path("{id}")
-    public String getNode(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String getNode(@PathParam("id") String id) {
 
         WebTarget target = resource().path("nodes").path(id);
 
@@ -53,8 +54,7 @@ public class Node extends DockerClient {
 
     @DELETE
     @Path("{id}")
-    public String deleteNode(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String deleteNode(@PathParam("id") String id) {
 
         WebTarget target = resource().path("nodes").path(id);
 
@@ -68,8 +68,7 @@ public class Node extends DockerClient {
     @Path("{id}/update")
     public String updateNode(@PathParam("id") String id,
                              @QueryParam("version") String version,
-                             JsonObject content)
-            throws ExecutionException, InterruptedException {
+                             JsonObject content) {
 
         WebTarget target = resource().path("nodes").path(id).path("update");
 

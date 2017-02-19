@@ -4,7 +4,6 @@ import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.JsonObject;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,7 +12,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.deleteResponse;
+import static com.kodcu.rapid.util.Networking.getResponse;
+import static com.kodcu.rapid.util.Networking.postResponse;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -23,8 +25,7 @@ public class Secret extends DockerClient {
 
     @GET
     public String getSecrets(
-            @QueryParam("filters") String filters)
-            throws ExecutionException, InterruptedException {
+            @QueryParam("filters") String filters) {
 
         WebTarget target = resource().path("secrets");
         if (Objects.nonNull(filters))
@@ -38,8 +39,7 @@ public class Secret extends DockerClient {
 
     @POST
     @Path("create")
-    public String createSecret(JsonObject content)
-            throws ExecutionException, InterruptedException {
+    public String createSecret(JsonObject content) {
 
         WebTarget target = resource().path("secrets").path("create");
 
@@ -52,8 +52,7 @@ public class Secret extends DockerClient {
     @GET
     @Path("{id}")
     public String inspectSecret(
-            @PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+            @PathParam("id") String id) {
 
         WebTarget target = resource().path("secrets").path(id);
 
@@ -66,8 +65,7 @@ public class Secret extends DockerClient {
     @DELETE
     @Path("{id}")
     public String deleteSecret(
-            @PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+            @PathParam("id") String id) {
 
         WebTarget target = resource().path("secrets").path(id);
 
@@ -82,8 +80,7 @@ public class Secret extends DockerClient {
     public String updateSecret(
             @PathParam("id") String id,
             @QueryParam("version") String version,
-            JsonObject content)
-            throws ExecutionException, InterruptedException {
+            JsonObject content) {
 
         WebTarget target = resource().path("secrets").path(id).path("update").queryParam("version", version);
 

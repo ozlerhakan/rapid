@@ -15,7 +15,10 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.deleteResponse;
+import static com.kodcu.rapid.util.Networking.getResponse;
+import static com.kodcu.rapid.util.Networking.postResponse;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -24,8 +27,7 @@ import java.util.concurrent.ExecutionException;
 public class Service extends DockerClient {
 
     @GET
-    public String listServices(@QueryParam("filters") String filters)
-            throws ExecutionException, InterruptedException, UnsupportedEncodingException {
+    public String listServices(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("services");
 
@@ -40,8 +42,7 @@ public class Service extends DockerClient {
 
     @POST
     @Path("create")
-    public String createService(JsonObject content)
-            throws ExecutionException, InterruptedException {
+    public String createService(JsonObject content) {
 
         WebTarget target = resource().path("services").path("create");
 
@@ -53,8 +54,7 @@ public class Service extends DockerClient {
 
     @GET
     @Path("{id}")
-    public String inspectService(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String inspectService(@PathParam("id") String id) {
 
         WebTarget target = resource().path("services").path(id);
 
@@ -66,8 +66,7 @@ public class Service extends DockerClient {
 
     @DELETE
     @Path("{id}")
-    public String deleteService(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String deleteService(@PathParam("id") String id) {
 
         WebTarget target = resource().path("services").path(id);
 
@@ -82,8 +81,7 @@ public class Service extends DockerClient {
     public String updateService(@PathParam("id") String id,
                                 @QueryParam("version") int version,
                                 @DefaultValue("spec") @QueryParam("registryAuthFrom") String registryAuthFrom,
-                                JsonObject content)
-            throws ExecutionException, InterruptedException {
+                                JsonObject content) {
 
         WebTarget target = resource().path("services").path(id).path("update").queryParam("registryAuthFrom", registryAuthFrom);
 
@@ -105,8 +103,7 @@ public class Service extends DockerClient {
                                @DefaultValue("false") @QueryParam("stderr") boolean stderr,
                                @DefaultValue("0") @QueryParam("since") String since,
                                @DefaultValue("false") @QueryParam("timestamps") boolean timestamps,
-                               @DefaultValue("all") @QueryParam("tail") String tail)
-            throws ExecutionException, InterruptedException {
+                               @DefaultValue("all") @QueryParam("tail") String tail) {
 
         WebTarget target = resource().path("services").path(id).path("logs")
                 .queryParam("details", details)

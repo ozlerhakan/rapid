@@ -10,7 +10,7 @@ import javax.ws.rs.core.Application;
 /**
  * Created by hakan on 17/02/2017.
  */
-public class ImageConfig extends Config {
+class ImageConfig extends Config {
 
     @Override
     protected Application configure() {

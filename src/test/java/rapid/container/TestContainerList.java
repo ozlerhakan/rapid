@@ -1,17 +1,9 @@
 package rapid.container;
 
-import com.kodcu.rapid.path.Container;
-import com.kodcu.rapid.provider.JsonProvider;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.test.JerseyTest;
-import org.glassfish.jersey.test.TestProperties;
-import org.junit.Assert;
 import org.junit.Test;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static org.hamcrest.CoreMatchers.is;

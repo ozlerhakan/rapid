@@ -2,7 +2,6 @@ package rapid.container;
 
 import com.kodcu.rapid.path.Container;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import rapid.Config;
 

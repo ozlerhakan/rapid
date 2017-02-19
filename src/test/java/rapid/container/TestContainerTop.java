@@ -1,12 +1,10 @@
 package rapid.container;
 
-import com.kodcu.rapid.util.Networking;
 import org.junit.Test;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;

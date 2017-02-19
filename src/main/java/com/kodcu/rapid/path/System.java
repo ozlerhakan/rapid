@@ -3,13 +3,19 @@ package com.kodcu.rapid.path;
 import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.JsonObject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.getResponse;
+import static com.kodcu.rapid.util.Networking.postResponse;
 
 /**
  * Created by Hakan on 2/12/2016.
@@ -20,7 +26,7 @@ public class System extends DockerClient {
     @POST
     @Path("auth")
     @Produces(value = "application/json")
-    public JsonObject getAuth(JsonObject content) throws IOException, ExecutionException, InterruptedException {
+    public JsonObject getAuth(JsonObject content) {
         WebTarget target = resource().path("auth");
         Response response = postResponse(target, content);
         JsonObject entity = response.readEntity(JsonObject.class);
@@ -31,7 +37,7 @@ public class System extends DockerClient {
     @GET
     @Path("version")
     @Produces(value = "application/json")
-    public JsonObject getVersion() throws IOException, ExecutionException, InterruptedException {
+    public JsonObject getVersion() {
         WebTarget target = resource().path("version");
         Response response = getResponse(target);
         JsonObject entity = response.readEntity(JsonObject.class);
@@ -42,7 +48,7 @@ public class System extends DockerClient {
     @GET
     @Path("info")
     @Produces(value = "application/json")
-    public JsonObject getInfo() throws IOException, ExecutionException, InterruptedException {
+    public JsonObject getInfo() {
         WebTarget target = resource().path("info");
         Response response = getResponse(target);
         JsonObject entity = response.readEntity(JsonObject.class);
@@ -52,7 +58,7 @@ public class System extends DockerClient {
 
     @GET
     @Path("_ping")
-    public String ping() throws IOException, ExecutionException, InterruptedException {
+    public String ping() {
         WebTarget target = resource().path("_ping");
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
@@ -62,7 +68,7 @@ public class System extends DockerClient {
 
     @GET
     @Path("system/df")
-    public String df() throws IOException, ExecutionException, InterruptedException {
+    public String df() {
         WebTarget target = resource().path("system").path("df");
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
@@ -75,8 +81,7 @@ public class System extends DockerClient {
     public String events(
             @QueryParam("since") String since,
             @QueryParam("until") String until,
-            @QueryParam("filters") String filters)
-            throws IOException, ExecutionException, InterruptedException {
+            @QueryParam("filters") String filters) throws UnsupportedEncodingException {
         WebTarget target = resource().path("events");
 
         if (Objects.nonNull(since))

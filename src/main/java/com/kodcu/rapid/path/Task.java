@@ -9,7 +9,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
+
+import static com.kodcu.rapid.util.Networking.getResponse;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -18,8 +19,7 @@ import java.util.concurrent.ExecutionException;
 public class Task extends DockerClient {
 
     @GET
-    public String listTasks(@QueryParam("filters") String filters)
-            throws ExecutionException, InterruptedException {
+    public String listTasks(@QueryParam("filters") String filters) {
 
         WebTarget target = resource().path("tasks");
 
@@ -34,8 +34,7 @@ public class Task extends DockerClient {
 
     @GET
     @Path("{id}")
-    public String inspectTask(@PathParam("id") String id)
-            throws ExecutionException, InterruptedException {
+    public String inspectTask(@PathParam("id") String id) {
 
         WebTarget target = resource().path("tasks").path(id);
 
