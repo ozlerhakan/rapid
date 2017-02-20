@@ -11,7 +11,7 @@ import 'brace/theme/github';
 class CommandEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {defaultValue: "GET v1.26/containers/json"};
+        this.state = {defaultValue: "GET containers/json"};
     }
 
     onSplitPaneChanged(newValue) {
@@ -24,8 +24,10 @@ class CommandEditor extends React.Component {
     }
 
     addCommandExample(command) {
+        // askenkronluk sorun cikartiyor, kontrol gerekecek gibi
         this.aceEditor.editor.session.insert(this.aceEditor.editor.getCursorPosition(), command.example);
         this.aceEditor.editor.focus();
+        this.setState({defaultValue: this.aceEditor.editor.getValue()});
     }
 
     componentDidMount() {

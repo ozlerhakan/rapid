@@ -27,8 +27,8 @@ class HomePage extends React.Component {
     handlePlay() {
         let cmd = this.commandEditor.getSelectedText();
 
-        var myRegexp = /(GET|POST|PUT|DELETE)[ |\t]+(.*)([\r\n?]?({[\s\S\t ]*})?)/g;
-        var match = myRegexp.exec(cmd);
+        const myRegexp = /(GET|POST|PUT|DELETE)[ |\t]+(.*)([\r\n?]?({[\s\S\t ]*})?)/g;
+        let match = myRegexp.exec(cmd);
         console.log('HTTP REQUEST: ' + match[1]);
         console.log('URL: ' + match[2]);
         console.log('DATA: ' + match[3]);
@@ -42,9 +42,9 @@ class HomePage extends React.Component {
         fetch('/docker/' + url, {
             method,
             headers: {'Content-Type': 'application/json'},
-            body: method == 'GET' ? null : body
+            body: method == 'POST' ? body : null
         }).then(function (response) {
-            return response.json()
+            return response.json();
         }).then(function (json) {
             that.setState({'loading':false});
             that.resultEditor.setResult(json);
