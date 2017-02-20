@@ -47,6 +47,10 @@ public final class Networking {
         return target.request(APPLICATION_JSON_TYPE).async().method("POST", Entity.entity(content, MediaType.APPLICATION_JSON)).get();
     }
 
+    public static Response postAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
+        return target.request(APPLICATION_JSON_TYPE).async().method("POST").get();
+    }
+
     public static Response deleteAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
         return target.request().async().method("DELETE").get();
     }

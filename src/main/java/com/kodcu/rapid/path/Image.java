@@ -1,9 +1,11 @@
 package com.kodcu.rapid.path;
 
 import com.kodcu.rapid.config.DockerClient;
+import com.kodcu.rapid.pojo.ResponseFrame;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -136,7 +138,7 @@ public class Image extends DockerClient {
 
     @POST
     @Path("{id}/tag")
-    public String tagImage(
+    public ResponseFrame tagImage(
             @PathParam("id") String id,
             @QueryParam("repo") String repo,
             @QueryParam("tag") String tag) {
@@ -146,14 +148,17 @@ public class Image extends DockerClient {
                 .queryParam("tag", tag).queryParam("repo", repo);
 
         Response response = postResponse(target);
+        ResponseFrame frame = new ResponseFrame();
+
         String entity = response.readEntity(String.class);
+        frame.setMessage(entity);
         response.close();
-        return entity;
+        return frame;
     }
 
     @POST
     @Path("prune")
-    public String pruneImages(
+    public JsonObject pruneImages(
             @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("images").path("prune");
@@ -162,14 +167,14 @@ public class Image extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = postResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @DELETE
     @Path("{id}")
-    public JsonArray deleteImage(
+    public JsonStructure deleteImage(
             @PathParam("id") String id,
             @DefaultValue("false") @QueryParam("force") String force,
             @DefaultValue("false") @QueryParam("noprune") String noprune) {
@@ -180,14 +185,18 @@ public class Image extends DockerClient {
                 .queryParam("noprune", noprune);
 
         Response response = deleteResponse(target);
-        JsonArray entity = response.readEntity(JsonArray.class);
+        JsonStructure entity;
+        if (response.getStatus() == 200)
+            entity = response.readEntity(JsonArray.class);
+        else
+            entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @POST
     @Path("create")
-    public String createImage(@QueryParam("fromImage") String fromImage,
+    public JsonObject createImage(@QueryParam("fromImage") String fromImage,
                               @QueryParam("repo") String repo,
                               @QueryParam("tag") String tag) {
 
@@ -200,7 +209,8 @@ public class Image extends DockerClient {
             target = target.queryParam("repo", repo);
 
         Response response = postResponse(target);
-        String entity = response.readEntity(String.class);
+
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }

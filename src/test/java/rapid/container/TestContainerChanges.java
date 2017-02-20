@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class TestContainerChanges extends ContainerConfig {
 
     @Test
-    public void inspectContainer() {
+    public void shouldInspectContainer() {
         final Response listContainers = target("containers").path("json").request(MediaType.APPLICATION_JSON).get();
         final JsonArray containers = listContainers.readEntity(JsonArray.class);
         final JsonObject runningCurrentContainer = (JsonObject) containers.get(0);

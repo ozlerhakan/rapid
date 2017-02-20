@@ -46,6 +46,10 @@ public class Config extends JerseyTest {
         return Networking.postAsycResponse(target, content);
     }
 
+    public static Response postAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
+        return Networking.postAsycResponse(target);
+    }
+
     public static Response deleteAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
         return Networking.deleteAsycResponse(target);
     }

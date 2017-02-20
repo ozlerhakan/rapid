@@ -5,6 +5,8 @@ import org.junit.Test;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 
+import java.util.concurrent.ExecutionException;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -13,11 +15,12 @@ import static org.junit.Assert.assertEquals;
 public class TestImageCreate extends ImageConfig {
 
     @Test
-    public void shouldCreateImage() {
-        final Response response = postResponse(target("images").path("create").queryParam("fromImage","alpine").queryParam("tag","3.2"));
+    public void shouldCreateImage() throws ExecutionException, InterruptedException {
+        final Response response = postAsycResponse(target("images").path("create").queryParam("fromImage","alpine").queryParam("tag","3.2"));
         System.out.println(response);
+
         assertEquals(200, response.getStatus());
-        final String responseContent = response.readEntity(String.class);
+        final JsonObject responseContent = response.readEntity(JsonObject.class);
         System.out.println(responseContent);
         response.close();
     }
