@@ -182,10 +182,10 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
     public void shouldDeleteContainer() throws ExecutionException, InterruptedException {
         final WebTarget target = target("containers").path(id).queryParam("v", true).queryParam("force", true);
         Response response = deleteAsycResponse(target);
-
+        System.out.println(response);
         // ubuntu:latest neeeded
         assertEquals(200, response.getStatus());
-        final String responseContent = response.readEntity(String.class);
+        final JsonObject responseContent = response.readEntity(JsonObject.class);
         response.close();
     }
 

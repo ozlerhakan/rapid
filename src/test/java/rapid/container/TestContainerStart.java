@@ -39,6 +39,7 @@ public class TestContainerStart extends ContainerConfig {
         assertEquals(200, createResponse.getStatus());
         final JsonObject responseContent = createResponse.readEntity(JsonObject.class);
         createResponse.close();
+
         final String containerId = responseContent.getJsonString("Id").getString();
 
         final Response start = postResponse(target("containers").path(containerId).path("start"));
