@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +22,7 @@ public class TestImageRemove extends ImageConfig {
         System.out.println(delete);
         assertEquals(200, delete.getStatus());
         // array for 200
-        final JsonArray responseContent = delete.readEntity(JsonArray.class);
+        final JsonStructure responseContent = delete.readEntity(JsonStructure.class);
         System.out.println(responseContent);
 
     }

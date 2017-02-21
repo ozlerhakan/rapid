@@ -7,6 +7,7 @@ import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.json.JsonStructure;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -45,14 +46,19 @@ public class JsonProvider implements MessageBodyWriter, MessageBodyReader {
                         MediaType mediaType, MultivaluedMap httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
 
-        JsonObject jObj;
+        JsonStructure jObj;
         if (o instanceof ResponseFrame) {
             ResponseFrame f = (ResponseFrame) o;
-            JsonObjectBuilder b = Json.createObjectBuilder()
-                    .add("message", f.getMessage());
+            JsonObjectBuilder b = Json.createObjectBuilder();
+
+            if (!f.getId().isEmpty())
+                b.add("id", f.getId());
+
+            b.add("message", f.getMessage());
             jObj = b.build();
         } else
-            jObj = (JsonObject) o;
+            jObj = (JsonStructure) o;
+
 
         entityStream.write(jObj.toString().getBytes());
     }

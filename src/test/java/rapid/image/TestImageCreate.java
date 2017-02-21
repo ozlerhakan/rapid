@@ -15,8 +15,8 @@ import static org.junit.Assert.assertEquals;
 public class TestImageCreate extends ImageConfig {
 
     @Test
-    public void shouldCreateImage() throws ExecutionException, InterruptedException {
-        final Response response = postAsycResponse(target("images").path("create").queryParam("fromImage","alpine").queryParam("tag","3.2"));
+    public void shouldCreateImage() {
+        final Response response = postResponse(target("images").path("create").queryParam("fromImage","alpine").queryParam("tag","3.2"));
         System.out.println(response);
 
         assertEquals(200, response.getStatus());

@@ -3,9 +3,9 @@ package com.kodcu.rapid.path;
 import com.kodcu.rapid.config.DockerClient;
 import com.kodcu.rapid.pojo.ResponseFrame;
 
-import javax.json.JsonArray;
+import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -16,9 +16,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
@@ -43,13 +46,10 @@ public class Image extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
+        String raw = response.readEntity(String.class);
         response.close();
-        return entity;
+        JsonReader reader = Json.createReader(new StringReader(raw));
+        return reader.read();
     }
 
     @GET
@@ -72,21 +72,17 @@ public class Image extends DockerClient {
 
         Response response = getResponse(target);
 
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
-
+        String raw = response.readEntity(String.class);
         response.close();
-        return entity;
+        JsonReader reader = Json.createReader(new StringReader(raw));
+        return reader.read();
     }
 
     @GET
     @Path("search")
     public JsonStructure searchImages(@QueryParam("term") String term,
-                               @DefaultValue("25") @QueryParam("limit") int limit,
-                               @QueryParam("filters") String filters) throws UnsupportedEncodingException {
+                                      @DefaultValue("25") @QueryParam("limit") int limit,
+                                      @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("images").path("search").queryParam("term", term).queryParam("limit", limit);
 
@@ -94,13 +90,10 @@ public class Image extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
+        String raw = response.readEntity(String.class);
         response.close();
-        return entity;
+        JsonReader reader = Json.createReader(new StringReader(raw));
+        return reader.read();
     }
 
     @POST
@@ -148,11 +141,18 @@ public class Image extends DockerClient {
                 .queryParam("tag", tag).queryParam("repo", repo);
 
         Response response = postResponse(target);
-        ResponseFrame frame = new ResponseFrame();
-
         String entity = response.readEntity(String.class);
-        frame.setMessage(entity);
         response.close();
+        ResponseFrame frame = new ResponseFrame();
+        frame.setId(id);
+
+        if (entity.isEmpty())
+            frame.setMessage("tagged as " + tag);
+        else {
+            JsonReader reader = Json.createReader(new StringReader(entity));
+            JsonObject o = reader.readObject();
+            frame.setMessage(o.getJsonString("message").getString());
+        }
         return frame;
     }
 
@@ -185,33 +185,40 @@ public class Image extends DockerClient {
                 .queryParam("noprune", noprune);
 
         Response response = deleteResponse(target);
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
+        String raw = response.readEntity(String.class);
         response.close();
-        return entity;
+        JsonReader reader = Json.createReader(new StringReader(raw));
+        return reader.read();
     }
 
     @POST
     @Path("create")
-    public JsonObject createImage(@QueryParam("fromImage") String fromImage,
-                              @QueryParam("repo") String repo,
-                              @QueryParam("tag") String tag) {
+    public ResponseFrame createImage(@QueryParam("fromImage") String fromImage,
+                              @QueryParam("tag") String tag)  {
 
         WebTarget target = resource().path("images").path("create")
-                .queryParam("fromImage", fromImage);
-
-        if (Objects.nonNull(tag))
-            target = target.queryParam("tag", tag);
-        if (Objects.nonNull(repo))
-            target = target.queryParam("repo", repo);
+                .queryParam("fromImage", fromImage)
+                .queryParam("tag", tag);
 
         Response response = postResponse(target);
-
-        JsonObject entity = response.readEntity(JsonObject.class);
+        String entity = response.readEntity(String.class);
         response.close();
-        return entity;
+
+        ResponseFrame f = new ResponseFrame();
+        f.setId("");
+        f.setMessage("No such image: "+ fromImage + ":" + tag);
+
+        if (!entity.isEmpty()) {
+            String pattern = "\\{\\\"status\\\":\\\"(Status:.*)\\\"\\}";
+            Pattern compile = Pattern.compile(pattern);
+            Matcher matcher = compile.matcher(entity);
+
+            if(matcher.find()) {
+                String group = matcher.group(1);
+                f.setMessage(group);
+            }
+        }
+
+        return f;
     }
 }
