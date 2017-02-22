@@ -11,12 +11,13 @@ import 'brace/theme/github';
 class CommandEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {defaultValue: "GET containers/json"};
+        this.state = {defaultValue: "## containers\n\nGET containers/json"};
+        this.onChange = this.onChange.bind(this);
     }
 
     onSplitPaneChanged(newValue) {
         this.aceEditor.editor.session.setWrapLimitRange(0, newValue + 1);
-        this.setState({defaultValue: this.aceEditor.editor.getValue()});
+        this.setState({defaultValue: this.aceEditor.editor.session.getValue()});
     }
 
     getSelectedText() {
@@ -24,10 +25,14 @@ class CommandEditor extends React.Component {
     }
 
     addCommandExample(command) {
-        // askenkronluk sorun cikartiyor, kontrol gerekecek gibi
         this.aceEditor.editor.session.insert(this.aceEditor.editor.getCursorPosition(), command.example);
+        this.setState({defaultValue: this.aceEditor.editor.session.getValue()});
+
         this.aceEditor.editor.focus();
-        this.setState({defaultValue: this.aceEditor.editor.getValue()});
+    }
+
+    onChange() {
+        this.setState({defaultValue: this.aceEditor.editor.session.getValue()});
     }
 
     componentDidMount() {
@@ -49,6 +54,7 @@ class CommandEditor extends React.Component {
             enableLiveAutocompletion
             highlightActiveLine
             showInvisibles
+            onChange={this.onChange}
             editorProps={{$blockScrolling: Infinity}}
             value={this.state.defaultValue}
             ref={(input) => this.aceEditor = input}
