@@ -171,17 +171,17 @@ export default {
                 "  }\n" +
                 "}"
                 },
-                {name: 'Inspect a container', example: "GET containers/container-id/json"},
+                {name: 'Inspect a container', example: "GET containers/containerId/json"},
                 {
                     name: 'List processes running inside a container',
                     example: "GET containers/container-id/top?ps_args=-ef"
                 },
-                {name: 'Get container logs', example: "GET containers/container-id/logs?stdout=true&tail=all"},
+                {name: 'Get container logs', example: "GET containers/containerId/logs?stdout=true&tail=all"},
                 {name: 'Get changes on a container’s filesystem', example: "GET containers/container-id/changes"},
-                {name: 'Start a container', example: "POST containers/container-id/start"},
-                {name: 'Stop a container', example: "POST containers/container-id/stop"},
-                {name: 'Kill a container', example: "POST containers/container-id/kill?signal=KILL"},
-                {name: 'Restart a container', example: "POST containers/container-id/restart?t=5"},
+                {name: 'Start a container', example: "POST containers/containerId/start"},
+                {name: 'Stop a container', example: "POST containers/containerId/stop"},
+                {name: 'Kill a container', example: "POST containers/containervd/kill?signal=KILL"},
+                {name: 'Restart a container', example: "POST containers/containerId/restart?t=5"},
                 {
                     name: 'Update a container', example: "POST containers/container-id/update\n{\n" +
                 "  \"BlkioWeight\": 300,\n" +
@@ -202,10 +202,10 @@ export default {
                 "  }\n" +
                 "}\n"
                 },
-                {name: 'Rename a container', example: "POST containers/container-id/rename?name=newName"},
-                {name: 'Pause a container', example: "POST containers/container-id/pause"},
-                {name: 'Unpause a container', example: "POST containers/container-id/unpause"},
-                {name: 'Remove a container', example: "DELETE containers/container-id?v=true&force=true"},
+                {name: 'Rename a container', example: "POST containers/containerId/rename?name=newName"},
+                {name: 'Pause a container', example: "POST containers/containerId/pause"},
+                {name: 'Unpause a container', example: "POST containers/containerId/unpause"},
+                {name: 'Remove a container', example: "DELETE containers/containerId?v=true&force=true"},
                 {name: 'Delete stopped containers', example: "DELETE containers/prune"}
             ]
         },
