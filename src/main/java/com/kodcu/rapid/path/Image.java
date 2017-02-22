@@ -194,7 +194,7 @@ public class Image extends DockerClient {
     @POST
     @Path("create")
     public ResponseFrame createImage(@QueryParam("fromImage") String fromImage,
-                              @QueryParam("tag") String tag)  {
+                                     @QueryParam("tag") String tag) {
 
         WebTarget target = resource().path("images").path("create")
                 .queryParam("fromImage", fromImage)
@@ -206,17 +206,18 @@ public class Image extends DockerClient {
 
         ResponseFrame f = new ResponseFrame();
         f.setId("");
-        f.setMessage("No such image: "+ fromImage + ":" + tag);
+        f.setMessage("No such image: " + fromImage + ":" + tag);
 
         if (!entity.isEmpty()) {
             String pattern = "\\{\\\"status\\\":\\\"(Status:.*)\\\"\\}";
             Pattern compile = Pattern.compile(pattern);
             Matcher matcher = compile.matcher(entity);
 
-            if(matcher.find()) {
+            if (matcher.find()) {
                 String group = matcher.group(1);
                 f.setMessage(group);
-            }
+            } else
+                f.setMessage("");
         }
 
         return f;

@@ -27,7 +27,7 @@ class Header extends React.Component {
         return <Navbar>
             <Navbar.Header>
                 <Navbar.Brand>
-                    Rapid Dashboar
+                    Rapid Dashboard
                 </Navbar.Brand>
             </Navbar.Header>
             <Nav>

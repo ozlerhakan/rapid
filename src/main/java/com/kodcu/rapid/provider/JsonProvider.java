@@ -75,7 +75,7 @@ public class JsonProvider implements MessageBodyWriter, MessageBodyReader {
                            InputStream entityStream) throws IOException, WebApplicationException {
         // from HTML to methods having @Consumes
         JsonReader jsonReader = Json.createReader(entityStream);
-        JsonObject object = jsonReader.readObject();
+        JsonStructure object = jsonReader.read();
         jsonReader.close();
         entityStream.close();
         return object;

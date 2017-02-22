@@ -3,6 +3,7 @@ package com.kodcu.rapid.util;
 import org.eclipse.jetty.http.MimeTypes;
 
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -23,7 +24,7 @@ public final class Networking {
         return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).get();
     }
 
-    public static Response postResponse(WebTarget target, JsonObject content) {
+    public static Response postResponse(WebTarget target, JsonStructure content) {
         return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).method("POST", Entity.entity(content, MediaType.APPLICATION_JSON));
     }
 

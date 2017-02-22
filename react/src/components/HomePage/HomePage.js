@@ -27,7 +27,7 @@ class HomePage extends React.Component {
     handlePlay() {
         let cmd = this.commandEditor.getSelectedText();
 
-        const myRegexp = /(GET|POST|PUT|DELETE)[ |\t]+(.*)([\r\n?]?({[\s\S\t ]*})?)/g;
+        const myRegexp = /(GET|POST|PUT|DELETE)[ |\t]+(.*)([\r\n?]?([{\[][\s\S\t ]*[}\]])?)/g;
         let match = myRegexp.exec(cmd);
         console.log('HTTP REQUEST: ' + match[1]);
         console.log('URL: ' + match[2]);

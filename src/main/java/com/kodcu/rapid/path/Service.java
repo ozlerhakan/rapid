@@ -2,7 +2,9 @@ package com.kodcu.rapid.path;
 
 import com.kodcu.rapid.config.DockerClient;
 
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -12,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
@@ -27,7 +30,7 @@ import static com.kodcu.rapid.util.Networking.postResponse;
 public class Service extends DockerClient {
 
     @GET
-    public String listServices(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public JsonStructure listServices(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("services");
 
@@ -37,51 +40,55 @@ public class Service extends DockerClient {
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
         response.close();
-        return entity;
+        return Json.createReader(new StringReader(entity)).read();
     }
 
     @POST
     @Path("create")
-    public String createService(JsonObject content) {
+    public JsonStructure createService(JsonObject content) {
 
         WebTarget target = resource().path("services").path("create");
 
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
         response.close();
-        return entity;
+        return Json.createReader(new StringReader(entity)).read();
     }
 
     @GET
     @Path("{id}")
-    public String inspectService(@PathParam("id") String id) {
+    public JsonObject inspectService(@PathParam("id") String id) {
 
         WebTarget target = resource().path("services").path(id);
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @DELETE
     @Path("{id}")
-    public String deleteService(@PathParam("id") String id) {
+    public JsonObject deleteService(@PathParam("id") String id) {
 
         WebTarget target = resource().path("services").path(id);
 
         Response response = deleteResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject result;
+        if (response.getStatus() == 200)
+            result = Json.createObjectBuilder().add("message", id + " service deleted.").build();
+        else
+            result = response.readEntity(JsonObject.class);
         response.close();
-        return entity;
+        return result;
     }
 
     @POST
     @Path("{id}/update")
-    public String updateService(@PathParam("id") String id,
-                                @QueryParam("version") int version,
-                                @DefaultValue("spec") @QueryParam("registryAuthFrom") String registryAuthFrom,
-                                JsonObject content) {
+    public JsonObject updateService(@PathParam("id") String id,
+                                    @QueryParam("version") int version,
+                                    @DefaultValue("spec") @QueryParam("registryAuthFrom") String registryAuthFrom,
+                                    JsonObject content) {
 
         WebTarget target = resource().path("services").path(id).path("update").queryParam("registryAuthFrom", registryAuthFrom);
 
@@ -89,25 +96,24 @@ public class Service extends DockerClient {
             target = target.queryParam("version", version);
 
         Response response = postResponse(target, content);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @GET
     @Path("{id}/logs")
-    public String serviceLiogs(@PathParam("id") String id,
-                               @DefaultValue("false") @QueryParam("details") boolean details,
-                               @DefaultValue("false") @QueryParam("follow") boolean follow,
-                               @DefaultValue("false") @QueryParam("stdout") boolean stdout,
-                               @DefaultValue("false") @QueryParam("stderr") boolean stderr,
-                               @DefaultValue("0") @QueryParam("since") String since,
-                               @DefaultValue("false") @QueryParam("timestamps") boolean timestamps,
-                               @DefaultValue("all") @QueryParam("tail") String tail) {
+    public JsonObject serviceLiogs(@PathParam("id") String id,
+                                   @DefaultValue("false") @QueryParam("details") boolean details,
+                                   @DefaultValue("false") @QueryParam("stdout") boolean stdout,
+                                   @DefaultValue("false") @QueryParam("stderr") boolean stderr,
+                                   @DefaultValue("0") @QueryParam("since") String since,
+                                   @DefaultValue("false") @QueryParam("timestamps") boolean timestamps,
+                                   @DefaultValue("all") @QueryParam("tail") String tail) {
 
         WebTarget target = resource().path("services").path(id).path("logs")
                 .queryParam("details", details)
-                .queryParam("follow", follow)
+                .queryParam("follow", false)
                 .queryParam("stdout", stdout)
                 .queryParam("stderr", stderr)
                 .queryParam("since", since)
@@ -116,8 +122,14 @@ public class Service extends DockerClient {
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
+        int status = response.getStatus();
+        JsonObject result;
+        if (status == 200 || status == 101)
+            result = Json.createObjectBuilder().add("message", response.readEntity(String.class)).build();
+        else
+            result = response.readEntity(JsonObject.class);
         response.close();
-        return entity;
+        return result;
     }
 
 

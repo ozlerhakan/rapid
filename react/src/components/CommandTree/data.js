@@ -342,16 +342,21 @@ export default {
                 {name: 'Inspect swarm', example: "GET swarm"},
                 {
                     name: 'Initialize a new swarm', example: "POST swarm/init\n{\n" +
-                "  \"ListenAddr\": \"0.0.0.0:2377\",\n" +
-                "  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n" +
+                "  \"AdvertiseAddr\": \"192.168.56.101:2377\",\n" +
+                "  \"AutoLockManagers\": false,\n" +
                 "  \"ForceNewCluster\": false,\n" +
+                "  \"ListenAddr\": \"192.168.56.101:2377\",\n" +
                 "  \"Spec\": {\n" +
-                "    \"Orchestration\": {},\n" +
-                "    \"Raft\": {},\n" +
-                "    \"Dispatcher\": {},\n" +
                 "    \"CAConfig\": {},\n" +
+                "    \"Dispatcher\": {},\n" +
                 "    \"EncryptionConfig\": {\n" +
-                "      \"AutoLockManagers\": false\n" +
+                "      \"AutoLockManagers\": false,\n" +
+                "      \"Orchestration\": {},\n" +
+                "      \"Raft\": {\n" +
+                "        \"ElectionTick\": 0,\n" +
+                "        \"HeartbeatTick\": 0\n" +
+                "      },\n" +
+                "      \"TaskDefaults\": {}\n" +
                 "    }\n" +
                 "  }\n" +
                 "}"
@@ -406,42 +411,217 @@ export default {
         {
             name: 'Nodes',
             children: [
-                {name: 'List nodes'},
-                {name: 'Inspect a node'},
-                {name: 'Delete a node'},
-                {name: 'Update a node'}
+                {name: 'List nodes', example: "GET nodes?filters={\"role\":{\"manager\":true}}"},
+                {name: 'Inspect a node', example: "GET nodes/id"},
+                {name: 'Delete a node', example: "DELETE nodes/id?force=true"},
+                {
+                    name: 'Update a node', example: "POST nodes/id/update\n{\n" +
+                "  \"Availability\": \"active\",\n" +
+                "  \"Name\": \"node-name\",\n" +
+                "  \"Role\": \"manager\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"foo\": \"bar\"\n" +
+                "  }\n" +
+                "}"
+                }
             ]
         },
         {
             name: 'Services',
             children: [
-                {name: 'List services'},
-                {name: 'Create a service'},
-                {name: 'Inspect a service'},
-                {name: 'Delete a service'},
-                {name: 'Update a service'},
-                {name: 'Get service logs'}
+                {name: 'List services', example: "GET services?filters={\"name\":{\"service-name\":true}}"},
+                {
+                    name: 'Create a service', example: "POST services/create\n{\n" +
+                "  \"Name\": \"web\",\n" +
+                "  \"TaskTemplate\": {\n" +
+                "    \"ContainerSpec\": {\n" +
+                "      \"Image\": \"nginx:alpine\",\n" +
+                "      \"Mounts\": [\n" +
+                "        {\n" +
+                "          \"ReadOnly\": true,\n" +
+                "          \"Source\": \"web-data\",\n" +
+                "          \"Target\": \"/usr/share/nginx/html\",\n" +
+                "          \"Type\": \"volume\",\n" +
+                "          \"VolumeOptions\": {\n" +
+                "            \"DriverConfig\": {},\n" +
+                "            \"Labels\": {\n" +
+                "              \"com.example.something\": \"something-value\"\n" +
+                "            }\n" +
+                "          }\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"User\": \"33\",\n" +
+                "      \"DNSConfig\": {\n" +
+                "        \"Nameservers\": [\n" +
+                "          \"8.8.8.8\"\n" +
+                "        ],\n" +
+                "        \"Search\": [\n" +
+                "          \"example.org\"\n" +
+                "        ],\n" +
+                "        \"Options\": [\n" +
+                "          \"timeout:3\"\n" +
+                "        ]\n" +
+                "      }\n" +
+                "    },\n" +
+                "    \"LogDriver\": {\n" +
+                "      \"Name\": \"json-file\",\n" +
+                "      \"Options\": {\n" +
+                "        \"max-file\": \"3\",\n" +
+                "        \"max-size\": \"10M\"\n" +
+                "      }\n" +
+                "    },\n" +
+                "    \"Placement\": {},\n" +
+                "    \"Resources\": {\n" +
+                "      \"Limits\": {\n" +
+                "        \"MemoryBytes\": 104857600\n" +
+                "      },\n" +
+                "      \"Reservations\": {}\n" +
+                "    },\n" +
+                "    \"RestartPolicy\": {\n" +
+                "      \"Condition\": \"on-failure\",\n" +
+                "      \"Delay\": 10000000000,\n" +
+                "      \"MaxAttempts\": 10\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"Mode\": {\n" +
+                "    \"Replicated\": {\n" +
+                "      \"Replicas\": 4\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"UpdateConfig\": {\n" +
+                "    \"Delay\": 30000000000,\n" +
+                "    \"Parallelism\": 2,\n" +
+                "    \"FailureAction\": \"pause\"\n" +
+                "  },\n" +
+                "  \"EndpointSpec\": {\n" +
+                "    \"Ports\": [\n" +
+                "      {\n" +
+                "        \"Protocol\": \"tcp\",\n" +
+                "        \"PublishedPort\": 8080,\n" +
+                "        \"TargetPort\": 80\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  \"Labels\": {\n" +
+                "    \"foo\": \"bar\"\n" +
+                "  }\n" +
+                "}"
+                },
+                {name: 'Inspect a service', example: "GET services/id"},
+                {name: 'Delete a service', example: "DELETE services/id"},
+                {
+                    name: 'Update a service', example: "POST services/id/update\n{\n" +
+                "  \"Name\": \"top\",\n" +
+                "  \"TaskTemplate\": {\n" +
+                "    \"ContainerSpec\": {\n" +
+                "      \"Image\": \"busybox\",\n" +
+                "      \"Args\": [\n" +
+                "        \"top\"\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    \"Resources\": {\n" +
+                "      \"Limits\": {},\n" +
+                "      \"Reservations\": {}\n" +
+                "    },\n" +
+                "    \"RestartPolicy\": {\n" +
+                "      \"Condition\": \"any\",\n" +
+                "      \"MaxAttempts\": 0\n" +
+                "    },\n" +
+                "    \"Placement\": {},\n" +
+                "    \"ForceUpdate\": 0\n" +
+                "  },\n" +
+                "  \"Mode\": {\n" +
+                "    \"Replicated\": {\n" +
+                "      \"Replicas\": 1\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"UpdateConfig\": {\n" +
+                "    \"Parallelism\": 1,\n" +
+                "    \"Monitor\": 15000000000,\n" +
+                "    \"MaxFailureRatio\": 0.15\n" +
+                "  },\n" +
+                "  \"EndpointSpec\": {\n" +
+                "    \"Mode\": \"vip\"\n" +
+                "  }\n" +
+                "}"
+                },
+                {name: 'Get service logs', example: "GET services/id/logs?stdout=true&tail=all&details=true"}
             ]
         },
         {
             name: 'Tasks',
             children: [
-                {name: 'List tasks'},
-                {name: 'Inspect a task'}
+                {name: 'List tasks', example: "GET tasks?filters={\"desired-state\":{\"accepted\":true}}"},
+                {name: 'Inspect a task', example: "GET tasks/id"}
             ]
         },
         {
             name: 'Plugins',
             children: [
-                {name: 'List plugins'},
-                {name: 'Get plugin privileges'},
-                {name: 'Install a plugin'},
-                {name: 'Inspect a plugin'},
-                {name: 'Remove a plugin'},
-                {name: 'Enable a plugin'},
-                {name: 'Disable a plugin'},
-                {name: 'Upgrade a plugin'},
-                {name: 'Push a plugin'}
+                {name: 'List plugins', example: "GET plugins"},
+                {name: 'Get plugin privileges', example: "GET plugins/privileges?name=myplugin"},
+                {
+                    name: 'Install a plugin', example: "POST plugins/pull\n[\n" +
+                "  {\n" +
+                "    \"Name\": \"network\",\n" +
+                "    \"Description\": \"\",\n" +
+                "    \"Value\": [\n" +
+                "      \"host\"\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"Name\": \"mount\",\n" +
+                "    \"Description\": \"\",\n" +
+                "    \"Value\": [\n" +
+                "      \"/data\"\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"Name\": \"device\",\n" +
+                "    \"Description\": \"\",\n" +
+                "    \"Value\": [\n" +
+                "      \"/dev/cpu_dma_latency\"\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]"
+                },
+                {name: 'Inspect a plugin', example: "GET plugins/{name}/json"},
+                {name: 'Remove a plugin', example: "DELETE plugins/{name}?force=false"},
+                {name: 'Enable a plugin', example: "POST plugins/{name}/enable?timeout=0"},
+                {name: 'Disable a plugin', example: "POST plugins/{name}/disable"},
+                {
+                    name: 'Upgrade a plugin', example: "POST plugins/{name}/upgrade\n[\n" +
+                "  {\n" +
+                "    \"Name\": \"network\",\n" +
+                "    \"Description\": \"\",\n" +
+                "    \"Value\": [\n" +
+                "      \"host\"\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"Name\": \"mount\",\n" +
+                "    \"Description\": \"\",\n" +
+                "    \"Value\": [\n" +
+                "      \"/data\"\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"Name\": \"device\",\n" +
+                "    \"Description\": \"\",\n" +
+                "    \"Value\": [\n" +
+                "      \"/dev/cpu_dma_latency\"\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]"
+                },
+                {
+                    name: 'Push a plugin', example: "POST plugins/{name}/push"
+                },
+                {
+                    name: 'Configure a plugin', example: "POST plugins/{name}/set\n[\n" +
+                "  \"DEBUG=1\"\n" +
+                "]"
+                }
             ]
         }
     ]
