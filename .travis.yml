@@ -8,13 +8,16 @@ os:
 - linux
 env:
 - RAPID_FULL="ozlerhakan/rapid:1.26"
-script: sudo -E sh -c docker run --rm -v ~/.m2:/root/.m2 -v $(PWD):/rapid -w /rapid --privileged -v /var/run/docker.sock:/var/run/docker.sock maven:3-jdk-8 mvn clean test
+script: docker run --rm -v ~/.m2:/root/.m2 -v $(PWD):/rapid -w /rapid --privileged -v /var/run/docker.sock:/var/run/docker.sock maven:3-jdk-8 mvn clean test
 before_install:
 - sudo apt-get update
 - sudo wget -qO- https://get.docker.com/ | sh
-- sudo -E sh -c docker version
-- sudo -E sh -c docker pull ubuntu:latest
-- sudo -E sh -c docker pull busybox:1.26
+- sudo groupadd docker
+- sudo usermod -aG docker travis
+- sudo service docker restart
+- docker version
+- docker pull ubuntu:latest
+- docker pull busybox:1.26
 - cd react/
 - npm install
 - npm run build:prod
