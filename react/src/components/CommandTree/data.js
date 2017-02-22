@@ -140,36 +140,8 @@ export default {
                 "        }\n" +
                 "      ]\n" +
                 "    },\n" +
-                "    \"PublishAllPorts\": false,\n" +
-                "    \"Privileged\": false,\n" +
-                "    \"ReadonlyRootfs\": false,\n" +
                 "    \"Dns\": [\n" +
                 "      \"8.8.8.8\"\n" +
-                "    ],\n" +
-                "    \"DnsOptions\": [\n" +
-                "      \"\"\n" +
-                "    ],\n" +
-                "    \"DnsSearch\": [\n" +
-                "      \"\"\n" +
-                "    ],\n" +
-                "    \"CapAdd\": [\n" +
-                "      \"NET_ADMIN\"\n" +
-                "    ],\n" +
-                "    \"CapDrop\": [\n" +
-                "      \"MKNOD\"\n" +
-                "    ],\n" +
-                "    \"GroupAdd\": [\n" +
-                "      \"newgroup\"\n" +
-                "    ],\n" +
-                "    \"RestartPolicy\": {\n" +
-                "      \"Name\": \"\",\n" +
-                "      \"MaximumRetryCount\": 0\n" +
-                "    },\n" +
-                "    \"AutoRemove\": true,\n" +
-                "    \"NetworkMode\": \"bridge\",\n" +
-                "    \"Devices\": [],\n" +
-                "    \"Ulimits\": [\n" +
-                "      {}\n" +
                 "    ],\n" +
                 "    \"LogConfig\": {\n" +
                 "      \"Type\": \"json-file\",\n" +
@@ -240,55 +212,195 @@ export default {
         {
             name: 'Networks',
             children: [
-                {name: 'List networks'},
-                {name: 'Inspect a network'},
-                {name: 'Remove a network'},
-                {name: 'Create a network'},
-                {name: 'Connect a container to a network'},
-                {name: 'Disconnect a container from a network'},
-                {name: 'Delete unused networks'}
+                {name: 'List networks', example: "GET networks?filters={\"name\":{\"host\":true}}"},
+                {name: 'Inspect a network', example: "GET networks/id-name"},
+                {name: 'Remove a network', example: "DELETE networks/id-name"},
+                {
+                    name: 'Create a network', example: "POST networks/create\n{\n" +
+                "  \"Name\": \"isolated_nw\",\n" +
+                "  \"CheckDuplicate\": false,\n" +
+                "  \"Driver\": \"bridge\",\n" +
+                "  \"EnableIPv6\": true,\n" +
+                "  \"IPAM\": {\n" +
+                "    \"Driver\": \"default\",\n" +
+                "    \"Config\": [\n" +
+                "      {\n" +
+                "        \"Subnet\": \"172.20.0.0/16\",\n" +
+                "        \"IPRange\": \"172.20.10.0/24\",\n" +
+                "        \"Gateway\": \"172.20.10.11\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"Subnet\": \"2001:db8:abcd::/64\",\n" +
+                "        \"Gateway\": \"2001:db8:abcd::1011\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"Options\": {\n" +
+                "      \"foo\": \"bar\"\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"Internal\": true,\n" +
+                "  \"Attachable\": false,\n" +
+                "  \"Options\": {\n" +
+                "    \"com.docker.network.bridge.default_bridge\": \"true\",\n" +
+                "    \"com.docker.network.bridge.enable_icc\": \"true\",\n" +
+                "    \"com.docker.network.bridge.enable_ip_masquerade\": \"true\",\n" +
+                "    \"com.docker.network.bridge.host_binding_ipv4\": \"0.0.0.0\",\n" +
+                "    \"com.docker.network.bridge.name\": \"docker0\",\n" +
+                "    \"com.docker.network.driver.mtu\": \"1500\"\n" +
+                "  },\n" +
+                "  \"Labels\": {\n" +
+                "    \"com.example.some-label\": \"some-value\",\n" +
+                "    \"com.example.some-other-label\": \"some-other-value\"\n" +
+                "  }\n" +
+                "}"
+                },
+                {
+                    name: 'Connect a container to a network', example: "POST networks/id/connect\n{\n" +
+                "  \"Container\": \"3613f73ba0e4\",\n" +
+                "  \"EndpointConfig\": {\n" +
+                "    \"IPAMConfig\": {\n" +
+                "      \"IPv4Address\": \"172.24.56.89\",\n" +
+                "      \"IPv6Address\": \"2001:db8::5689\"\n" +
+                "    }\n" +
+                "  }\n" +
+                "}"
+                },
+                {
+                    name: 'Disconnect a container from a network',
+                    example: "POST networks/id/disconnect\n{\n   \"Container\":\"string\"\n,   \"Force\":true\n}"
+                },
+                {name: 'Delete unused networks', example: "POST networks/prune"}
             ]
         },
         {
             name: 'Volumes',
             children: [
-                {name: 'List volumes'},
-                {name: 'Create a volume'},
-                {name: 'Inspect a volume'},
-                {name: 'Remove a volume'},
-                {name: 'Delete unused volumes'}
+                {name: 'List volumes', example: "GET volumes?filters={\"dangling\":{\"true\":false}}"},
+                {
+                    name: 'Create a volume', example: "POST volumes/create\n{\n" +
+                "  \"Name\": \"tardis\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"com.example.some-label\": \"some-value\",\n" +
+                "    \"com.example.some-other-label\": \"some-other-value\"\n" +
+                "  },\n" +
+                "  \"Driver\": \"local\"\n" +
+                "}"
+                },
+                {name: 'Inspect a volume', example: "GET volumes/volume-name"},
+                {name: 'Remove a volume', example: "DELETE volumes/volume-name?force=true"},
+                {name: 'Delete unused volumes', example: "DELETE volume/prune"}
             ]
         },
         {
             name: 'System',
             children: [
-                {name: 'Check auth configuration'},
-                {name: 'Get system information'},
-                {name: 'Get version'},
-                {name: 'Ping'},
-                {name: 'Get data usage information'}
+                {
+                    name: 'Check auth configuration', example: "GET /auth\n{\n" +
+                "  \"username\": \"hannibal\",\n" +
+                "  \"password\": \"xxxx\",\n" +
+                "  \"serveraddress\": \"https://index.docker.io/v1/\"\n" +
+                "}"
+                },
+                {name: 'Get system information', example: "GET info"},
+                {name: 'Get version', example: "GET version"},
+                {name: 'Ping', example: "GET _ping"},
+                {name: 'Get data usage information', example: "GET system/df"}
             ]
         },
         {
             name: 'Secrets',
             children: [
-                {name: 'List secrets'},
-                {name: 'Create a secret'},
-                {name: 'Inspect a secret'},
-                {name: 'Delete a secret'},
-                {name: 'Update a Secret'}
+                {name: 'List secrets', example: "GET secrets"},
+                {
+                    name: 'Create a secret', example: "POST secrets/create\n{\n" +
+                "  \"Name\": \"app-key.crt\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"foo\": \"bar\"\n" +
+                "  },\n" +
+                "  \"Data\": \"VEhJUyBJUyBOT1QgQSBSRUFMIENFUlRJRklDQVRFCg==\"\n" +
+                "}"
+                },
+                {name: 'Inspect a secret', example: "GET secrets/id"},
+                {name: 'Delete a secret', example: "DELETE secrets/id"},
+                {
+                    name: 'Update a Secret', example: "POST secrets/id/update/n{\n" +
+                "  \"Name\": \"string\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"property1\": \"string\",\n" +
+                "    \"property2\": \"string\"\n" +
+                "  },\n" +
+                "  \"Data\": [\n" +
+                "    \"string\"\n" +
+                "  ]\n" +
+                "}"
+                }
             ]
         },
         {
             name: 'Swarm',
             children: [
-                {name: 'Inspect swarm'},
-                {name: 'Initialize a new swarm'},
-                {name: 'Join an existing swarm'},
-                {name: 'Leave a swarm'},
-                {name: 'Update a swarm'},
-                {name: 'Get the unlock key'},
-                {name: 'Unlock a locked manager'}
+                {name: 'Inspect swarm', example: "GET swarm"},
+                {
+                    name: 'Initialize a new swarm', example: "POST swarm/init\n{\n" +
+                "  \"ListenAddr\": \"0.0.0.0:2377\",\n" +
+                "  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n" +
+                "  \"ForceNewCluster\": false,\n" +
+                "  \"Spec\": {\n" +
+                "    \"Orchestration\": {},\n" +
+                "    \"Raft\": {},\n" +
+                "    \"Dispatcher\": {},\n" +
+                "    \"CAConfig\": {},\n" +
+                "    \"EncryptionConfig\": {\n" +
+                "      \"AutoLockManagers\": false\n" +
+                "    }\n" +
+                "  }\n" +
+                "}"
+                },
+                {
+                    name: 'Join an existing swarm', example: "POST swarm/join\n{\n" +
+                "  \"ListenAddr\": \"0.0.0.0:2377\",\n" +
+                "  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n" +
+                "  \"RemoteAddrs\": [\n" +
+                "    \"node1:2377\"\n" +
+                "  ],\n" +
+                "  \"JoinToken\": \"SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-7p73s1dx5in4tatdymyhg9hu2\"\n" +
+                "}"
+                },
+                {name: 'Leave a swarm', example: "POST swarm/leave?force=true"},
+                {
+                    name: 'Update a swarm',
+                    example: "POST swarm/update?version=1&rotateWorkerToken=false&rotateManagerToken=false\n{\n" +
+                    "  \"Name\": \"default\",\n" +
+                    "  \"Orchestration\": {\n" +
+                    "    \"TaskHistoryRetentionLimit\": 10\n" +
+                    "  },\n" +
+                    "  \"Raft\": {\n" +
+                    "    \"SnapshotInterval\": 10000,\n" +
+                    "    \"LogEntriesForSlowFollowers\": 500,\n" +
+                    "    \"HeartbeatTick\": 1,\n" +
+                    "    \"ElectionTick\": 3\n" +
+                    "  },\n" +
+                    "  \"Dispatcher\": {\n" +
+                    "    \"HeartbeatPeriod\": 5000000000\n" +
+                    "  },\n" +
+                    "  \"CAConfig\": {\n" +
+                    "    \"NodeCertExpiry\": 7776000000000000\n" +
+                    "  },\n" +
+                    "  \"JoinTokens\": {\n" +
+                    "    \"Worker\": \"SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-1awxwuwd3z9j1z3puu7rcgdbx\",\n" +
+                    "    \"Manager\": \"SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-7p73s1dx5in4tatdymyhg9hu2\"\n" +
+                    "  },\n" +
+                    "  \"EncryptionConfig\": {\n" +
+                    "    \"AutoLockManagers\": false\n" +
+                    "  }\n" +
+                    "}"
+                },
+                {name: 'Get the unlock key', example: "GET swarm/unlockkey"},
+                {
+                    name: 'Unlock a locked manager', example: "POST swarm/unlock\n{\n" +
+                "  \"UnlockKey\": \"SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8\"\n" +
+                "}"
+                }
             ]
         },
         {

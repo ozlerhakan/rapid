@@ -2,7 +2,10 @@ package com.kodcu.rapid.path;
 
 import com.kodcu.rapid.config.DockerClient;
 
+import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
@@ -26,63 +30,72 @@ import static com.kodcu.rapid.util.Networking.postResponse;
 public class Network extends DockerClient {
 
     @GET
-    public String getNetwork(
-            @QueryParam("filters") String filters) {
-
-        WebTarget target = resource().path("networks");
-        if (Objects.nonNull(filters))
-            target = target.queryParam("filters", filters);
-
-        Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return entity;
-    }
-
-    @GET
-    @Path("{id}")
-    public String inspectNetwork(
-            @PathParam("id") String id) {
-
-        WebTarget target = resource().path("networks").path(id);
-
-        Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return entity;
-    }
-
-    @DELETE
-    @Path("{id}")
-    public String deleteNetwork(
-            @PathParam("id") String id) {
-
-        WebTarget target = resource().path("networks").path(id);
-
-        Response response = deleteResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return entity;
-    }
-
-    @POST
-    @Path("prune")
-    public String pruneNetwork(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public JsonStructure listNetworks(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("networks");
 
         if (Objects.nonNull(filters))
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
-        Response response = postResponse(target);
+        Response response = getResponse(target);
+        JsonStructure entity;
+        if (response.getStatus() == 200)
+            entity = response.readEntity(JsonArray.class);
+        else
+            entity = response.readEntity(JsonObject.class);
+        response.close();
+        return entity;
+    }
+
+    @GET
+    @Path("{id}")
+    public JsonStructure inspectNetwork(
+            @PathParam("id") String id) {
+
+        WebTarget target = resource().path("networks").path(id);
+
+        Response response = getResponse(target);
         String entity = response.readEntity(String.class);
+        JsonStructure structure = Json.createReader(new StringReader(entity)).read();
+        response.close();
+        return structure;
+    }
+
+    @DELETE
+    @Path("{id}")
+    public JsonStructure deleteNetwork(
+            @PathParam("id") String id) {
+
+        WebTarget target = resource().path("networks").path(id);
+
+        Response response = deleteResponse(target);
+        String entity = response.readEntity(String.class);
+
+        JsonStructure structure;
+        if (entity.isEmpty()) {
+            structure = Json.createObjectBuilder().add("message", id + " removed.").build();
+        } else {
+            structure = Json.createReader(new StringReader(entity)).read();
+        }
+        response.close();
+        return structure;
+    }
+
+    @POST
+    @Path("prune")
+    public JsonObject pruneNetwork() {
+
+        WebTarget target = resource().path("networks");
+
+        Response response = postResponse(target);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @POST
     @Path("{id}/connect")
-    public String connectToNetwork(
+    public JsonStructure connectToNetwork(
             @PathParam("id") String id,
             JsonObject content) {
 
@@ -91,12 +104,19 @@ public class Network extends DockerClient {
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
         response.close();
-        return entity;
+
+        JsonStructure structure;
+        if (entity.isEmpty()) {
+            structure = Json.createObjectBuilder().add("message", id + " connected.").build();
+        } else {
+            structure = Json.createReader(new StringReader(entity)).read();
+        }
+        return structure;
     }
 
     @POST
     @Path("{id}/disconnect")
-    public String disconnectToNetwork(
+    public JsonStructure disconnectToNetwork(
             @PathParam("id") String id,
             JsonObject content) {
 
@@ -105,17 +125,24 @@ public class Network extends DockerClient {
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
         response.close();
-        return entity;
+
+        JsonStructure structure;
+        if (entity.isEmpty()) {
+            structure = Json.createObjectBuilder().add("message", id + " disconnected.").build();
+        } else {
+            structure = Json.createReader(new StringReader(entity)).read();
+        }
+        return structure;
     }
 
     @POST
     @Path("create")
-    public String createNetwork(JsonObject content) {
+    public JsonObject createNetwork(JsonObject content) {
 
         WebTarget target = resource().path("networks").path("create");
 
         Response response = postResponse(target, content);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }

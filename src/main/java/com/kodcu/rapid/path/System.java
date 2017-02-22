@@ -2,7 +2,10 @@ package com.kodcu.rapid.path;
 
 import com.kodcu.rapid.config.DockerClient;
 
+import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -25,7 +28,6 @@ public class System extends DockerClient {
 
     @POST
     @Path("auth")
-    @Produces(value = "application/json")
     public JsonObject getAuth(JsonObject content) {
         WebTarget target = resource().path("auth");
         Response response = postResponse(target, content);
@@ -36,7 +38,6 @@ public class System extends DockerClient {
 
     @GET
     @Path("version")
-    @Produces(value = "application/json")
     public JsonObject getVersion() {
         WebTarget target = resource().path("version");
         Response response = getResponse(target);
@@ -47,7 +48,6 @@ public class System extends DockerClient {
 
     @GET
     @Path("info")
-    @Produces(value = "application/json")
     public JsonObject getInfo() {
         WebTarget target = resource().path("info");
         Response response = getResponse(target);
@@ -58,42 +58,28 @@ public class System extends DockerClient {
 
     @GET
     @Path("_ping")
-    public String ping() {
+    public JsonStructure ping() {
         WebTarget target = resource().path("_ping");
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonStructure entity;
+        if (response.getStatus() == 200) {
+            String value = response.readEntity(String.class);
+            entity = Json.createObjectBuilder().add("message", value).build();
+        }
+        else
+            entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
     @GET
     @Path("system/df")
-    public String df() {
+    public JsonObject df() {
         WebTarget target = resource().path("system").path("df");
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
+        JsonObject entity = response.readEntity(JsonObject.class);
         response.close();
         return entity;
     }
 
-    @GET
-    @Path("events")
-    public String events(
-            @QueryParam("since") String since,
-            @QueryParam("until") String until,
-            @QueryParam("filters") String filters) throws UnsupportedEncodingException {
-        WebTarget target = resource().path("events");
-
-        if (Objects.nonNull(since))
-            target = target.queryParam("since", since);
-        if (Objects.nonNull(until))
-            target = target.queryParam("until", until);
-        if (Objects.nonNull(filters))
-            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
-
-        Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return entity;
-    }
 }
