@@ -275,7 +275,7 @@ export default {
         {
             name: 'Volumes',
             children: [
-                {name: 'List volumes', example: "GET volumes?filters={\"dangling\":{\"true\":false}}"},
+                {name: 'List volumes', example: "GET volumes?filters={\"dangling\":{\"false\":true}}"},
                 {
                     name: 'Create a volume', example: "POST volumes/create\n{\n" +
                 "  \"Name\": \"tardis\",\n" +
@@ -295,7 +295,7 @@ export default {
             name: 'System',
             children: [
                 {
-                    name: 'Check auth configuration', example: "GET /auth\n{\n" +
+                    name: 'Check auth configuration', example: "POST auth\n{\n" +
                 "  \"username\": \"hannibal\",\n" +
                 "  \"password\": \"xxxx\",\n" +
                 "  \"serveraddress\": \"https://index.docker.io/v1/\"\n" +
