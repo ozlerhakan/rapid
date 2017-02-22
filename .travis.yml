@@ -12,7 +12,6 @@ script: docker run --rm -v ~/.m2:/root/.m2 -v $(PWD):/rapid -w /rapid --privileg
 before_install:
 - sudo apt-get update
 - sudo wget -qO- https://get.docker.com/ | sh
-- sudo groupadd docker
 - sudo usermod -aG docker travis
 - sudo service docker restart
 - docker version
