@@ -1,26 +1,21 @@
 sudo: required
 notifications:
   email: false
-language: node_js
-node_js:
-- node
+language: java
+jdk:
+- oraclejdk8
 os:
 - linux
+services:
+- docker
 env:
 - RAPID_FULL="ozlerhakan/rapid:1.26"
-script: docker run --rm -v ~/.m2:/root/.m2 -v $(PWD):/rapid -w /rapid --privileged -v /var/run/docker.sock:/var/run/docker.sock maven:3-jdk-8 mvn clean test
+script: mvn install
 before_install:
-- sudo apt-get update
-- sudo wget -qO- https://get.docker.com/ | sh
-- sudo usermod -aG docker travis
-- sudo service docker restart
-- docker version
-- docker pull ubuntu:latest
-- docker pull busybox:1.26
-- cd react/
-- npm install
-- npm run build:prod
-- cd ..
+- docker run --rm -v $(PWD):/rapid -w /rapid/react node npm install
+- docker run --rm -v $(PWD):/rapid -w /rapid/react node run build:prod
+- rm -r react/node_modules
+- mvn clean
 after_success:
 - mvn clean
 - docker build -t $RAPID_FULL .
