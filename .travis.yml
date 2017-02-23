@@ -10,7 +10,7 @@ services:
 - docker
 env:
 - RAPID_FULL="ozlerhakan/rapid:1.26"
-script: mvn install
+script: mvn install -DskipTests
 before_install:
 - docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node npm install
 - docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node npm run build:prod
