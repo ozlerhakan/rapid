@@ -12,8 +12,8 @@ env:
 - RAPID_FULL="ozlerhakan/rapid:1.26"
 script: mvn install
 before_install:
-- docker run --rm -v $(PWD):/rapid -w /rapid/react node npm install
-- docker run --rm -v $(PWD):/rapid -w /rapid/react node run build:prod
+- docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node npm install
+- docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node run build:prod
 - rm -r react/node_modules
 - mvn clean
 after_success:
