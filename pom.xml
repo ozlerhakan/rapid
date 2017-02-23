@@ -6,7 +6,7 @@
 
     <groupId>com.kodcu.docker</groupId>
     <artifactId>rapid</artifactId>
-    <version>1.0</version>
+    <version>1.26</version>
 
     <prerequisites>
         <maven>3.0</maven>
@@ -71,6 +71,21 @@
             <groupId>com.github.jnr</groupId>
             <artifactId>jnr-unixsocket</artifactId>
             <version>0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-api</artifactId>
+            <version>2.5.0-b34</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-locator</artifactId>
+            <version>2.5.0-b34</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-utils</artifactId>
+            <version>2.5.0-b34</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
