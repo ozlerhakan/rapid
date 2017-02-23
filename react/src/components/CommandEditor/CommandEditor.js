@@ -3,6 +3,7 @@
  */
 import React from 'react'
 import AceEditor from 'react-ace';
+import * as shortcuts from './shortcuts';
 
 import 'brace/mode/javascript'
 import 'brace/mode/json';
@@ -11,7 +12,7 @@ import 'brace/theme/github';
 class CommandEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {defaultValue: "## containers\n\nGET containers/json"};
+        this.state = {defaultValue: "// list all containers\n\nGET containers/json?all=true&size=true"};
         this.onChange = this.onChange.bind(this);
     }
 
@@ -37,6 +38,7 @@ class CommandEditor extends React.Component {
 
     componentDidMount() {
         this.aceEditor.editor.session.setUseWorker(false);
+        shortcuts.apply(this.aceEditor.editor);
     }
 
     render() {
