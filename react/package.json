@@ -10,7 +10,9 @@
     "build:dev": "npm run clean:dev && cross-env NODE_ENV=dev node_modules/webpack/bin/webpack.js --watch --config webpack.config.js ",
     "serve": "cross-env NODE_ENV=dev node_modules/.bin/webpack-dev-server",
     "docker:prod": "npm run build:prod && npm run docker:run",
-    "docker:run": "cd .. && docker run --rm -v ~/.m2:/root/.m2 -v $(PWD):/rapid -w /rapid -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 maven:3-jdk-8 mvn jetty:run"
+    "docker:run": "cd .. && docker run --rm -v ~/.m2:/root/.m2 -v $(PWD):/rapid -w /rapid -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 maven:3-jdk-8 mvn jetty:run",
+    "mvn:test": "cd .. && mvn clean test",
+    "jetty:run": "cd .. && mvn clean jetty:run"
   },
   "babel": {
     "presets": [
