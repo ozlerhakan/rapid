@@ -10,18 +10,20 @@ services:
 - docker
 env:
 - RAPID_FULL="ozlerhakan/rapid:1.26"
-script: mvn install -DskipTests
+script: mvn install test
 before_install:
+- docker pull ubuntu:latest
+- docker pull busybox:1.26
 - docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node npm install
 - docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node npm run build:prod
 - mvn clean
 after_success:
 - mvn clean
 - docker build -t $RAPID_FULL .
-- docker tag $RAPID_FULL ozlerhakan/rapid:latest;
+- docker tag $RAPID_FULL ozlerhakan/rapid:latest
+- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker images
+- docker push $RAPID_FULL
 - if [ "$TRAVIS_BRANCH" == "master" ]; then
-  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  docker push $RAPID_FULL;
   docker push ozlerhakan/rapid:latest;
   fi
