@@ -27,7 +27,7 @@ NOTE: Header Parameters (X-Registry-Auth) is not supported.
 
 == Editor Shortcuts
 
-Rapid containers the following shortcuts. Any other shortcut suggestions are request, we can implement it.
+Rapid containers the following shortcuts. Any other shortcut suggestions are always welcome.
 
 [width="100%",options="header,footer"]
 |===
