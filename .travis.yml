@@ -1,4 +1,3 @@
-sudo: required
 notifications:
   email: false
 language: java
