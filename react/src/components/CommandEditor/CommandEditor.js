@@ -6,8 +6,8 @@ import AceEditor from 'react-ace';
 import * as shortcuts from './shortcuts';
 
 import 'brace/mode/javascript'
-import 'brace/mode/json';
 import 'brace/theme/github';
+import 'brace/ext/searchbox';
 
 class CommandEditor extends React.Component {
     constructor(props) {
