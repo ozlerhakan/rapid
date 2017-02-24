@@ -14,6 +14,7 @@ script: mvn install test
 before_install:
 - docker pull ubuntu:latest
 - docker pull busybox:1.26
+- docker run -d  mongo:3.4
 - docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node npm install
 - docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node npm run build:prod
 - mvn clean
