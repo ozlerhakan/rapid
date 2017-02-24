@@ -1,10 +1,11 @@
 = Rapid Dashboard image:https://travis-ci.org/ozlerhakan/rapid.svg?branch=master["Build Status", link="https://travis-ci.org/ozlerhakan/rapid"] image:https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg["Docker Pulls,link="https://hub.docker.com/r/ozlerhakan/rapid"] image:https://img.shields.io/badge/license-MIT-blue.svg[]
+:experimental:
 
 image::images/screen.png[]
 
 Rapid Docker Interface provides a connection between Docker queries and your Docker Host. Rapid changes the way of using Docker Engine API with ease. The Command Editor is your new Docker client communicating with the Engine. You can easily request supported Docker queries of https://docs.docker.com/engine/reference/api/docker_remote_api/[Docker Remote API].
 
-=== Installation
+== Installation
 
 Supported tags:
 
