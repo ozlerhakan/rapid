@@ -25,7 +25,7 @@ public class TestContainerTop extends ContainerConfig {
         assertEquals(200, top.getStatus());
 
         final JsonObject actualContainer = top.readEntity(JsonObject.class);
-        int expectedProcessSize = 3;
+        int expectedProcessSize = 1;
         assertEquals(expectedProcessSize, actualContainer.getJsonArray("Processes").size());
     }
 }

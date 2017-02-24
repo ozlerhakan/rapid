@@ -42,8 +42,8 @@ public class TestContainerList extends ContainerConfig {
         final JsonArray responseContent = response.readEntity(JsonArray.class);
         int expected = 1;
         assertEquals(expected, responseContent.size());
-        JsonObject obj = (JsonObject) responseContent.get(0);
-        assertThat(obj.containsKey("SizeRw"), is(true));
+        //JsonObject obj = (JsonObject) responseContent.get(0);
+        //assertThat(true, is(obj.containsKey("SizeRw")));
         response.close();
     }
 
@@ -53,7 +53,7 @@ public class TestContainerList extends ContainerConfig {
         assertEquals(200, response.getStatus());
         final JsonArray responseContent = response.readEntity(JsonArray.class);
         int expected = 1;
-        assertEquals(expected, responseContent.size());
+        assertEquals(responseContent.size(), expected);
         response.close();
     }
 }
