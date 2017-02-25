@@ -25,6 +25,17 @@ export const apply = (editor) => {
     });
 
     editor.commands.addCommand({
+        name: 'shift-enter-line',
+        bindKey: {win: 'Shift-Enter', mac: 'Shift-Enter'},
+        exec: function (editor) {
+            editor.navigateLineEnd();
+            editor.insert("\n");
+        },
+        readOnly: true
+    });
+
+
+    editor.commands.addCommand({
         name: 'ctrl-enter-1',
         bindKey: {win: 'Ctrl-Enter', mac: 'Command-Enter'},
         exec: function (editor) {
@@ -60,7 +71,7 @@ export const apply = (editor) => {
 
         if (event.ctrlKey && editor.getValue().length) {
 
-            var fontSize = parseInt(editor.getFontSize());
+            let fontSize = parseInt(editor.getFontSize());
 
             if (event.wheelDelta < 0 && fontSize > 8) {
                 //mouse scroll down - min size 8
