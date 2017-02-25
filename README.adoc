@@ -34,7 +34,7 @@ Rapid contains the following shortcuts. Any other shortcut suggestions are alway
 
 [width="100%",options="header"]
 |===
-|Windows | macOS |Detail
+|Windows | Mac |Detail
 |kbd:[Ctrl+D] |kbd:[&#8984;+D]| Duplicate line
 |kbd:[Ctrl+X]|kbd:[&#8984;+X] | Remove current line
 |kbd:[Shift+Enter]|kbd:[&#8679;+&#9166;] | Start new line
@@ -47,10 +47,6 @@ Rapid contains the following shortcuts. Any other shortcut suggestions are alway
 == Contributing
 
 Contributions are welcome!
-
-== Support
-
-All feedback is appreciated!
 
 == License
 
