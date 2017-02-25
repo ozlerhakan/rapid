@@ -17,11 +17,25 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>http://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>github.com</system>
+        <url>https://github.com/ozlerhakan/rapid/issues</url>
+    </issueManagement>
+
     <developers>
         <developer>
             <id>ozlerhakan</id>
             <name>Hakan Ozler</name>
             <url>http://github.com/ozlerhakan</url>
+            <organization>Istanbul JUG</organization>
             <roles>
                 <role>Java developer</role>
             </roles>
@@ -30,6 +44,7 @@
             <id>gokselpirnal</id>
             <name>Goksel Pirnal</name>
             <url>http://github.com/gokselpirnal</url>
+            <organization>Istanbul JUG</organization>
             <roles>
                 <role>Android - Java developer</role>
             </roles>
