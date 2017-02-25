@@ -23,11 +23,14 @@ If you have maven installed on your machine, you can use another `-v` flag and m
 
   $ docker run -d --name rapid -v ~/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock -p <PORT>:8080 ozlerhakan/rapid
 
+
 NOTE: Header Parameters (X-Registry-Auth) is not supported.
+
+NOTE: `latest` and `1.26` tags are compitable with Docker v1.13.1.
 
 == Editor Shortcuts
 
-Rapid containers the following shortcuts. Any other shortcut suggestions are always welcome.
+Rapid contains the following shortcuts. Any other shortcut suggestions are always welcome.
 
 [width="100%",options="header,footer"]
 |===
