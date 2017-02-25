@@ -16,6 +16,11 @@ class ResultEditor extends React.Component {
         this.aceEditor.editor.session.setUseWorker(false);
     }
 
+    onSplitPaneChanged(newValue) {
+        let limit = this.aceEditor.editor.session.getWrapLimit();
+        this.aceEditor.editor.session.setWrapLimitRange(0, (newValue - limit) + 1);
+    }
+
     setResult(result) {
         if (typeof result == 'object') {
             result = JSON.stringify(result, null, 4);

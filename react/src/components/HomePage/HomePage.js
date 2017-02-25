@@ -22,6 +22,7 @@ class HomePage extends React.Component {
 
     onChangeSplitPane(newValue) {
         this.commandEditor.onSplitPaneChanged(newValue);
+        this.resultEditor.onSplitPaneChanged(newValue);
     }
 
     handlePlay() {
