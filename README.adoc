@@ -1,4 +1,4 @@
-= Rapid Dashboard image:https://travis-ci.org/ozlerhakan/rapid.svg?branch=master["Build Status", link="https://travis-ci.org/ozlerhakan/rapid"] image:https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg["Docker Pulls,link="https://hub.docker.com/r/ozlerhakan/rapid"] image:https://img.shields.io/badge/license-MIT-blue.svg[]
+= Rapid Dashboard image:https://travis-ci.org/ozlerhakan/rapid.svg?branch=master["Build Status", link="https://travis-ci.org/ozlerhakan/rapid"] image:https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg["Docker Pulls",link="https://hub.docker.com/r/ozlerhakan/rapid"] image:https://img.shields.io/badge/license-MIT-blue.svg[]
 :experimental:
 
 image::images/screen.gif[]
@@ -11,7 +11,7 @@ Supported tags:
 
 *  `_1.26_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(master)_]
 
-The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080:
+The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080 and we need to give access to the host’s Docker daemon by mapping to the Docker socket:
 
   $ docker run -d --name rapid  -v /var/run/docker.sock:/var/run/docker.sock -p <PORT>:8080 ozlerhakan/rapid
 
@@ -24,7 +24,7 @@ If you have maven installed on your machine, you can use another `-v` flag and m
   $ docker run -d --name rapid -v ~/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock -p <PORT>:8080 ozlerhakan/rapid
 
 
-NOTE: Header Parameters (X-Registry-Auth) is not supported.
+NOTE: Header Parameters (X-Registry-Auth) are not supported.
 
 NOTE: `latest` and `1.26` tags are compitable with Docker v1.13.1.
 
@@ -32,16 +32,25 @@ NOTE: `latest` and `1.26` tags are compitable with Docker v1.13.1.
 
 Rapid contains the following shortcuts. Any other shortcut suggestions are always welcome.
 
-[width="100%",options="header,footer"]
+[width="100%",options="header"]
 |===
-|Shortcut |Detail
-|kbd:[Ctrl+D] | Duplicate line
-|kbd:[Ctrl+X] | Remove current line
-|kbd:[Alt+Shift+Up] | Move line up
-|kbd:[Alt+Shift+Down] | Move line down
-|kbd:[Ctrl+Mouse_Scroll_Up] | Zoom in
-|kbd:[Ctrl+Mouse_Scroll_Down] | Zoom out
+|Windows | macOS |Detail
+|kbd:[Ctrl+D] |kbd:[&#8984;+D]| Duplicate line
+|kbd:[Ctrl+X]|kbd:[&#8984;+X] | Remove current line
+|kbd:[Shift+Enter]|kbd:[&#8679;+&#9166;] | Start new line
+|kbd:[Alt+Shift+Up]|kbd:[&#8997;+&#8679;+Up] | Move line up
+|kbd:[Alt+Shift+Down] |kbd:[&#8997;+&#8679;+Down] | Move line down
+|kbd:[Ctrl+Mouse_Scroll_Up] |kbd:[&#8963;+Mouse_Scroll_Up] | Zoom in
+|kbd:[Ctrl+Mouse_Scroll_Down] |kbd:[&#8963;+Mouse_Scroll_Down] | Zoom out
 |===
+
+== Contributing
+
+Contributions are welcome!
+
+== Support
+
+All feedback is appreciated!
 
 == License
 
