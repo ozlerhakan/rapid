@@ -29,7 +29,7 @@ If you have maven installed on your machine, you can use another `-v` flag and m
 =====
 . Header Parameters (X-Registry-Auth) are not supported.
 . `latest` and `1.26` tags are compitable with Docker v1.13.1 and later (i.e. v17.03.0-ce).
-. Image tags ending with `arm` work on ARM.
+. Tags ending with `arm` should work on supported versions of the Raspberry Pi.
 =====
 
 == Editor Shortcuts
