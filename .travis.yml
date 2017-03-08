@@ -9,6 +9,7 @@ services:
 - docker
 env:
 - RAPID_FULL="ozlerhakan/rapid:1.26"
+- RAPID_ARM="ozlerhakan/rapid:1.26-arm"
 script: mvn install test
 before_install:
 - docker pull ubuntu:latest
@@ -20,10 +21,12 @@ before_install:
 after_success:
 - mvn clean
 - docker build -t $RAPID_FULL .
+- docker build -t $RAPID_ARM Dockerfile.arm
 - docker tag $RAPID_FULL ozlerhakan/rapid:latest
 - docker images
 - if [ "$TRAVIS_BRANCH" == "master" ]; then
   docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   docker push $RAPID_FULL;
+  docker push $RAPID_ARM;
   docker push ozlerhakan/rapid:latest;
   fi

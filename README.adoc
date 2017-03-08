@@ -1,4 +1,4 @@
-= Rapid Dashboard image:https://travis-ci.org/ozlerhakan/rapid.svg?branch=master["Build Status", link="https://travis-ci.org/ozlerhakan/rapid"] image:https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg["Docker Pulls",link="https://hub.docker.com/r/ozlerhakan/rapid"] image:https://img.shields.io/badge/license-MIT-blue.svg[]
+= Rapid Dashboard image:https://travis-ci.org/ozlerhakan/rapid.svg?branch=master["Build Status", link="https://travis-ci.org/ozlerhakan/rapid"] image:https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg["Docker Pulls",link="https://hub.docker.com/r/ozlerhakan/rapid"] image:https://badges.gitter.im/Join%20Chat.svg["Gitter", link="https://gitter.im/rapidui/rapid"] image:https://img.shields.io/badge/license-MIT-blue.svg[]
 :experimental:
 
 image::images/screen.gif[]
@@ -24,9 +24,12 @@ If you have maven installed on your machine, you can use another `-v` flag and m
   $ docker run -d --name rapid -v ~/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock -p <PORT>:8080 ozlerhakan/rapid
 
 
-NOTE: Header Parameters (X-Registry-Auth) are not supported.
-
-NOTE: `latest` and `1.26` tags are compitable with Docker v1.13.1.
+[NOTE]
+=====
+. Header Parameters (X-Registry-Auth) are not supported.
+. `latest` and `1.26` tags are compitable with Docker v1.13.1 and later (i.e. v17.03.0-ce).
+. Image tags ending with `arm` work on ARM.
+=====
 
 == Editor Shortcuts
 
