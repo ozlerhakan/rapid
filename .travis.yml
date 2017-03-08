@@ -20,8 +20,8 @@ before_install:
 - mvn clean
 after_success:
 - mvn clean
-- docker build -t $RAPID_FULL .
-- docker build -t $RAPID_ARM Dockerfile.arm
+- docker build -t $RAPID_FULL -f Dockerfile .
+- docker build -t $RAPID_ARM  -f Dockerfile.arm .
 - docker tag $RAPID_FULL ozlerhakan/rapid:latest
 - docker images
 - if [ "$TRAVIS_BRANCH" == "master" ]; then
