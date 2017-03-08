@@ -8,8 +8,9 @@ os:
 services:
 - docker
 env:
-- RAPID_FULL="ozlerhakan/rapid:1.26"
-- RAPID_ARM="ozlerhakan/rapid:1.26-arm"
+  global:
+    - RAPID_FULL="ozlerhakan/rapid:1.26"
+    - RAPID_ARM="ozlerhakan/rapid:1.26-arm"
 script: mvn install test
 before_install:
 - docker pull ubuntu:latest
