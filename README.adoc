@@ -40,6 +40,7 @@ Rapid contains the following shortcuts. Any other shortcut suggestions are alway
 |===
 |Windows | Mac |Detail
 |kbd:[Ctrl+D] |kbd:[&#8984;+D]| Duplicate line
+|kbd:[Ctrl+Shift+C] |kbd:[&#8984;+&#8679;+C]| Copy the selection as cURL
 |kbd:[Ctrl+X]|kbd:[&#8984;+X] | Remove current line
 |kbd:[Shift+Enter]|kbd:[&#8679;+&#9166;] | Start new line
 |kbd:[Alt+Shift+Up]|kbd:[&#8997;+&#8679;+Up] | Move line up
@@ -48,9 +49,75 @@ Rapid contains the following shortcuts. Any other shortcut suggestions are alway
 |kbd:[Ctrl+Mouse_Scroll_Down] |kbd:[&#8963;+Mouse_Scroll_Down] | Zoom out
 |===
 
+==== cURL Details
+
+The following cURL commands are all valid so as to paste them into the command editor. When you paste a valid command, Rapid converts it to a corresponding valid Docker remote query.
+
+[source, curl]
+----
+curl --unix-socket /var/run/docker.sock \
+ -H "Content-Type: application/json" \
+ -X POST http:/v1.26/containers/create \
+ -d '
+ {"Image": "alpine", "Cmd": ["echo", "hello world"]}
+ '
+
+curl --unix-socket /var/run/docker.sock -H "Content-Type: application/json" \
+  -X POST http:/v1.26/containers/create \
+  -d '{"Image": "alpine", "Cmd": ["echo", "hello world"]}'
+
+curl --unix-socket /var/run/docker.sock \
+ -H "Content-Type: application/json" \
+ -X POST http:/v1.26/containers/create \
+ -d '{"Image": "alpine", "Cmd": ["echo", "hello world"]}'
+
+curl --unix-socket /var/run/docker.sock -X GET http:/v1.26/containers/json
+
+curl --unix-socket /var/run/docker.sock -X GET http:/v1.26/images/json
+
+curl --unix-socket /var/run/docker.sock -XGET http:/v1.26/containers/json
+
+curl --unix-socket /var/run/docker.sock -XGET "http:/v1.26/containers/1c6594faf5/logs?stdout=1"
+
+curl --unix-socket /var/run/docker.sock  -H "Content-Type: application/json"  -X POST http:/v1.26/containers/create -d'
+ {"Image": "alpine", "Cmd": ["echo", "hello world"]}
+ '
+
+curl --unix-socket /var/run/docker.sock  -H "Content-Type: application/json"  -XPOST http:/v1.26/containers/create -d' {"Image": "alpine", "Cmd": ["echo", "hello world"]}'
+
+curl --unix-socket /var/run/docker.sock\
+  -X POST "http:/v1.26/commit?container=0888269a9d&repo=helloworld"
+----
+
+The kbd:[&#8984;+&#8679;+C] shortcut enables you to convert the selection to the equivalent cURL command and copy it to clipboard.
+
+.a selected query from the command editor
+----
+POST containers/create?name=mycontainer
+{
+    "Image": "alpine",
+    "Cmd": [
+        "echo",
+        "hello world"
+    ]
+}
+----
+
+.the equivalent cURL command of the query above
+----
+curl --unix-socket /var/run/docker.sock -XPOST "http:/v1.26/containers/create?name=mycontainer" -H "Content-Type: application/json" -d'
+{
+    "Image": "alpine",
+    "Cmd": [
+        "echo",
+        "hello world"
+    ]
+}'
+----
+
 == Contributing
 
-Contributions are welcome!
+Any comments/issues/PRs are always welcome!
 
 == License
 
