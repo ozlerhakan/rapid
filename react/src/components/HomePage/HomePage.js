@@ -9,7 +9,6 @@ import ResultEditor from '../ResultEditor';
 import CommandEditor from '../CommandEditor';
 import CommandTree from '../CommandTree';
 import Style from './styles';
-import * as regex from '../CommandEditor/regex';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -29,7 +28,7 @@ class HomePage extends React.Component {
     handlePlay() {
         let cmd = this.commandEditor.getSelectedText();
 
-        let match = cmd.match(regex.query);
+        let match = cmd.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]+([{\[][\s\S]*[}\]])?/);
         if (!match) return;
 
         console.log('HTTP REQUEST: ' + match[1]);

@@ -2,7 +2,6 @@
  * Created by hakan on 23/02/2017.
  */
 import * as curl from './curl';
-import * as regex from '../CommandEditor/regex';
 
 export const apply = (editor) => {
 
@@ -66,6 +65,13 @@ export const apply = (editor) => {
         bindKey: {win: 'Ctrl-Shift-C', mac: 'Command-Shift-C'},
         exec: function (editor) {
 
+            editor.focus();
+            let text = editor.getSelectedText();
+            if (!text) return;
+
+            let matches = text.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]+([{\[][\s\S]*[}\]])?/);
+            if (!matches) return;
+
             let id = "rapid-clipboard-textarea-hidden-id";
             let existsTextarea = document.getElementById(id);
             if (!existsTextarea) {
@@ -88,16 +94,9 @@ export const apply = (editor) => {
                 existsTextarea = document.getElementById(id);
             }
 
-            editor.focus();
-            let text = editor.getSelectedText();
-            if (!text) return;
-
-            let match = text.match(regex.query);
-            if (!match) return;
-
-            let verb = match[1];
-            let url = match[2];
-            let body = match[3];
+            let verb = matches[1];
+            let url = matches[2];
+            let body = matches[3];
 
             if (verb) {
                 let req = 'curl --unix-socket /var/run/docker.sock -X' + verb;
