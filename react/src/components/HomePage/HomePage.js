@@ -29,7 +29,7 @@ class HomePage extends React.Component {
     handlePlay() {
         let cmd = this.commandEditor.getSelectedText();
 
-        let match = regex.query.exec(cmd);
+        let match = cmd.match(regex.query);
         if (!match) return;
 
         console.log('HTTP REQUEST: ' + match[1]);
