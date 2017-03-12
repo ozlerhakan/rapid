@@ -12,7 +12,13 @@ import 'brace/ext/searchbox';
 class CommandEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {defaultValue: "// list all containers\n\nGET containers/json?all=true&size=true"};
+
+        const dashboard = localStorage.getItem("rapid-dashboard");
+        let dValue = "// list all containers\n\nGET containers/json?all=true&size=true"
+        if (dashboard) {
+            dValue = dashboard;
+        }
+        this.state = {defaultValue: dValue};
         this.onChange = this.onChange.bind(this);
     }
 
@@ -39,6 +45,10 @@ class CommandEditor extends React.Component {
     componentDidMount() {
         this.aceEditor.editor.session.setUseWorker(false);
         shortcuts.apply(this.aceEditor.editor);
+    }
+
+    componentDidUpdate() {
+        localStorage.setItem("rapid-dashboard", this.aceEditor.editor.session.getValue());
     }
 
     render() {
