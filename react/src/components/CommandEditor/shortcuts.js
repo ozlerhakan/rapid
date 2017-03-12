@@ -69,7 +69,7 @@ export const apply = (editor) => {
             let text = editor.getSelectedText();
             if (!text) return;
 
-            let matches = text.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]+([{\[][\s\S]*[}\]])?/);
+            let matches = text.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]*([{\[][\s\S]*[}\]])?/);
             if (!matches) return;
 
             let id = "rapid-clipboard-textarea-hidden-id";

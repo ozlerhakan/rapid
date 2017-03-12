@@ -28,7 +28,7 @@ class HomePage extends React.Component {
     handlePlay() {
         let cmd = this.commandEditor.getSelectedText();
 
-        let match = cmd.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]+([{\[][\s\S]*[}\]])?/);
+        let match = cmd.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]*([{\[][\s\S]*[}\]])?/);
         if (!match) return;
 
         console.log('HTTP REQUEST: ' + match[1]);
