@@ -112,9 +112,7 @@ export const apply = (editor) => {
                     req += "'";
                 }
 
-                if (req) {
-                    existsTextarea.value = req;
-                }
+                existsTextarea.value = req;
             }
             else {
                 existsTextarea.value = text;

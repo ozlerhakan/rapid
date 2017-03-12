@@ -36,7 +36,7 @@ export const parseCURL = (text) => {
 
     let HasProtocol = /[\s"']https?:\/\/?/;
     let CurlRequestWithProto = /[\s"']https?:\/\/?[^\/ ]+\/+([^\s"']+)/;
-    let CurlRequestWithoutProto = /[\s"'][^\/ ]+\/+([^\s"']+)/;
+    let CurlRequestWithoutProto = / {1}[\s"'][^\/ ]+\/+[^\/ ]+\/+([^\s"']+)/;
     let CurlData = /\s*(--data|-d)\s*/m;
 
     if (lines.length > 0 && ExecutionComment.test(lines[0])) {
