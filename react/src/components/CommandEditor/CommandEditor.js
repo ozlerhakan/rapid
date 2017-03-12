@@ -13,8 +13,8 @@ class CommandEditor extends React.Component {
     constructor(props) {
         super(props);
 
+        let dValue = "// list all containers\n\nGET containers/json?all=true&size=true";
         const dashboard = localStorage.getItem("rapid-dashboard");
-        let dValue = "// list all containers\n\nGET containers/json?all=true&size=true"
         if (dashboard) {
             dValue = dashboard;
         }
