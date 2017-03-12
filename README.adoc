@@ -49,7 +49,7 @@ Rapid contains the following shortcuts. Any other shortcut suggestions are alway
 |kbd:[Ctrl+Mouse_Scroll_Down] |kbd:[&#8963;+Mouse_Scroll_Down] | Zoom out
 |===
 
-==== cURL Details
+=== cURL Details
 
 The following cURL commands are all valid so as to paste them into the command editor. When you paste a valid command, Rapid converts it to a corresponding valid Docker remote query.
 
