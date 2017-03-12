@@ -1,6 +1,5 @@
 export const detectCURLinLine = (line) => {
     return line.match(/^\s*?curl\s+(-X[A-Z]+)?\s*['"]?.*?['"]?(\s*$|\s+?-d\s*?['"])/);
-
 };
 
 export const detectCURL = (text) => {
@@ -33,13 +32,12 @@ export const parseCURL = (text) => {
     let EscapedQuotes = /^((?:[^\\"']|\\.)+)/;
 
     let LooksLikeCurl = /^\s*curl\s+/;
-    let CurlVerb = /^\s*-X ?(GET|POST|DELETE)/;
+    let CurlVerb = /\s*-X ?(GET|POST|DELETE)/;
 
     let HasProtocol = /[\s"']https?:\/\/?/;
     let CurlRequestWithProto = /[\s"']https?:\/\/?[^\/ ]+\/+([^\s"']+)/;
     let CurlRequestWithoutProto = /[\s"'][^\/ ]+\/+([^\s"']+)/;
-    let CurlData = /^.?\s(--data|-d)\s*/m;
-    let SenseLine = /^\s*(GET|POST|DELETE)\s+\/?(.+)/;
+    let CurlData = /\s*(--data|-d)\s*/m;
 
     if (lines.length > 0 && ExecutionComment.test(lines[0])) {
         lines.shift();
@@ -81,7 +79,11 @@ export const parseCURL = (text) => {
     function addBodyToOut() {
         if (body.length > 0) {
             let b = body.join("");
-            out.push(JSON.stringify(JSON.parse(b), null, 4));
+            try {
+                out.push(JSON.stringify(JSON.parse(b), null, 4));
+            } catch (e) {
+                out.push(b);
+            }
             body = [];
         }
         state = 'LF';
@@ -105,7 +107,7 @@ export const parseCURL = (text) => {
     }
 
     function parseCurlLine() {
-        let verb = 'GET';
+        let verb = '';
         let request = '';
         let matches;
         if (matches = line.match(CurlVerb)) {
@@ -125,6 +127,8 @@ export const parseCURL = (text) => {
         out.push(verb + ' ' + request + "\n");
 
         if (matches = line.match(CurlData)) {
+            let index = line.lastIndexOf(matches[0]);
+            line = line.substr(index);
             line = line.substr(matches[0].length);
             detectQuote();
             if (EmptyLine.test(line)) {
@@ -136,6 +140,7 @@ export const parseCURL = (text) => {
             line = '';
             out.push('');
         }
+        // line = '';
     }
 
     while (nextLine()) {
@@ -161,19 +166,6 @@ export const parseCURL = (text) => {
             }
         }
 
-        // the BODY state (used to match the body of a Sense request)
-        // can be terminated early if it encounters
-        // a comment or an empty line
-        else if (state == 'BODY') {
-            if (Comment.test(line) || EmptyLine.test(line)) {
-                addBodyToOut();
-            }
-            else {
-                body.push(line);
-                line = '';
-            }
-        }
-
         else if (EmptyLine.test(line)) {
             if (state != 'LF') {
                 out.push("\n");
@@ -188,15 +180,11 @@ export const parseCURL = (text) => {
             line = '';
         }
 
-        else if (LooksLikeCurl.test(line)) {
+        else if (matches = line.match(LooksLikeCurl)) {
+            line = line.substr(matches[0].length).trim();
             parseCurlLine();
         }
 
-        else if (matches = line.match(SenseLine)) {
-            out.push(matches[1] + ' /' + matches[2] + "\n");
-            line = '';
-            state = 'BODY';
-        }
         else if (matches = line.match(CurlData)) {
             line = line.substr(matches[0].length);
             detectQuote();
@@ -205,8 +193,27 @@ export const parseCURL = (text) => {
             }
         }
 
+        else if (matches = line.match(CurlVerb)) {
+            let verb = matches[1];
+            out.push(verb + ' ');
+            line = line.substr(matches[1].length).trim();
+
+            let pattern = HasProtocol.test(line)
+                ? CurlRequestWithProto
+                : CurlRequestWithoutProto;
+
+            if (matches = line.match(pattern)) {
+                let request = matches[1];
+                out.push(request + "\n");
+            } else {
+                state = 'NONE';
+                out.push('');
+            }
+            // line = '';
+        }
+
         else {
-            out.push(line);
+            out.push('');
             line = '';
         }
     }
