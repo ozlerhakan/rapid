@@ -9,6 +9,7 @@ import ResultEditor from '../ResultEditor';
 import CommandEditor from '../CommandEditor';
 import CommandTree from '../CommandTree';
 import Style from './styles';
+import * as regex from '../CommandEditor/regex';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -28,8 +29,9 @@ class HomePage extends React.Component {
     handlePlay() {
         let cmd = this.commandEditor.getSelectedText();
 
-        const myRegexp = /^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)([\r\n?]?([{\[][\s\S\t ]*[}\]])?)/g;
-        let match = myRegexp.exec(cmd);
+        let match = regex.query.exec(cmd);
+        if (!match) return;
+
         console.log('HTTP REQUEST: ' + match[1]);
         console.log('URL: ' + match[2]);
         console.log('DATA: ' + match[3]);
@@ -47,10 +49,10 @@ class HomePage extends React.Component {
         }).then(function (response) {
             return response.json();
         }).then(function (json) {
-            that.setState({'loading':false});
+            that.setState({'loading': false});
             that.resultEditor.setResult(json);
         }).catch(function (ex) {
-            that.setState({'loading':false});
+            that.setState({'loading': false});
             that.resultEditor.setResult(ex);
             console.log(ex);
         });
@@ -67,8 +69,8 @@ class HomePage extends React.Component {
             <SplitPane split="vertical" defaultSize="20%">
                 <CommandTree commandSelected={this.commandSelected}/>
                 <SplitPane split="vertical" onDragFinished={this.onChangeSplitPane} defaultSize="40%">
-                    <CommandEditor ref={(i)=> this.commandEditor = i}/>
-                    <ResultEditor ref={(i)=> this.resultEditor = i}/>
+                    <CommandEditor ref={(i) => this.commandEditor = i}/>
+                    <ResultEditor ref={(i) => this.resultEditor = i}/>
                 </SplitPane>
             </SplitPane>
             {!!this.state.loading && <div style={Style.modal}>
