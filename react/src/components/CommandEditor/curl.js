@@ -145,7 +145,6 @@ export const parseCURL = (text) => {
 
     while (nextLine()) {
 
-        console.log(line);
         if (state == 'SINGLE_QUOTE') {
             consumeMatching(ClosingSingleQuote);
         }
