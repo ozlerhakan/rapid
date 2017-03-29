@@ -9,8 +9,10 @@ Rapid Docker Interface provides a connection between Docker queries and your Doc
 
 Supported tags:
 
-*  `_1.26_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(master/Dockerfile)_]
-*  `_1.26-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(master/Dockerfile.arm)_]
+*  `_1.27_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(master/Dockerfile)_]
+*  `_1.26_` https://github.com/ozlerhakan/rapid/blob/1488cc27b70a529489766c18f11958fed43ab265/Dockerfile[_(master/Dockerfile)_]
+*  `_1.27-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(master/Dockerfile.arm)_]
+*  `_1.26-arm_` https://github.com/ozlerhakan/rapid/blob/1488cc27b70a529489766c18f11958fed43ab265/Dockerfile.arm[_(master/Dockerfile.arm)_]
 
 The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080 and we need to give access to the host’s Docker daemon by mapping to the Docker socket:
 
@@ -28,9 +30,22 @@ If you have maven installed on your machine, you can use another `-v` flag and m
 [NOTE]
 =====
 . Header Parameters (X-Registry-Auth) are not supported.
-. `latest` and `1.26` tags are compitable with Docker v1.13.1 and later (i.e. v17.03.0-ce).
 . Tags ending with `arm` should work on supported versions of the Raspberry Pi.
 =====
+
+|===
+|Docker Version |API & Tag Version  |Changes
+
+|17.03.1
+|1.27, latest
+|https://docs.docker.com/engine/api/version-history/#v127-api-changes[API changes]
+
+|1.13.1 & 17.03.0
+|1.26
+|https://docs.docker.com/engine/api/version-history/#v1-26-api-changes[API changes]
+
+|===
+
 
 == Editor Shortcuts
 

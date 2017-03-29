@@ -101,7 +101,7 @@ export const apply = (editor) => {
             if (verb) {
                 let req = 'curl --unix-socket /var/run/docker.sock -X' + verb;
                 if (url && url.length) {
-                    req += ' \"http:/v1.26/' + encodeURI(url) + '"';
+                    req += ' \"http:/v1.27/' + encodeURI(url) + '"';
                 }
 
                 if (body && body.length) {
