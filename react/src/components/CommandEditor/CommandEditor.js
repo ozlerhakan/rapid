@@ -4,10 +4,13 @@
 import React from 'react'
 import AceEditor from 'react-ace';
 import * as shortcuts from './shortcuts';
+import * as docker from './docker-editor';
 
-import 'brace/mode/javascript'
-import 'brace/theme/github';
+import 'brace/theme/chrome';
 import 'brace/ext/searchbox';
+import 'brace/ext/language_tools';
+import 'brace/ext/keybinding_menu';
+import 'brace/snippets/snippets';
 
 class CommandEditor extends React.Component {
     constructor(props) {
@@ -20,6 +23,11 @@ class CommandEditor extends React.Component {
         }
         this.state = {defaultValue: dValue};
         this.onChange = this.onChange.bind(this);
+        this.onBeforeLoad = this.onBeforeLoad.bind(this);
+    }
+
+    onBeforeLoad(ace) {
+        docker.init(ace);
     }
 
     onSplitPaneChanged(newValue) {
@@ -43,7 +51,6 @@ class CommandEditor extends React.Component {
     }
 
     componentDidMount() {
-        this.aceEditor.editor.session.setUseWorker(false);
         shortcuts.apply(this.aceEditor.editor);
     }
 
@@ -53,8 +60,8 @@ class CommandEditor extends React.Component {
 
     render() {
         return <AceEditor
-            mode="javascript"
-            theme="github"
+            mode="docker"
+            theme="chrome"
             name="rest_editor"
             width="100%"
             height="100%"
@@ -66,6 +73,8 @@ class CommandEditor extends React.Component {
             enableLiveAutocompletion
             highlightActiveLine
             showInvisibles
+            enableSnippets
+            onBeforeLoad={this.onBeforeLoad}
             onChange={this.onChange}
             editorProps={{$blockScrolling: Infinity}}
             value={this.state.defaultValue}
@@ -74,4 +83,6 @@ class CommandEditor extends React.Component {
     }
 }
 
-export default CommandEditor;
+export
+default
+CommandEditor;

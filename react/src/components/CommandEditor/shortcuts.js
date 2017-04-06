@@ -6,7 +6,7 @@ import * as curl from './curl';
 export const apply = (editor) => {
 
     editor.commands.addCommand({
-        name: 'cut-1',
+        name: 'Remove current line',
         bindKey: {win: 'Ctrl-X', mac: 'Command-X'},
         exec: function (editor) {
 
@@ -17,7 +17,7 @@ export const apply = (editor) => {
     });
 
     editor.commands.addCommand({
-        name: 'ctrl-duplicate',
+        name: 'Duplicate line',
         bindKey: {win: 'Ctrl-D', mac: 'Command-D'},
         exec: function (editor) {
             editor.copyLinesDown();
@@ -26,7 +26,7 @@ export const apply = (editor) => {
     });
 
     editor.commands.addCommand({
-        name: 'shift-enter-line',
+        name: 'Start new line',
         bindKey: {win: 'Shift-Enter', mac: 'Shift-Enter'},
         exec: function (editor) {
             editor.navigateLineEnd();
@@ -35,15 +35,6 @@ export const apply = (editor) => {
         readOnly: true
     });
 
-
-    editor.commands.addCommand({
-        name: 'ctrl-enter-1',
-        bindKey: {win: 'Ctrl-Enter', mac: 'Command-Enter'},
-        exec: function (editor) {
-            editor.insert("\n");
-        },
-        readOnly: true
-    });
 
     const origOnPaste = editor.onPaste;
     editor.onPaste = function (text) {
@@ -61,7 +52,7 @@ export const apply = (editor) => {
     };
 
     editor.commands.addCommand({
-        name: 'ctrl-shift-c',
+        name: 'Copy the selection as cURL',
         bindKey: {win: 'Ctrl-Shift-C', mac: 'Command-Shift-C'},
         exec: function (editor) {
 
@@ -134,7 +125,7 @@ export const apply = (editor) => {
     });
 
     editor.commands.addCommand({
-        name: 'Alt-shift-up',
+        name: 'Move line up',
         bindKey: {win: 'Alt-Shift-Up', mac: 'Shift-Option-Up'},
         exec: function (editor) {
             editor.moveLinesUp();
@@ -143,7 +134,7 @@ export const apply = (editor) => {
     });
 
     editor.commands.addCommand({
-        name: 'Alt-shift-down',
+        name: 'Move line down',
         bindKey: {win: 'Alt-Shift-Down', mac: 'Shift-Option-Down'},
         exec: function (editor) {
             editor.moveLinesDown();
@@ -172,5 +163,42 @@ export const apply = (editor) => {
             }
         }
     }
+
+    editor.commands.addCommand({
+        name: "show keyboard shortcuts",
+        bindKey: {win: "Ctrl-Alt-h", mac: "Command-Alt-h"},
+        exec: function(editor) {
+            ace.config.loadModule("ace/ext/keybinding_menu", function(module) {
+                module.init(editor);
+                editor.showKeyboardShortcuts()
+            })
+        }
+    });
+
+    editor.commands.addCommand({
+        name: "clear editor",
+        bindKey: {win: "Ctrl-Shift-R", mac: "Command-Shift-R"},
+        exec: function(editor) {
+            editor.setValue("", 0);
+        }
+    });
+
+    editor.commands.addCommand({
+        name: "comment/uncomment with line comment",
+        bindKey: {win: "Ctrl-/", mac: "Command-/"},
+        exec: function(editor) {
+            let cursorPosition = editor.getCursorPosition();
+            cursorPosition.column = 0;
+
+            let session = editor.getSession();
+            let line = session.getLine(cursorPosition.row);
+            let first = line[0] || "";
+
+            if (first == "#")
+                session.getDocument().removeInLine(cursorPosition.row, 0, 1);
+            else
+                session.insert(cursorPosition, "#");
+        }
+    });
 
 };
