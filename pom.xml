@@ -6,7 +6,7 @@
 
     <groupId>com.kodcu.docker</groupId>
     <artifactId>rapid</artifactId>
-    <version>1.26</version>
+    <version>1.27</version>
 
     <prerequisites>
         <maven>3.0</maven>
