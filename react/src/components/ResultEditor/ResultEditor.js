@@ -5,7 +5,7 @@ import React from 'react'
 import AceEditor from 'react-ace';
 
 import 'brace/mode/json';
-import 'brace/theme/github';
+import 'brace/theme/chrome';
 
 class ResultEditor extends React.Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class ResultEditor extends React.Component {
     render() {
         return <AceEditor
             mode="json"
-            theme="github"
+            theme="chrome"
             name="view_unique_json"
             width="100%"
             height="100%"

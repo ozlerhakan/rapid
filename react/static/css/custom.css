@@ -96,7 +96,7 @@ Resizer.disabled:hover {
     border-right-style: ridge;
 }
 
-.ace-github .ace_gutter {
+.ace_gutter {
     color: #000000 !important;
     background: #ffffff !important;
 }
@@ -105,7 +105,7 @@ Resizer.disabled:hover {
     background: rgba(0, 0, 0, 0.20) !important;
 }
 
-.ace-github .ace_gutter-active-line {
+.ace_gutter-active-line {
     background-color: rgba(0, 0, 0, 0.20) !important;
     color: rgb(170, 170, 170) !important;
 }
