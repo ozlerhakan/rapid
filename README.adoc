@@ -27,11 +27,12 @@ If you have maven installed on your machine, you can use another `-v` flag and m
   $ docker run -d --name rapid -v ~/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock -p <PORT>:8080 ozlerhakan/rapid
 
 
-[NOTE]
-=====
+== Notes
+
 . Header Parameters (X-Registry-Auth) are not supported.
 . Tags ending with `arm` should work on supported versions of the Raspberry Pi.
-=====
+
+== Versions
 
 |===
 |Docker Version |API & Tag Version  |Changes
@@ -62,6 +63,9 @@ Rapid contains the following shortcuts. Any other shortcut suggestions are alway
 |kbd:[Alt+Shift+Down] |kbd:[&#8997;+&#8679;+Down] | Move line down
 |kbd:[Ctrl+Mouse_Scroll_Up] |kbd:[&#8963;+Mouse_Scroll_Up] | Zoom in
 |kbd:[Ctrl+Mouse_Scroll_Down] |kbd:[&#8963;+Mouse_Scroll_Down] | Zoom out
+|kbd:[Ctrl+Alt+H] |kbd:[&#8984;+&#8997;+H] | Show shortcuts
+|kbd:[Ctrl+Shift+R] |kbd:[&#8984;+&#8679;+R] | Clear editor
+|kbd:[Ctrl+/] |kbd:[&#8984;+/] | Comment/Uncomment with line comment
 |===
 
 === cURL Details
