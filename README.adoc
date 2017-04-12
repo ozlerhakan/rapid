@@ -1,5 +1,14 @@
-= Rapid Dashboard image:https://travis-ci.org/ozlerhakan/rapid.svg?branch=master["Build Status", link="https://travis-ci.org/ozlerhakan/rapid"] image:https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg["Docker Pulls",link="https://hub.docker.com/r/ozlerhakan/rapid"] image:https://badges.gitter.im/Join%20Chat.svg["Gitter", link="https://gitter.im/rapidui/rapid"] image:https://img.shields.io/badge/license-MIT-blue.svg[]
 :experimental:
+
+image:images/logo.jpg[]
+++++
+<p align="center">
+    <a href="https://travis-ci.org/ozlerhakan/rapid"><img src="https://travis-ci.org/ozlerhakan/rapid.svg?branch=master" alt="Travis"></a>
+    <a href="https://hub.docker.com/r/ozlerhakan/rapid"><img src="https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg" alt="devDependency Status"></a>
+    <a href="https://gitter.im/rapidui/rapid"><img src="https://badges.gitter.im/Join%20Chat.svg"></a>
+    <a href="https://img.shields.io/badge/license-MIT-blue.svg"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+</p>
+++++
 
 image::images/screen.gif[]
 
