@@ -29,12 +29,12 @@ export const init = (ace) => {
                     regex: "\#.*$"
                 },
                 {
-                    token: "storage",
-                    regex: "\s*(GET|POST|DELETE)[ |\t](images|containers|swarm|networks|volumes|_ping|system/df|version|info|auth|secrets|nodes|services|tasks|plugins)(?=\\/)?"
+                    token: "variable",
+                    regex: " *(?:GET|POST|DELETE)[ |\t](images|containers|swarm|networks|volumes|_ping|system\\/df|version|info|auth|secrets|nodes|services|tasks|plugins)(?=\\/)?"
                 },
                 {
-                    token: "storage",
-                    regex: "(filters|all|size|limit|name|ps_args|follow|stdout|stdin|stderr|since|logs|force|ling|v|digest|fromImage|fromSrc|repo|tag|noprune|comment|author|pause|changes|container|rotateWorkerToken|rotateManagerToken|rotateManagerUnlockKey|registryAuthFrom|remote|timeout|timestamps|tail|h|w|t|signal)(?=\\=)"
+                    token: "variable",
+                    regex: "(filters|all|size|limit|name|rename|ps_args|term|follow|stdout|stdin|stderr|since|logs|force|ling|digest|fromImage|fromSrc|repo|tag|noprune|comment|author|pause|changes|rotateWorkerToken|rotateManagerToken|rotateManagerUnlockKey|registryAuthFrom|remote|timeout|timestamps|tail|signal|json|create|top|stats|start|stop|restart|kill)(?=\\=|\\?)?"
                 }
             );
         };
