@@ -29,12 +29,7 @@ The command below will pull the latest image of Rapid into your local docker hos
 
 If your docker host runs via docker machine, go into it using `$docker-machine ssh` and run the command.
 
-then open your browser to `http://localhost:<PORT>` or `http://<docker-host-vm-ip>:<PORT>` and start requesting!
-
-If you have maven installed on your machine, you can use another `-v` flag and mount the host's `~/.m2` directory over `/root/.m2`:
-
-  $ docker run -d --name rapid -v ~/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock -p <PORT>:8080 ozlerhakan/rapid
-
+then open your browser to `http://localhost:<PORT>` or `http://<docker-host-vm-ip>:<PORT>`, have fun!
 
 == Notes
 
