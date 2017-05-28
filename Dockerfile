@@ -15,16 +15,15 @@ ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 # speeding up a bit maven
 ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
-RUN mkdir /rapid
+COPY pom.xml /rapid/
 
 WORKDIR /rapid
-
-COPY pom.xml /rapid
 
 # use 1 thread per available CPU core then remove the target directory
 RUN mvn -T 1C install && rm -rf target
 
-COPY src /rapid/src/
+#COPY src /rapid/src
+COPY src/main /rapid/src/main/
 
 EXPOSE 8080
 
