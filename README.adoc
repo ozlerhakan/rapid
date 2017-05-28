@@ -19,7 +19,7 @@ Rapid Docker Interface provides a connection between Docker queries and your Doc
 Supported tags:
 
 *  `_1.29_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.29/Dockerfile)_]
-*  `_1.27_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/3302b768c28b1532772e271ad8013609dd0cdf85/Dockerfile[_(1.27/Dockerfile)_]
+*  `_1.27_` https://github.com/ozlerhakan/rapid/blob/3302b768c28b1532772e271ad8013609dd0cdf85/Dockerfile[_(1.27/Dockerfile)_]
 *  `_1.29-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(master/Dockerfile.arm)_]
 *  `_1.27-arm_` https://github.com/ozlerhakan/rapid/blob/3302b768c28b1532772e271ad8013609dd0cdf85/Dockerfile.arm[_(1.27/Dockerfile.arm)_]
 
