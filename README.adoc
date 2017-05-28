@@ -18,10 +18,10 @@ Rapid Docker Interface provides a connection between Docker queries and your Doc
 
 Supported tags:
 
-*  `_1.27_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(master/Dockerfile)_]
-*  `_1.26_` https://github.com/ozlerhakan/rapid/blob/1488cc27b70a529489766c18f11958fed43ab265/Dockerfile[_(1.26/Dockerfile)_]
-*  `_1.27-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(master/Dockerfile.arm)_]
-*  `_1.26-arm_` https://github.com/ozlerhakan/rapid/blob/1488cc27b70a529489766c18f11958fed43ab265/Dockerfile.arm[_(1.26-arm/Dockerfile.arm)_]
+*  `_1.29_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.29/Dockerfile)_]
+*  `_1.27_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/3302b768c28b1532772e271ad8013609dd0cdf85/Dockerfile[_(1.27/Dockerfile)_]
+*  `_1.29-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(master/Dockerfile.arm)_]
+*  `_1.27-arm_` https://github.com/ozlerhakan/rapid/blob/3302b768c28b1532772e271ad8013609dd0cdf85/Dockerfile.arm[_(1.27/Dockerfile.arm)_]
 
 The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080 and we need to give access to the host’s Docker daemon by mapping to the Docker socket:
 
@@ -34,15 +34,19 @@ then open your browser to `http://localhost:<PORT>` or `http://<docker-host-vm-i
 == Notes
 
 . Header Parameters (X-Registry-Auth) are not supported.
-. Tags ending with `arm` should work on supported versions of the Raspberry Pi.
+. Tags ending with `arm` should work on supported versions of the Raspberry Pi models.
 
 == Versions
 
 |===
 |Docker Version |API & Tag Version  |Changes
 
+|17.04.x
+|1.29, latest
+|https://docs.docker.com/engine/api/version-history/#v1-29-api-changes[API changes]
+
 |17.03.1
-|1.27, latest
+|1.27
 |https://docs.docker.com/engine/api/version-history/#v127-api-changes[API changes]
 
 |1.13.1 & 17.03.0
