@@ -41,7 +41,7 @@ then open your browser to `http://localhost:<PORT>` or `http://<docker-host-vm-i
 |===
 |Docker Version |API & Tag Version  |Changes
 
-|17.04.x
+|17.05.x
 |1.29, latest
 |https://docs.docker.com/engine/api/version-history/#v1-29-api-changes[API changes]
 
