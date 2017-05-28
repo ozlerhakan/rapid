@@ -6,7 +6,7 @@
 
     <groupId>com.kodcu.docker</groupId>
     <artifactId>rapid</artifactId>
-    <version>1.27</version>
+    <version>1.29</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
