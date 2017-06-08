@@ -1,5 +1,3 @@
-'use strict';
-
 // Helper functions for filtering
 export const defaultMatcher = (filterText, node) => {
     return node.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1;

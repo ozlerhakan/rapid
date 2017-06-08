@@ -26,7 +26,7 @@ export const init = (ace) => {
             this.$rules.start.unshift(
                 {
                     token: "comment", // single line
-                    regex: "\#.*$"
+                    regex: "#.*$"
                 },
                 {
                     token: "variable",
@@ -43,7 +43,8 @@ export const init = (ace) => {
     });
 
     ace.define("ace/snippets/docker", ["require", "exports", "module"], function (require, exports, module) {
-        exports.snippetText = "snippet flt\n	filters={\"${1:filter-name}\":{\"${2:true}\":true}}";
+        // eslint-disable-next-line
+        exports.snippetText = 'snippet flt\n    filters={${1:filter-name}:{${2:true}:true}}';
         exports.scope = "docker"
     });
 
@@ -55,7 +56,7 @@ export const init = (ace) => {
         let MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
         let CstyleBehaviour = require("./behaviour/cstyle").CstyleBehaviour;
         let CStyleFoldMode = require("./folding/cstyle").FoldMode;
-        let WorkerClient = require("../worker/worker_client").WorkerClient;
+        //let WorkerClient = require("../worker/worker_client").WorkerClient;
 
         let Mode = function () {
             this.HighlightRules = DockerJsonHighlightRules;
@@ -76,8 +77,8 @@ export const init = (ace) => {
             this.getNextLineIndent = function (state, line, tab) {
                 let indent = this.$getIndent(line);
 
-                if (state == "start") {
-                    let match = line.match(/^.*[\{\(\[]\s*$/);
+                if (state === "start") {
+                    let match = line.match(/^.*[{([]\s*$/);
                     if (match) {
                         indent += tab;
                     }

@@ -17,7 +17,9 @@ class TreeView extends React.Component {
 
     onToggle(node, toggled) {
         if (this.state.cursor) {
-            this.state.cursor.active = false;
+            let temp = this.state.cursor;
+            temp.active = false;
+            this.setState({cursor:temp})
         }
         node.active = true;
         if (node.children) {
@@ -35,7 +37,7 @@ class TreeView extends React.Component {
         if (!filter) {
             return this.setState({data});
         }
-        var filtered = filters.filterTree(data, filter);
+        let filtered = filters.filterTree(data, filter);
         filtered = filters.expandFilteredNodes(filtered, filter);
         this.setState({data: filtered});
     }

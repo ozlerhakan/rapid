@@ -2,13 +2,7 @@
  * Created by hakan on 12/02/2017.
  */
 import React from 'react'
-import Nav from 'react-bootstrap/lib/Nav';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-import NavDropdown from 'react-bootstrap/lib/NavDropdown';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import {Nav,Navbar,NavItem,MenuItem,NavDropdown,Tooltip,OverlayTrigger} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 
 class Header extends React.Component {

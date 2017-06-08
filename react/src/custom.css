@@ -63,17 +63,17 @@ Resizer.disabled:hover {
     overflow: scroll;
 }
 
-#container > div > div > div.Pane.vertical.Pane1 > div > ul > li > span > ul > li > div > div:nth-child(2) > div {
+#root > div > div > div.Pane.vertical.Pane1 > div > ul > li > span > ul > li > div > div:nth-child(2) > div {
     color: #1DA4C9;
     font-weight: bold;
 }
 
-#container > div > div > div.Pane.vertical.Pane1 > div > ul > li > div > div:nth-child(2) > div  {
+#root > div > div > div.Pane.vertical.Pane1 > div > ul > li > div > div:nth-child(2) > div  {
     font-size: large;
     color: #70ba56;
 }
 
-#container > div > div > div.Pane.vertical.Pane1 > div > ul {
+#root > div > div > div.Pane.vertical.Pane1 > div > ul {
     margin-left: 9px !important;
 }
 

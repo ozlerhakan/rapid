@@ -35,7 +35,9 @@ export const parseCURL = (text) => {
     let CurlVerb = /\s*-X ?(GET|POST|DELETE)/;
 
     let HasProtocol = /[\s"']https?:\/\/?/;
+    // eslint-disable-next-line
     let CurlRequestWithProto = /[\s"']https?:\/\/?[^\/ ]+\/+([^\s"']+)/;
+    // eslint-disable-next-line
     let CurlRequestWithoutProto = / {1}[\s"'][^\/ ]+\/+[^\/ ]+\/+([^\s"']+)/;
     let CurlData = /\s*(--data|-d)\s*/m;
 
@@ -47,7 +49,7 @@ export const parseCURL = (text) => {
         if (line.length > 0) {
             return true;
         }
-        if (lines.length == 0) {
+        if (lines.length === 0) {
             return false;
         }
         line = lines.shift().replace(/[\r\n]+/g, "\n") + "\n";
@@ -62,11 +64,11 @@ export const parseCURL = (text) => {
     // Is the next char a single or double quote?
     // If so remove it
     function detectQuote() {
-        if (line.substr(0, 1) == "'") {
+        if (line.substr(0, 1) === "'") {
             line = line.substr(1);
             state = 'SINGLE_QUOTE';
         }
-        else if (line.substr(0, 1) == '"') {
+        else if (line.substr(0, 1) === '"') {
             line = line.substr(1);
             state = 'DOUBLE_QUOTE';
         }
@@ -110,6 +112,7 @@ export const parseCURL = (text) => {
         let verb = '';
         let request = '';
         let matches;
+        // eslint-disable-next-line
         if (matches = line.match(CurlVerb)) {
             verb = matches[1];
         }
@@ -120,12 +123,14 @@ export const parseCURL = (text) => {
             ? CurlRequestWithProto
             : CurlRequestWithoutProto;
 
+        // eslint-disable-next-line
         if (matches = line.match(pattern)) {
             request = matches[1];
         }
 
         out.push(verb + ' ' + request + "\n");
 
+        // eslint-disable-next-line
         if (matches = line.match(CurlData)) {
             let index = line.lastIndexOf(matches[0]);
             line = line.substr(index);
@@ -145,45 +150,46 @@ export const parseCURL = (text) => {
 
     while (nextLine()) {
 
-        if (state == 'SINGLE_QUOTE') {
+        if (state === 'SINGLE_QUOTE') {
             consumeMatching(ClosingSingleQuote);
         }
 
-        else if (state == 'DOUBLE_QUOTE') {
+        else if (state === 'DOUBLE_QUOTE') {
             consumeMatching(ClosingDoubleQuote);
             unescapeLastBodyEl();
         }
 
-        else if (state == 'UNQUOTED') {
+        else if (state === 'UNQUOTED') {
             consumeMatching(EscapedQuotes);
             if (body.length) {
                 unescapeLastBodyEl();
             }
-            if (state == 'UNQUOTED') {
+            if (state === 'UNQUOTED') {
                 addBodyToOut();
                 line = ''
             }
         }
 
         else if (EmptyLine.test(line)) {
-            if (state != 'LF') {
+            if (state !== 'LF') {
                 out.push("\n");
                 state = 'LF';
             }
             line = '';
         }
 
+        // eslint-disable-next-line
         else if (matches = line.match(Comment)) {
             out.push("#" + matches[1] + "\n");
             state = 'NONE';
             line = '';
         }
-
+        // eslint-disable-next-line
         else if (matches = line.match(LooksLikeCurl)) {
             line = line.substr(matches[0].length).trim();
             parseCurlLine();
         }
-
+        // eslint-disable-next-line
         else if (matches = line.match(CurlData)) {
             line = line.substr(matches[0].length);
             detectQuote();
@@ -191,7 +197,7 @@ export const parseCURL = (text) => {
                 line = '';
             }
         }
-
+        // eslint-disable-next-line
         else if (matches = line.match(CurlVerb)) {
             let verb = matches[1];
             out.push(verb + ' ');
@@ -200,7 +206,7 @@ export const parseCURL = (text) => {
             let pattern = HasProtocol.test(line)
                 ? CurlRequestWithProto
                 : CurlRequestWithoutProto;
-
+            // eslint-disable-next-line
             if (matches = line.match(pattern)) {
                 let request = matches[1];
                 out.push(request + "\n");

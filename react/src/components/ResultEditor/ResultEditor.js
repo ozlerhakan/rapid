@@ -8,10 +8,6 @@ import 'brace/mode/json';
 import 'brace/theme/chrome';
 
 class ResultEditor extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.aceEditor.editor.session.setUseWorker(false);
     }
@@ -22,7 +18,7 @@ class ResultEditor extends React.Component {
     }
 
     setResult(result) {
-        if (typeof result == 'object') {
+        if (typeof result === 'object') {
             result = JSON.stringify(result, null, 4);
         }
         this.aceEditor.editor.session.setValue(result, this.aceEditor.editor.getCursorPosition());

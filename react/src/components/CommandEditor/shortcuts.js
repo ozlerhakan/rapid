@@ -3,7 +3,7 @@
  */
 import * as curl from './curl';
 
-export const apply = (editor) => {
+export const apply = (editor,ace) => {
 
     editor.commands.addCommand({
         name: 'Remove current line',
@@ -35,7 +35,6 @@ export const apply = (editor) => {
         readOnly: true
     });
 
-
     const origOnPaste = editor.onPaste;
     editor.onPaste = function (text) {
         console.log(text);
@@ -60,7 +59,7 @@ export const apply = (editor) => {
             let text = editor.getSelectedText();
             if (!text) return;
 
-            let matches = text.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]*([{\[][\s\S]*[}\]])?/);
+            let matches = text.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]*([{[][\s\S]*[}\]])?/);
             if (!matches) return;
 
             let id = "rapid-clipboard-textarea-hidden-id";
@@ -92,7 +91,7 @@ export const apply = (editor) => {
             if (verb) {
                 let req = 'curl --unix-socket /var/run/docker.sock -X' + verb;
                 if (url && url.length) {
-                    req += ' \"http:/v1.29/' + encodeURI(url) + '"';
+                    req += ' "http:/v1.29/' + encodeURI(url) + '"';
                 }
 
                 if (body && body.length) {
@@ -151,7 +150,7 @@ export const apply = (editor) => {
 
         if (event.ctrlKey && editor.getValue().length) {
 
-            let fontSize = parseInt(editor.getFontSize());
+            let fontSize = +(editor.getFontSize());
 
             if (event.wheelDelta < 0 && fontSize > 8) {
                 //mouse scroll down - min size 8
@@ -194,7 +193,7 @@ export const apply = (editor) => {
             let line = session.getLine(cursorPosition.row);
             let first = line[0] || "";
 
-            if (first == "#")
+            if (first === "#")
                 session.getDocument().removeInLine(cursorPosition.row, 0, 1);
             else
                 session.insert(cursorPosition, "#");

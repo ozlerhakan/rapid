@@ -9,6 +9,7 @@ import ResultEditor from '../ResultEditor';
 import CommandEditor from '../CommandEditor';
 import CommandTree from '../CommandTree';
 import Style from './styles';
+import loadingGif from '../../docker_loading.gif'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -28,7 +29,7 @@ class HomePage extends React.Component {
     handlePlay() {
         let cmd = this.commandEditor.getSelectedText();
 
-        let match = cmd.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]*([{\[][\s\S]*[}\]])?/);
+        let match = cmd.match(/^\s*(GET|POST|PUT|DELETE)[ |\t]+(.*)[\r\n]*([{[][\s\S]*[}\]])?/);
         if (!match) return;
 
         console.log('HTTP REQUEST: ' + match[1]);
@@ -44,7 +45,7 @@ class HomePage extends React.Component {
         fetch('/docker/' + url, {
             method,
             headers: {'Content-Type': 'application/json'},
-            body: method == 'POST' ? body : null
+            body: method === 'POST' ? body : null
         }).then(function (response) {
             return response.json();
         }).then(function (json) {
@@ -73,7 +74,7 @@ class HomePage extends React.Component {
                 </SplitPane>
             </SplitPane>
             {!!this.state.loading && <div style={Style.modal}>
-                <img style={Style.dockerGif} src="/static/images/docker_loading.gif"/>
+                <img style={Style.dockerGif} src={loadingGif} alt="Loading..."/>
             </div>}
         </div>;
     }

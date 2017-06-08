@@ -26,7 +26,10 @@ class CommandEditor extends React.Component {
         this.onBeforeLoad = this.onBeforeLoad.bind(this);
     }
 
+    ace = null;
+
     onBeforeLoad(ace) {
+        this.ace = ace;
         docker.init(ace);
     }
 
@@ -51,7 +54,7 @@ class CommandEditor extends React.Component {
     }
 
     componentDidMount() {
-        shortcuts.apply(this.aceEditor.editor);
+        shortcuts.apply(this.aceEditor.editor,this.ace);
     }
 
     componentDidUpdate() {
