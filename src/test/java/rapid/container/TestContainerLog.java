@@ -17,7 +17,7 @@ public class TestContainerLog extends ContainerConfig {
 
     @Test
     public void inspectContainer() {
-        final Response listContainers = target("containers").path("json").request(MediaType.APPLICATION_JSON).get();
+        final Response listContainers = target("containers").path("json").queryParam("stdout", true).request(MediaType.APPLICATION_JSON).get();
         final JsonArray containers = listContainers.readEntity(JsonArray.class);
         final JsonObject container = (JsonObject) containers.get(0);
         final JsonString expectedId = container.getJsonString("Id");

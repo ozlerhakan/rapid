@@ -16,12 +16,8 @@ public class TestImageCreate extends ImageConfig {
 
     @Test
     public void shouldCreateImage() {
-        final Response response = postResponse(target("images").path("create").queryParam("fromImage","alpine").queryParam("tag","3.2"));
-        System.out.println(response);
-
+        final Response response = postResponse(target("images").path("create").queryParam("fromImage","alpine:3.2").queryParam("tag","3.2"));
         assertEquals(200, response.getStatus());
-        final JsonObject responseContent = response.readEntity(JsonObject.class);
-        System.out.println(responseContent);
         response.close();
     }
 

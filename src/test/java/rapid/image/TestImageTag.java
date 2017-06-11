@@ -16,10 +16,7 @@ public class TestImageTag extends ImageConfig {
     @Test
     public void shouldTagImage() {
         final Response response = postResponse(target("images").path("ubuntu:latest").path("tag").queryParam("repo","ubuntu").queryParam("tag","test"));
-        System.out.println(response);
         assertEquals(200, response.getStatus());
-        final JsonStructure responseContent = response.readEntity(JsonStructure.class);
-        System.out.println(responseContent);
         response.close();
 
     }
