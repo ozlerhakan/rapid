@@ -16,7 +16,7 @@ before_install:
 - docker pull ubuntu:latest
 - docker pull busybox:1.26
 - docker run -d  mongo:3.4
-- docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node:7-alpine sh -c "npm install --global yarn && /usr/local/bin/yarn install && /usr/local/bin/yarn run build"
+- docker run --rm -v /home/travis/build/ozlerhakan/rapid:/rapid -w /rapid/react node:7-alpine sh -c "yarn install && yarn run build"
 - mvn clean
 after_success:
 - docker build -t $RAPID_FULL -f Dockerfile .
