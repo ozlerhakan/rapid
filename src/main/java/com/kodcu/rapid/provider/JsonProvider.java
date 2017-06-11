@@ -3,8 +3,6 @@ package com.kodcu.rapid.provider;
 import com.kodcu.rapid.pojo.ResponseFrame;
 
 import javax.json.Json;
-import javax.json.JsonBuilderFactory;
-import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonStructure;
@@ -21,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 /**
  * Created by Hakan on 2/10/2016.
@@ -51,7 +50,7 @@ public class JsonProvider implements MessageBodyWriter, MessageBodyReader {
             ResponseFrame f = (ResponseFrame) o;
             JsonObjectBuilder b = Json.createObjectBuilder();
 
-            if (!f.getId().isEmpty())
+            if (Objects.nonNull(f.getId()))
                 b.add("id", f.getId());
 
             b.add("message", f.getMessage());

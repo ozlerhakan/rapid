@@ -111,16 +111,19 @@ public class Container extends DockerClient {
                 .queryParam("tail", tail);
 
         Response response = getResponse(target);
-        response.close();
-
         ResponseFrame frame = new ResponseFrame();
-        if (response.getStatus() == 200) {
-            String entity = response.readEntity(String.class);
-            frame.setMessage(entity);
-        } else if (response.getStatus() == 404) {
-            frame.setMessage("No such container: " + containerId);
-        } else {
-            frame.setMessage("Something went wrong.");
+        try {
+            if (response.getStatus() == 200) {
+                String entity = response.readEntity(String.class);
+                frame.setMessage(entity);
+            } else if (response.getStatus() == 404) {
+                frame.setMessage("No such container: " + containerId);
+            } else {
+                frame.setMessage("Something went wrong.");
+            }
+        } finally {
+            response.close();
+
         }
         return frame;
     }
