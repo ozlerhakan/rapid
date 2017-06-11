@@ -25,11 +25,14 @@ Supported tags:
 
 The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080 and we need to give access to the host’s Docker daemon by mapping to the Docker socket:
 
-  $ docker run -d --name rapid  -v /var/run/docker.sock:/var/run/docker.sock -p <PORT>:8080 ozlerhakan/rapid
+  $ docker run -d --name rapid  \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -p 8080:8080 \
+    ozlerhakan/rapid
 
 If your docker host runs via docker machine, go into it using `$docker-machine ssh` and run the command.
 
-then open your browser to `http://localhost:<PORT>` or `http://<docker-host-vm-ip>:<PORT>`, have fun!
+then open your browser to `http://localhost:8080` or `http://<docker-host-vm-ip>:8080`, have fun!
 
 == Notes
 
