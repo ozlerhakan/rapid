@@ -11,7 +11,7 @@ env:
   global:
     - RAPID_FULL="ozlerhakan/rapid:1.29"
     - RAPID_ARM="ozlerhakan/rapid:1.29-arm"
-script: mvn install test
+script: mvn install
 before_install:
 - docker pull ubuntu:latest
 - docker pull busybox:1.26
