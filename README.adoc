@@ -19,10 +19,10 @@ Rapid Docker Interface provides a connection between Docker queries and your Doc
 
 Supported tags:
 
-*  `_1.29_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.29/Dockerfile)_]
-*  `_1.27_` https://github.com/ozlerhakan/rapid/blob/3302b768c28b1532772e271ad8013609dd0cdf85/Dockerfile[_(1.27/Dockerfile)_]
-*  `_1.29-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(master/Dockerfile.arm)_]
-*  `_1.27-arm_` https://github.com/ozlerhakan/rapid/blob/3302b768c28b1532772e271ad8013609dd0cdf85/Dockerfile.arm[_(1.27/Dockerfile.arm)_]
+*  `_1.30_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.30/Dockerfile)_]
+*  `_1.29_` https://github.com/ozlerhakan/rapid/blob/1d20d2e1465e457d5728568b411c3ac11fe98fd0/Dockerfile[_(1.29/Dockerfile)_]
+*  `_1.30-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(1.30/Dockerfile.arm)_]
+*  `_1.29-arm_` https://github.com/ozlerhakan/rapid/blob/1d20d2e1465e457d5728568b411c3ac11fe98fd0/Dockerfile.arm[_(1.27/Dockerfile.arm)_]
 
 The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080 and we need to give access to the host’s Docker daemon by mapping to the Docker socket:
 
@@ -45,17 +45,17 @@ then open your browser to `http://localhost:8080` or `http://<docker-host-vm-ip>
 |===
 |Docker Version |API & Tag Version  |Changes
 
+|17.06.x
+|1.30, latest
+|https://docs.docker.com/engine/api/version-history/#v1-30-api-changes[API changes]
+
 |17.05.x
-|1.29, latest
+|1.29
 |https://docs.docker.com/engine/api/version-history/#v1-29-api-changes[API changes]
 
 |17.03.1
 |1.27
 |https://docs.docker.com/engine/api/version-history/#v127-api-changes[API changes]
-
-|1.13.1 & 17.03.0
-|1.26
-|https://docs.docker.com/engine/api/version-history/#v1-26-api-changes[API changes]
 
 |===
 
