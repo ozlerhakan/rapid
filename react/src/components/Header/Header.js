@@ -29,8 +29,8 @@ class Header extends React.Component {
                     <MenuItem eventKey={1.1} href="https://docs.docker.com/engine/api/" target="_blank">Docker Remote
                         API</MenuItem>
                     <MenuItem divider/>
-                    <MenuItem eventKey={1.2} href="https://docs.docker.com/engine/api/v1.29/"
-                              target="_blank">v1.29</MenuItem>
+                    <MenuItem eventKey={1.2} href="https://docs.docker.com/engine/api/v1.30/"
+                              target="_blank">v1.30</MenuItem>
                     <MenuItem divider/>
                     <MenuItem eventKey={1.3} href="https://docs.docker.com/engine/faq/" target="_blank">FAQ</MenuItem>
                 </NavDropdown>
