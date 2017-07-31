@@ -1,6 +1,5 @@
 package rapid.container;
 
-import org.junit.After;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -49,7 +48,6 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
             "  },\n" +
             "  \"WorkingDir\": \"\",\n" +
             "  \"NetworkDisabled\": false,\n" +
-            "  \"MacAddress\": \"12:34:56:78:9a:bc\",\n" +
             "  \"ExposedPorts\": {\n" +
             "    \"22/tcp\": {}\n" +
             "  },\n" +
@@ -61,21 +59,7 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
             "    ],\n" +
             "    \"Links\": [\n" +
             "    ],\n" +
-            "    \"Memory\": 0,\n" +
-            "    \"MemorySwap\": 0,\n" +
             "    \"MemoryReservation\": 0,\n" +
-            "    \"KernelMemory\": 0,\n" +
-            "    \"CpuPercent\": 80,\n" +
-            "    \"CpuShares\": 512,\n" +
-            "    \"CpuPeriod\": 100000,\n" +
-            "    \"CpuRealtimePeriod\": 1000000,\n" +
-            "    \"CpuRealtimeRuntime\": 10000,\n" +
-            "    \"CpuQuota\": 50000,\n" +
-            "    \"CpusetCpus\": \"0\",\n" +
-            "    \"CpusetMems\": \"0\",\n" +
-            "    \"MaximumIOps\": 0,\n" +
-            "    \"MaximumIOBps\": 0,\n" +
-            "    \"BlkioWeight\": 300,\n" +
             "    \"BlkioWeightDevice\": [\n" +
             "      {}\n" +
             "    ],\n" +
@@ -148,10 +132,7 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
             "    \"EndpointsConfig\": {\n" +
             "      \"isolated_nw\": {\n" +
             "        \"IPAMConfig\": {\n" +
-            "          \"IPv4Address\": \"172.20.30.33\",\n" +
-            "          \"IPv6Address\": \"2001:db8:abcd::3033\",\n" +
-            "          \"LinkLocalIPs\": [\n" +
-            "          ]\n" +
+            "          \"IPv4Address\": \"172.20.30.33\"" +
             "        },\n" +
             "        \"Links\": [\n" +
             "        ],\n" +
@@ -166,12 +147,13 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
 
     @Test
     public void shouldCreateContainer() throws ExecutionException, InterruptedException {
-        final WebTarget target = target("containers").path("create").queryParam("name", "haci");
-        Response response = postAsycResponse(target, body);
+        final WebTarget target = target("containers").path("create").queryParam("name", "mysample");
+        Response response = postResponse(target, body);
 
-        // ubuntu:latest neeeded
+        // ubuntu:latest needed
         assertEquals(200, response.getStatus());
         final JsonObject responseContent = response.readEntity(JsonObject.class);
+
         assertThat(responseContent.containsKey("Id"), is(true));
 
         id = responseContent.getString("Id");
