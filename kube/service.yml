@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: codefresh-rapid
+spec:
+  ports:
+    - name: http1
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: codefresh-rapid
+  type: LoadBalancer
