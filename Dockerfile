@@ -19,6 +19,8 @@ COPY pom.xml /rapid/
 COPY src/main /rapid/src/main/
 
 WORKDIR /rapid
+
+COPY react /rapid/react
 RUN cd react && yarn install && yarn run build
 
 # use 1 thread per available CPU core then remove the target directory
