@@ -35,6 +35,14 @@ If your docker host runs via docker machine, go into it using `$docker-machine s
 
 then open your browser to `http://localhost:8080` or `http://<docker-host-vm-ip>:8080`, have fun!
 
+In Docker Swarm World, you can run the rapid as a service like below:
+
+  $ docker service create --name rapid \
+    --mount="type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock" \
+    --constraint "node.role == manager" \
+    -p 8080:8080 \
+    ozlerhakan/rapid
+
 == Notes
 
 . Header Parameters (X-Registry-Auth) are not supported.
