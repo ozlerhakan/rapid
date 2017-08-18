@@ -22,6 +22,7 @@ import java.util.Objects;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -34,13 +35,17 @@ public class Service extends DockerClient {
 
         WebTarget target = resource().path("services");
 
-        if (Objects.nonNull(filters))
+        if (Objects.nonNull(filters)) {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
+        }
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return Json.createReader(new StringReader(entity)).read();
+        try {
+            String entity = response.readEntity(String.class);
+            return Json.createReader(new StringReader(entity)).read();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
@@ -50,9 +55,12 @@ public class Service extends DockerClient {
         WebTarget target = resource().path("services").path("create");
 
         Response response = postResponse(target, content);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return Json.createReader(new StringReader(entity)).read();
+        try {
+            String entity = response.readEntity(String.class);
+            return Json.createReader(new StringReader(entity)).read();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
@@ -62,9 +70,12 @@ public class Service extends DockerClient {
         WebTarget target = resource().path("services").path(id);
 
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            JsonObject entity = response.readEntity(JsonObject.class);
+            return entity;
+        } finally {
+            response.close();
+        }
     }
 
     @DELETE
@@ -74,13 +85,14 @@ public class Service extends DockerClient {
         WebTarget target = resource().path("services").path(id);
 
         Response response = deleteResponse(target);
-        JsonObject result;
-        if (response.getStatus() == 200)
-            result = Json.createObjectBuilder().add("message", id + " service deleted.").build();
-        else
-            result = response.readEntity(JsonObject.class);
-        response.close();
-        return result;
+        try {
+            if (response.getStatus() == ACCEPTED.getStatusCode())
+                return Json.createObjectBuilder().add("message", id + " service deleted.").build();
+            else
+                return response.readEntity(JsonObject.class);
+        } finally {
+            response.close();
+        }
     }
 
     @POST
@@ -92,13 +104,17 @@ public class Service extends DockerClient {
 
         WebTarget target = resource().path("services").path(id).path("update").queryParam("registryAuthFrom", registryAuthFrom);
 
-        if (version != 0)
+        if (version != 0) {
             target = target.queryParam("version", version);
+        }
 
         Response response = postResponse(target, content);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            JsonObject entity = response.readEntity(JsonObject.class);
+            return entity;
+        } finally {
+            response.close();
+        }
     }
 
     @GET
@@ -121,15 +137,16 @@ public class Service extends DockerClient {
                 .queryParam("tail", tail);
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        int status = response.getStatus();
-        JsonObject result;
-        if (status == 200 || status == 101)
-            result = Json.createObjectBuilder().add("message", response.readEntity(String.class)).build();
-        else
-            result = response.readEntity(JsonObject.class);
-        response.close();
-        return result;
+        try {
+            int status = response.getStatus();
+            if (status == ACCEPTED.getStatusCode()) {
+                return Json.createObjectBuilder().add("message", response.readEntity(String.class)).build();
+            } else {
+                return response.readEntity(JsonObject.class);
+            }
+        } finally {
+            response.close();
+        }
     }
 
 
