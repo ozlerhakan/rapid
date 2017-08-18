@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -25,75 +26,85 @@ import static com.kodcu.rapid.util.Networking.postResponse;
 public class Swarm extends DockerClient {
 
     @GET
-    public JsonObject inspectSwarm() {
+    public Response inspectSwarm() {
 
         WebTarget target = resource().path("swarm");
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("init")
-    public JsonObject initSwarm(JsonObject content) {
+    public Response initSwarm(JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("init");
         Response response = postResponse(target, content);
 
-        JsonObject message;
-        if (response.getStatus() == 200) {
-            message = Json.createObjectBuilder().add("message", response.readEntity(String.class)).build();
-        } else
-            message = response.readEntity(JsonObject.class);
-
-        response.close();
-        return message;
+        try {
+            if (response.getStatus() == ACCEPTED.getStatusCode()) {
+                return Response.ok(Json.createObjectBuilder().add("message", response.readEntity(String.class)).build())
+                        .build();
+            } else
+                return Response.status(response.getStatus())
+                        .entity(response.readEntity(JsonObject.class))
+                        .build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("join")
-    public JsonObject joinSwarm(JsonObject content) {
+    public Response joinSwarm(JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("join");
         Response response = postResponse(target, content);
 
-        JsonObject message;
-        if (response.getStatus() == 200) {
-            message = Json.createObjectBuilder().add("message", "OK").build();
-        } else
-            message = response.readEntity(JsonObject.class);
-
-        response.close();
-        return message;
+        try {
+            if (response.getStatus() == ACCEPTED.getStatusCode()) {
+                return Response.ok(Json.createObjectBuilder().add("message", "OK").build()).build();
+            } else {
+                return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
+            }
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("leave")
-    public JsonStructure leaveSwarm(@DefaultValue("false") @QueryParam("force") boolean force) {
+    public Response leaveSwarm(@DefaultValue("false") @QueryParam("force") boolean force) {
 
         WebTarget target = resource().path("swarm").path("leave").queryParam("force", force);
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", "Node left.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", "Node left.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
     @POST
     @Path("update")
-    public JsonStructure updateSwarm(
-            @QueryParam("version") String version,
-            @DefaultValue("false") @QueryParam("rotateWorkerToken") boolean rotateWorkerToken,
-            @DefaultValue("false") @QueryParam("rotateManagerToken") boolean rotateManagerToken,
-            @DefaultValue("false") @QueryParam("rotateManagerUnlockKey") boolean rotateManagerUnlockKey,
-            JsonObject content) {
+    public Response updateSwarm(@QueryParam("version") String version,
+                                @DefaultValue("false") @QueryParam("rotateWorkerToken") boolean rotateWorkerToken,
+                                @DefaultValue("false") @QueryParam("rotateManagerToken") boolean rotateManagerToken,
+                                @DefaultValue("false") @QueryParam("rotateManagerUnlockKey") boolean rotateManagerUnlockKey,
+                                JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("update")
                 .queryParam("rotateWorkerToken", rotateWorkerToken)
@@ -105,49 +116,66 @@ public class Swarm extends DockerClient {
 
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", "Swarm updated.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", "Swarm updated.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
     @GET
     @Path("unlockkey")
-    public JsonStructure unluckKeySwarm() {
+    public Response unluckKeySwarm() {
         WebTarget target = resource().path("swarm").path("unlockkey");
+
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", "Swarm unlockkey.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", "Swarm unlockkey.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
     @POST
     @Path("unlock")
-    public JsonStructure unlockSwarm(JsonObject content) {
+    public Response unlockSwarm(JsonObject content) {
 
         WebTarget target = resource().path("swarm").path("unlock");
+
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", "Swarm unlock.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", "Swarm unlock.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 }

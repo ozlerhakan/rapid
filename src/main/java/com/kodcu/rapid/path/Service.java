@@ -4,7 +4,6 @@ import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -31,7 +30,7 @@ import static javax.ws.rs.core.Response.Status.ACCEPTED;
 public class Service extends DockerClient {
 
     @GET
-    public JsonStructure listServices(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response listServices(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("services");
 
@@ -42,7 +41,10 @@ public class Service extends DockerClient {
         Response response = getResponse(target);
         try {
             String entity = response.readEntity(String.class);
-            return Json.createReader(new StringReader(entity)).read();
+            return Response
+                    .status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(entity)).read())
+                    .build();
         } finally {
             response.close();
         }
@@ -50,14 +52,14 @@ public class Service extends DockerClient {
 
     @POST
     @Path("create")
-    public JsonStructure createService(JsonObject content) {
+    public Response createService(JsonObject content) {
 
         WebTarget target = resource().path("services").path("create");
 
         Response response = postResponse(target, content);
         try {
             String entity = response.readEntity(String.class);
-            return Json.createReader(new StringReader(entity)).read();
+            return Response.ok(Json.createReader(new StringReader(entity)).read()).build();
         } finally {
             response.close();
         }
@@ -65,14 +67,13 @@ public class Service extends DockerClient {
 
     @GET
     @Path("{id}")
-    public JsonObject inspectService(@PathParam("id") String id) {
+    public Response inspectService(@PathParam("id") String id) {
 
         WebTarget target = resource().path("services").path(id);
 
         Response response = getResponse(target);
         try {
-            JsonObject entity = response.readEntity(JsonObject.class);
-            return entity;
+            return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
         } finally {
             response.close();
         }
@@ -80,16 +81,16 @@ public class Service extends DockerClient {
 
     @DELETE
     @Path("{id}")
-    public JsonObject deleteService(@PathParam("id") String id) {
+    public Response deleteService(@PathParam("id") String id) {
 
         WebTarget target = resource().path("services").path(id);
 
         Response response = deleteResponse(target);
         try {
             if (response.getStatus() == ACCEPTED.getStatusCode())
-                return Json.createObjectBuilder().add("message", id + " service deleted.").build();
+                return Response.ok(Json.createObjectBuilder().add("message", id + " service deleted.").build()).build();
             else
-                return response.readEntity(JsonObject.class);
+                return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
         } finally {
             response.close();
         }
@@ -97,7 +98,7 @@ public class Service extends DockerClient {
 
     @POST
     @Path("{id}/update")
-    public JsonObject updateService(@PathParam("id") String id,
+    public Response updateService(@PathParam("id") String id,
                                     @QueryParam("version") int version,
                                     @DefaultValue("spec") @QueryParam("registryAuthFrom") String registryAuthFrom,
                                     JsonObject content) {
@@ -110,8 +111,7 @@ public class Service extends DockerClient {
 
         Response response = postResponse(target, content);
         try {
-            JsonObject entity = response.readEntity(JsonObject.class);
-            return entity;
+            return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
         } finally {
             response.close();
         }
@@ -119,7 +119,7 @@ public class Service extends DockerClient {
 
     @GET
     @Path("{id}/logs")
-    public JsonObject serviceLiogs(@PathParam("id") String id,
+    public Response serviceLiogs(@PathParam("id") String id,
                                    @DefaultValue("false") @QueryParam("details") boolean details,
                                    @DefaultValue("false") @QueryParam("stdout") boolean stdout,
                                    @DefaultValue("false") @QueryParam("stderr") boolean stderr,
@@ -140,9 +140,13 @@ public class Service extends DockerClient {
         try {
             int status = response.getStatus();
             if (status == ACCEPTED.getStatusCode()) {
-                return Json.createObjectBuilder().add("message", response.readEntity(String.class)).build();
+                return Response.ok(Json.createObjectBuilder().add("message", response.readEntity(String.class)).build())
+                        .build();
             } else {
-                return response.readEntity(JsonObject.class);
+                return Response
+                        .status(response.getStatus())
+                        .entity(response.readEntity(JsonObject.class))
+                        .build();
             }
         } finally {
             response.close();

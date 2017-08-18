@@ -23,6 +23,7 @@ import java.util.Objects;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -31,7 +32,7 @@ import static com.kodcu.rapid.util.Networking.postResponse;
 public class Node extends DockerClient {
 
     @GET
-    public JsonStructure listNodes(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response listNodes(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("nodes");
 
@@ -39,46 +40,62 @@ public class Node extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return Json.createReader(new StringReader(entity)).read();
+        try {
+            String entity = response.readEntity(String.class);
+            return Response.status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(entity)).read())
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}")
-    public JsonStructure getNode(@PathParam("id") String id) {
+    public Response getNode(@PathParam("id") String id) {
 
         WebTarget target = resource().path("nodes").path(id);
 
         Response response = getResponse(target);
-        String entity = response.readEntity(String.class);
-        response.close();
-        return Json.createReader(new StringReader(entity)).read();
+        try {
+            String entity = response.readEntity(String.class);
+            return Response.status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(entity)).read())
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
 
     @DELETE
     @Path("{id}")
-    public JsonStructure deleteNode(@PathParam("id") String id,
-                                    @DefaultValue("false") @QueryParam("force") String force) {
+    public Response deleteNode(@PathParam("id") String id,
+                               @DefaultValue("false") @QueryParam("force") String force) {
 
         WebTarget target = resource().path("nodes").path(id).queryParam("force", force);
         Response response = deleteResponse(target);
 
         JsonStructure result;
-        if (response.getStatus() == 200)
-            result = Json.createObjectBuilder().add("message", id + " node deleted.").build();
-        else
-            result = response.readEntity(JsonObject.class);
-        response.close();
-        return result;
+        try {
+            if (response.getStatus() == ACCEPTED.getStatusCode())
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", id + " node deleted.").build())
+                        .build();
+            else
+                return Response.status(response.getStatus())
+                        .entity(response.readEntity(JsonObject.class))
+                        .build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("{id}/update")
-    public JsonStructure updateNode(@PathParam("id") String id,
-                             @QueryParam("version") String version,
-                             JsonObject content) {
+    public Response updateNode(@PathParam("id") String id,
+                               @QueryParam("version") String version,
+                               JsonObject content) {
 
         WebTarget target = resource().path("nodes").path(id).path("update");
 
@@ -86,12 +103,17 @@ public class Node extends DockerClient {
             target = target.queryParam("version", version);
 
         Response response = postResponse(target, content);
-        JsonStructure result;
-        if (response.getStatus() == 200)
-            result = Json.createObjectBuilder().add("message", id + " node updated.").build();
-        else
-            result = response.readEntity(JsonObject.class);
-        response.close();
-        return result;
+        try {
+            if (response.getStatus() == ACCEPTED.getStatusCode())
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", id + " node updated.").build())
+                        .build();
+            else
+                return Response.status(response.getStatus())
+                        .entity(response.readEntity(JsonObject.class))
+                        .build();
+        } finally {
+            response.close();
+        }
     }
 }

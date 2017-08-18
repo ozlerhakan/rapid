@@ -24,6 +24,8 @@ import java.util.Objects;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
  * Created by Hakan on 2/10/2016.
@@ -33,11 +35,10 @@ public class Container extends DockerClient {
 
     @GET
     @Path("json")
-    public JsonStructure listContainers(
-            @DefaultValue("false") @QueryParam("all") String all,
-            @QueryParam("limit") int limit,
-            @DefaultValue("false") @QueryParam("size") String size,
-            @QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response listContainers(@DefaultValue("false") @QueryParam("all") String all,
+                                   @QueryParam("limit") int limit,
+                                   @DefaultValue("false") @QueryParam("size") String size,
+                                   @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("containers").path("json").queryParam("all", all).queryParam("size", size);
 
@@ -48,57 +49,61 @@ public class Container extends DockerClient {
 
         Response response = getResponse(target);
 
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            if (response.getStatus() == 200)
+                return Response.ok(response.readEntity(JsonArray.class)).build();
+            else
+                return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}/json")
     // inspect
-    public JsonObject inspectContainer(
-            @PathParam("id") String containerId,
-            @DefaultValue("false") @QueryParam("size") String size) {
+    public Response inspectContainer(@PathParam("id") String containerId,
+                                     @DefaultValue("false") @QueryParam("size") String size) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId).path("json")
                 .queryParam("size", size);
 
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}/top")
-    public JsonObject containerTopProcess(
-            @PathParam("id") String containerId,
-            @DefaultValue("-ef") @QueryParam("ps_args") String ps) {
+    public Response containerTopProcess(@PathParam("id") String containerId,
+                                        @DefaultValue("-ef") @QueryParam("ps_args") String ps) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId).path("top")
                 .queryParam("ps", ps);
 
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}/logs")
-    public ResponseFrame getContainerLogs(
-            @PathParam("id") String containerId,
-            @DefaultValue("false") @QueryParam("stdout") String stdout,
-            @DefaultValue("false") @QueryParam("stderr") String stderr,
-            @DefaultValue("0") @QueryParam("since") String since,
-            @DefaultValue("false") @QueryParam("timestamps") String timestamps,
-            @DefaultValue("all") @QueryParam("tail") String tail) {
+    public ResponseFrame getContainerLogs(@PathParam("id") String containerId,
+                                          @DefaultValue("false") @QueryParam("stdout") String stdout,
+                                          @DefaultValue("false") @QueryParam("stderr") String stderr,
+                                          @DefaultValue("0") @QueryParam("since") String since,
+                                          @DefaultValue("false") @QueryParam("timestamps") String timestamps,
+                                          @DefaultValue("all") @QueryParam("tail") String tail) {
 
         WebTarget target = resource().path("containers").path(containerId).path("logs");
 
@@ -113,10 +118,10 @@ public class Container extends DockerClient {
         Response response = getResponse(target);
         ResponseFrame frame = new ResponseFrame();
         try {
-            if (response.getStatus() == 200) {
+            if (response.getStatus() == ACCEPTED.getStatusCode()) {
                 String entity = response.readEntity(String.class);
                 frame.setMessage(entity);
-            } else if (response.getStatus() == 404) {
+            } else if (response.getStatus() == NOT_FOUND.getStatusCode()) {
                 frame.setMessage("No such container: " + containerId);
             } else {
                 frame.setMessage("Something went wrong.");
@@ -130,52 +135,55 @@ public class Container extends DockerClient {
 
     @GET
     @Path("{id}/changes")
-    public JsonStructure getContainerChanges(
-            @PathParam("id") String containerId) {
+    public Response getContainerChanges(@PathParam("id") String containerId) {
 
         WebTarget target = resource().path("containers").path(containerId).path("changes");
         Response response = getResponse(target);
 
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            if (response.getStatus() == ACCEPTED.getStatusCode())
+                return Response.ok(response.readEntity(JsonArray.class)).build();
+            else
+                return Response.status(response.getStatus())
+                        .entity(response.readEntity(JsonObject.class))
+                        .build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("{id}/start")
-    public JsonStructure startContainer(
-            @PathParam("id") String id,
-            @QueryParam("detachKeys") String detachKeys) {
+    public Response startContainer(@PathParam("id") String id,
+                                   @QueryParam("detachKeys") String detachKeys) {
 
         WebTarget target = resource().path("containers")
                 .path(id)
                 .path("start");
 
-//        if (Objects.nonNull(detachKeys))
-//            target = target.queryParam("detachKeys", detachKeys);
-
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", id + " started.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", id + " started.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
+
         }
-        response.close();
-        return structure;
     }
 
     @POST
     @Path("{id}/stop")
-    public JsonStructure stopContainer(
-            @PathParam("id") String containerId,
-            @QueryParam("t") String t) {
+    public Response stopContainer(@PathParam("id") String containerId,
+                                  @QueryParam("t") String t) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
@@ -187,21 +195,25 @@ public class Container extends DockerClient {
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", containerId + " stopped.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", containerId + " stopped.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        response.close();
-        return structure;
     }
 
     @POST
     @Path("{id}/restart")
-    public JsonStructure restartContainer(
-            @PathParam("id") String containerId,
-            @QueryParam("t") String t) {
+    public Response restartContainer(@PathParam("id") String containerId,
+                                     @QueryParam("t") String t) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
@@ -214,21 +226,25 @@ public class Container extends DockerClient {
         String entity = response.readEntity(String.class);
 
         JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", containerId + " restarted.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", containerId + " restarted.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        response.close();
-
-        return structure;
     }
 
     @POST
     @Path("{id}/kill")
-    public JsonStructure killContainer(
-            @PathParam("id") String containerId,
-            @DefaultValue("SIGKILL") @QueryParam("signal") String signal) {
+    public Response killContainer(@PathParam("id") String containerId,
+                                  @DefaultValue("SIGKILL") @QueryParam("signal") String signal) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
@@ -239,37 +255,45 @@ public class Container extends DockerClient {
         String entity = response.readEntity(String.class);
 
         JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", containerId + " killed.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", containerId + " killed.").build())
+                        .build();
+            } else {
+                return Response
+                        .status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        response.close();
-
-        return structure;
     }
 
     @POST
     @Path("{id}/update")
-    public JsonObject updateContainer(
-            @PathParam("id") String containerId,
-            JsonObject content) {
+    public Response updateContainer(@PathParam("id") String containerId,
+                                    JsonObject content) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
                 .path("update");
 
         Response response = postResponse(target, content);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            JsonObject entity = response.readEntity(JsonObject.class);
+            return Response.status(response.getStatus())
+                    .entity(entity).build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("{id}/rename")
-    public JsonStructure renameContainer(
-            @PathParam("id") String containerId,
-            @QueryParam("name") String name) {
+    public Response renameContainer(@PathParam("id") String containerId,
+                                    @QueryParam("name") String name) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
@@ -278,22 +302,21 @@ public class Container extends DockerClient {
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
-
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", containerId + " renamed as " + name).build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus()).entity(Json.createObjectBuilder().add("message", containerId + " renamed as " + name).build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus()).entity(Json.createReader(new StringReader(entity)).read()).build();
+            }
+        } finally {
+            response.close();
         }
-        response.close();
-
-        return structure;
     }
 
     @POST
     @Path("{id}/pause")
-    public JsonStructure pauseContainer(
-            @PathParam("id") String containerId) {
+    public Response pauseContainer(@PathParam("id") String containerId) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
@@ -303,20 +326,24 @@ public class Container extends DockerClient {
         String entity = response.readEntity(String.class);
 
         JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", containerId + " paused.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", containerId + " paused.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        response.close();
-
-        return structure;
     }
 
     @POST
     @Path("{id}/unpause")
-    public JsonStructure unpauseeContainer(
-            @PathParam("id") String containerId) {
+    public Response unpauseeContainer(@PathParam("id") String containerId) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
@@ -325,23 +352,26 @@ public class Container extends DockerClient {
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", containerId + " unpaused.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", containerId + " unpaused.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        response.close();
-
-        return structure;
     }
 
     @DELETE
     @Path("{id}")
-    public JsonStructure deleteContainer(
-            @PathParam("id") String containerId,
-            @DefaultValue("false") @QueryParam("v") String v,
-            @DefaultValue("false") @QueryParam("force") String force) {
+    public Response deleteContainer(@PathParam("id") String containerId,
+                                    @DefaultValue("false") @QueryParam("v") String v,
+                                    @DefaultValue("false") @QueryParam("force") String force) {
 
         WebTarget target = resource().path("containers")
                 .path(containerId)
@@ -350,21 +380,25 @@ public class Container extends DockerClient {
 
         Response response = deleteResponse(target);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", containerId + " deleted.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", containerId + " deleted.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
     @POST
     @Path("prune")
-    public JsonObject prune(
-            @QueryParam("filter") String filter) {
+    public Response prune(@QueryParam("filter") String filter) {
 
         WebTarget target = resource().path("containers")
                 .path("prune");
@@ -373,15 +407,19 @@ public class Container extends DockerClient {
             target = target.queryParam("filter", filter);
 
         Response response = postResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            JsonObject entity = response.readEntity(JsonObject.class);
+            return Response.status(response.getStatus())
+                    .entity(entity)
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("create")
-    public JsonObject createContainer(
-            @QueryParam("name") String name, JsonObject content) {
+    public Response createContainer(@QueryParam("name") String name, JsonObject content) {
 
         WebTarget target = resource().path("containers").path("create");
 
@@ -389,9 +427,13 @@ public class Container extends DockerClient {
             target = target.queryParam("name", name);
 
         Response response = postResponse(target, content);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
 }

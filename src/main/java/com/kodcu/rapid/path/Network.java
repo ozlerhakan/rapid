@@ -22,6 +22,7 @@ import java.util.Objects;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 
 /**
  * Created by Hakan on 2/12/2016.
@@ -30,7 +31,7 @@ import static com.kodcu.rapid.util.Networking.postResponse;
 public class Network extends DockerClient {
 
     @GET
-    public JsonStructure listNetworks(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response listNetworks(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("networks");
 
@@ -38,112 +39,128 @@ public class Network extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            if (response.getStatus() == ACCEPTED.getStatusCode())
+                return Response.ok(response.readEntity(JsonArray.class)).build();
+            else
+                return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}")
-    public JsonStructure inspectNetwork(
-            @PathParam("id") String id) {
+    public Response inspectNetwork(@PathParam("id") String id) {
 
         WebTarget target = resource().path("networks").path(id);
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
-        JsonStructure structure = Json.createReader(new StringReader(entity)).read();
-        response.close();
-        return structure;
+        try {
+            return Response.status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(entity)).read())
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @DELETE
     @Path("{id}")
-    public JsonStructure deleteNetwork(
-            @PathParam("id") String id) {
+    public Response deleteNetwork(@PathParam("id") String id) {
 
         WebTarget target = resource().path("networks").path(id);
 
         Response response = deleteResponse(target);
         String entity = response.readEntity(String.class);
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", id + " removed.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", id + " removed.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        response.close();
-        return structure;
     }
 
     @POST
     @Path("prune")
-    public JsonObject pruneNetwork() {
+    public Response pruneNetwork() {
 
         WebTarget target = resource().path("networks");
-
         Response response = postResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("{id}/connect")
-    public JsonStructure connectToNetwork(
-            @PathParam("id") String id,
-            JsonObject content) {
+    public Response connectToNetwork(@PathParam("id") String id,
+                                     JsonObject content) {
 
         WebTarget target = resource().path("networks").path(id).path("connect");
 
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", id + " connected.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", id + " connected.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus()).entity(Json.createReader(new StringReader(entity)).read()).build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
     @POST
     @Path("{id}/disconnect")
-    public JsonStructure disconnectToNetwork(
-            @PathParam("id") String id,
-            JsonObject content) {
+    public Response disconnectToNetwork(@PathParam("id") String id,
+                                        JsonObject content) {
 
         WebTarget target = resource().path("networks").path(id).path("disconnect");
 
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
-        response.close();
-
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", id + " disconnected.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", id + " disconnected.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
     @POST
     @Path("create")
-    public JsonObject createNetwork(JsonObject content) {
+    public Response createNetwork(JsonObject content) {
 
         WebTarget target = resource().path("networks").path("create");
 
         Response response = postResponse(target, content);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+        }
     }
 }

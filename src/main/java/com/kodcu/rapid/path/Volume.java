@@ -29,7 +29,7 @@ import static com.kodcu.rapid.util.Networking.postResponse;
 public class Volume extends DockerClient {
 
     @GET
-    public JsonObject listVolumes(
+    public Response listVolumes(
             @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("volumes");
@@ -37,27 +37,35 @@ public class Volume extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}")
-    public JsonObject inspectVolume(
+    public Response inspectVolume(
             @PathParam("id") String id) {
 
         WebTarget target = resource().path("volumes").path(id);
 
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @DELETE
     @Path("{id}")
-    public JsonObject deleteVolume(
+    public Response deleteVolume(
             @PathParam("id") String id,
             @DefaultValue("false") @QueryParam("force") boolean force) {
 
@@ -65,20 +73,25 @@ public class Volume extends DockerClient {
 
         Response response = deleteResponse(target);
         String value = response.readEntity(String.class);
-        JsonObject entity;
-        if (value.isEmpty()) {
-            entity = Json.createObjectBuilder().add("message", id + " deleted.").build();
+
+        try {
+            if (value.isEmpty()) {
+                return Response.status(response.getStatus())
+                        .entity(Json.createObjectBuilder().add("message", id + " deleted.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(value)).readObject())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        else {
-            entity = Json.createReader(new StringReader(value)).readObject();
-        }
-        response.close();
-        return entity;
     }
 
     @POST
     @Path("prune")
-    public JsonObject pruneVolume(
+    public Response pruneVolume(
             @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("volumes");
@@ -87,20 +100,28 @@ public class Volume extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = postResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("create")
-    public JsonObject createVolume(JsonObject content) {
+    public Response createVolume(JsonObject content) {
 
         WebTarget target = resource().path("volumes").path("create");
-
         Response response = postResponse(target, content);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 }

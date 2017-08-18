@@ -35,54 +35,67 @@ public class Image extends DockerClient {
 
     @GET
     @Path("json")
-    public JsonStructure listImages(
-            @DefaultValue("false") @QueryParam("all") String all,
-            @DefaultValue("false") @QueryParam("digests") String digests,
-            @QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response listImages(@DefaultValue("false") @QueryParam("all") String all,
+                               @DefaultValue("false") @QueryParam("digests") String digests,
+                               @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
-        WebTarget target = resource().path("images").path("json").queryParam("all", all).queryParam("digests", digests);
+        WebTarget target = resource().path("images").path("json")
+                .queryParam("all", all)
+                .queryParam("digests", digests);
 
         if (Objects.nonNull(filters))
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        String raw = response.readEntity(String.class);
-        response.close();
-        JsonReader reader = Json.createReader(new StringReader(raw));
-        return reader.read();
+        try {
+            String raw = response.readEntity(String.class);
+            JsonReader reader = Json.createReader(new StringReader(raw));
+            return Response.status(response.getStatus()).entity(reader.read()).build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}/json")
-    public JsonObject inspectImage(@PathParam("id") String id) {
+    public Response inspectImage(@PathParam("id") String id) {
 
         WebTarget target = resource().path("images").path(id).path("json");
 
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}/history")
-    public JsonStructure historyImage(@PathParam("id") String id) {
+    public Response historyImage(@PathParam("id") String id) {
 
         WebTarget target = resource().path("images").path(id).path("history");
 
         Response response = getResponse(target);
 
-        String raw = response.readEntity(String.class);
-        response.close();
-        JsonReader reader = Json.createReader(new StringReader(raw));
-        return reader.read();
+        try {
+            String raw = response.readEntity(String.class);
+            return Response
+                    .status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(raw)).read())
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("search")
-    public JsonStructure searchImages(@QueryParam("term") String term,
-                                      @DefaultValue("25") @QueryParam("limit") int limit,
-                                      @QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response searchImages(@QueryParam("term") String term,
+                                 @DefaultValue("25") @QueryParam("limit") int limit,
+                                 @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("images").path("search").queryParam("term", term).queryParam("limit", limit);
 
@@ -90,23 +103,27 @@ public class Image extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        String raw = response.readEntity(String.class);
-        response.close();
-        JsonReader reader = Json.createReader(new StringReader(raw));
-        return reader.read();
+        try {
+            String raw = response.readEntity(String.class);
+            return Response.status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(raw)).read())
+                    .build();
+        } finally {
+            response.close();
+
+        }
     }
 
     @POST
     @Path("commit")
-    public JsonObject commitImage(
-            @QueryParam("container") String container,
-            @QueryParam("repo") String repo,
-            @QueryParam("tag") String tag,
-            @QueryParam("comment") String comment,
-            @QueryParam("author") String author,
-            @QueryParam("changes") String changes,
-            @DefaultValue("false") @QueryParam("pause") String pause,
-            JsonObject content) {
+    public Response commitImage(@QueryParam("container") String container,
+                                @QueryParam("repo") String repo,
+                                @QueryParam("tag") String tag,
+                                @QueryParam("comment") String comment,
+                                @QueryParam("author") String author,
+                                @QueryParam("changes") String changes,
+                                @DefaultValue("false") @QueryParam("pause") String pause,
+                                JsonObject content) {
 
         WebTarget target = resource().path("images").path("commit").queryParam("pause", pause);
 
@@ -124,17 +141,19 @@ public class Image extends DockerClient {
             target = target.queryParam("changes", changes);
 
         Response response = postResponse(target, content);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            JsonObject entity = response.readEntity(JsonObject.class);
+            return Response.status(response.getStatus()).entity(entity).build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("{id}/tag")
-    public ResponseFrame tagImage(
-            @PathParam("id") String id,
-            @QueryParam("repo") String repo,
-            @QueryParam("tag") String tag) {
+    public ResponseFrame tagImage(@PathParam("id") String id,
+                                  @QueryParam("repo") String repo,
+                                  @QueryParam("tag") String tag) {
 
         WebTarget target = resource().path("images")
                 .path(id).path("tag")
@@ -158,8 +177,7 @@ public class Image extends DockerClient {
 
     @POST
     @Path("prune")
-    public JsonObject pruneImages(
-            @QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response pruneImages(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("images").path("prune");
 
@@ -167,17 +185,19 @@ public class Image extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = postResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        try {
+            JsonObject entity = response.readEntity(JsonObject.class);
+            return Response.status(response.getStatus()).entity(entity).build();
+        } finally {
+            response.close();
+        }
     }
 
     @DELETE
     @Path("{id}")
-    public JsonStructure deleteImage(
-            @PathParam("id") String id,
-            @DefaultValue("false") @QueryParam("force") String force,
-            @DefaultValue("false") @QueryParam("noprune") String noprune) {
+    public Response deleteImage(@PathParam("id") String id,
+                                @DefaultValue("false") @QueryParam("force") String force,
+                                @DefaultValue("false") @QueryParam("noprune") String noprune) {
 
         WebTarget target = resource().path("images")
                 .path(id)
@@ -185,10 +205,14 @@ public class Image extends DockerClient {
                 .queryParam("noprune", noprune);
 
         Response response = deleteResponse(target);
-        String raw = response.readEntity(String.class);
-        response.close();
-        JsonReader reader = Json.createReader(new StringReader(raw));
-        return reader.read();
+        try {
+            String raw = response.readEntity(String.class);
+            return Response.status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(raw)).read())
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST

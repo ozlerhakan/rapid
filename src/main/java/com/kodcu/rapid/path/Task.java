@@ -25,7 +25,7 @@ import static com.kodcu.rapid.util.Networking.getResponse;
 public class Task extends DockerClient {
 
     @GET
-    public JsonStructure listTasks(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response listTasks(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("tasks");
 
@@ -34,19 +34,30 @@ public class Task extends DockerClient {
 
         Response response = getResponse(target);
         String entity = response.readEntity(String.class);
-        response.close();
-        return Json.createReader(new StringReader(entity)).read();
+
+        try {
+            return Response.status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(entity)).read())
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}")
-    public JsonObject inspectTask(@PathParam("id") String id) {
+    public Response inspectTask(@PathParam("id") String id) {
 
         WebTarget target = resource().path("tasks").path(id);
 
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+
+        }
     }
 }
