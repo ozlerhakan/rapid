@@ -5,6 +5,7 @@ import com.kodcu.rapid.path.Image;
 import com.kodcu.rapid.path.Network;
 import com.kodcu.rapid.path.Node;
 import com.kodcu.rapid.path.Plugin;
+import com.kodcu.rapid.path.Secret;
 import com.kodcu.rapid.path.Service;
 import com.kodcu.rapid.path.Swarm;
 import com.kodcu.rapid.path.System;
@@ -35,6 +36,7 @@ public class AppConfig extends Application {
         resources.add(Service.class);
         resources.add(Task.class);
         resources.add(Plugin.class);
+        resources.add(Secret.class);
         resources.add(JsonProvider.class);
         return resources;
     }
