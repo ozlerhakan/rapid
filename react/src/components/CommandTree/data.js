@@ -323,15 +323,13 @@ export default {
                 {name: 'Inspect a secret', example: "GET secrets/id"},
                 {name: 'Delete a secret', example: "DELETE secrets/id"},
                 {
-                    name: 'Update a Secret', example: "POST secrets/id/update/n{\n" +
+                    name: 'Update a Secret', example: "POST secrets/id/update\n{\n" +
                 "  \"Name\": \"string\",\n" +
                 "  \"Labels\": {\n" +
                 "    \"property1\": \"string\",\n" +
                 "    \"property2\": \"string\"\n" +
                 "  },\n" +
-                "  \"Data\": [\n" +
-                "    \"string\"\n" +
-                "  ]\n" +
+                "  \"Data\": \"VEhJUyBJUyBOT1QgQSBSRUFMIENFUlRJRklDQVRFCg==\"\n" +
                 "}"
                 }
             ]
