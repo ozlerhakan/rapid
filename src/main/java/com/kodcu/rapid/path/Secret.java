@@ -30,8 +30,7 @@ import static com.kodcu.rapid.util.Networking.postResponse;
 public class Secret extends DockerClient {
 
     @GET
-    public JsonStructure getSecrets(
-            @QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response getSecrets(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
         WebTarget target = resource().path("secrets");
 
@@ -39,78 +38,94 @@ public class Secret extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        JsonStructure entity;
-        if (response.getStatus() == 200)
-            entity = response.readEntity(JsonArray.class);
-        else
-            entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+        String entity = response.readEntity(String.class);
+
+        try {
+            return Response.status(response.getStatus())
+                    .entity(Json.createReader(new StringReader(entity)).read())
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @POST
     @Path("create")
-    public JsonObject createSecret(JsonObject content) {
+    public Response createSecret(JsonObject content) {
 
         WebTarget target = resource().path("secrets").path("create");
-
         Response response = postResponse(target, content);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class)).build();
+        } finally {
+            response.close();
+        }
     }
 
     @GET
     @Path("{id}")
-    public JsonObject inspectSecret(@PathParam("id") String id) {
+    public Response inspectSecret(@PathParam("id") String id) {
 
         WebTarget target = resource().path("secrets").path(id);
-
         Response response = getResponse(target);
-        JsonObject entity = response.readEntity(JsonObject.class);
-        response.close();
-        return entity;
+
+        try {
+            return Response.status(response.getStatus())
+                    .entity(response.readEntity(JsonObject.class))
+                    .build();
+        } finally {
+            response.close();
+        }
     }
 
     @DELETE
     @Path("{id}")
-    public JsonStructure deleteSecret(@PathParam("id") String id) {
+    public Response deleteSecret(@PathParam("id") String id) {
 
         WebTarget target = resource().path("secrets").path(id);
 
         Response response = deleteResponse(target);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", id + " removed.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.ok(Json.createObjectBuilder().add("message", id + " removed.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
     @POST
     @Path("{id}/update")
-    public JsonStructure updateSecret(
-            @PathParam("id") String id,
-            @QueryParam("version") String version,
-            JsonObject content) {
+    public Response updateSecret(@PathParam("id") String id,
+                                 @QueryParam("version") String version,
+                                 JsonObject content) {
 
         WebTarget target = resource().path("secrets").path(id).path("update").queryParam("version", version);
 
         Response response = postResponse(target, content);
         String entity = response.readEntity(String.class);
-        response.close();
 
-        JsonStructure structure;
-        if (entity.isEmpty()) {
-            structure = Json.createObjectBuilder().add("message", id + " updated.").build();
-        } else {
-            structure = Json.createReader(new StringReader(entity)).read();
+        try {
+            if (entity.isEmpty()) {
+                return Response.ok(Json.createObjectBuilder().add("message", id + " updated.").build())
+                        .build();
+            } else {
+                return Response.status(response.getStatus())
+                        .entity(Json.createReader(new StringReader(entity)).read())
+                        .build();
+            }
+        } finally {
+            response.close();
         }
-        return structure;
     }
 
 }

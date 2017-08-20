@@ -4,7 +4,6 @@ import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonStructure;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,7 +16,7 @@ import java.util.Objects;
 
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
-import static javax.ws.rs.core.Response.Status.ACCEPTED;
+import static javax.ws.rs.core.Response.Status.OK;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -45,7 +44,7 @@ public class Swarm extends DockerClient {
         Response response = postResponse(target, content);
 
         try {
-            if (response.getStatus() == ACCEPTED.getStatusCode()) {
+            if (response.getStatus() == OK.getStatusCode()) {
                 return Response.ok(Json.createObjectBuilder().add("message", response.readEntity(String.class)).build())
                         .build();
             } else
@@ -65,7 +64,7 @@ public class Swarm extends DockerClient {
         Response response = postResponse(target, content);
 
         try {
-            if (response.getStatus() == ACCEPTED.getStatusCode()) {
+            if (response.getStatus() == OK.getStatusCode()) {
                 return Response.ok(Json.createObjectBuilder().add("message", "OK").build()).build();
             } else {
                 return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
@@ -85,8 +84,7 @@ public class Swarm extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", "Node left.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", "Node left.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -119,8 +117,7 @@ public class Swarm extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", "Swarm updated.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", "Swarm updated.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -142,8 +139,7 @@ public class Swarm extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", "Swarm unlockkey.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", "Swarm unlockkey.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -166,8 +162,7 @@ public class Swarm extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", "Swarm unlock.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", "Swarm unlock.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())

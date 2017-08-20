@@ -21,7 +21,7 @@ import java.util.Objects;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
-import static javax.ws.rs.core.Response.Status.ACCEPTED;
+import static javax.ws.rs.core.Response.Status.OK;
 
 /**
  * Created by hakan on 15/02/2017.
@@ -87,7 +87,7 @@ public class Service extends DockerClient {
 
         Response response = deleteResponse(target);
         try {
-            if (response.getStatus() == ACCEPTED.getStatusCode())
+            if (response.getStatus() == OK.getStatusCode())
                 return Response.ok(Json.createObjectBuilder().add("message", id + " service deleted.").build()).build();
             else
                 return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
@@ -139,7 +139,7 @@ public class Service extends DockerClient {
         Response response = getResponse(target);
         try {
             int status = response.getStatus();
-            if (status == ACCEPTED.getStatusCode()) {
+            if (status == OK.getStatusCode()) {
                 return Response.ok(Json.createObjectBuilder().add("message", response.readEntity(String.class)).build())
                         .build();
             } else {
