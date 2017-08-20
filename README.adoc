@@ -43,6 +43,10 @@ In Docker Swarm World, you can run the rapid as a service like below:
     -p 8080:8080 \
     ozlerhakan/rapid
 
+== Demo
+
+image:https://cdn.rawgit.com/play-with-docker/stacks/cff22438/assets/images/button.png["Try in PWD,link="http://play-with-docker.com?stack=/ozlerhakan/rapid/latest"]
+
 == Notes
 
 . Header Parameters (X-Registry-Auth) are not supported.
