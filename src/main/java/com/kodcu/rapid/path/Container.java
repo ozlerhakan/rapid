@@ -24,8 +24,8 @@ import java.util.Objects;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
-import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.OK;
 
 /**
  * Created by Hakan on 2/10/2016.
@@ -50,7 +50,7 @@ public class Container extends DockerClient {
         Response response = getResponse(target);
 
         try {
-            if (response.getStatus() == 200)
+            if (response.getStatus() == OK.getStatusCode())
                 return Response.ok(response.readEntity(JsonArray.class)).build();
             else
                 return Response.status(response.getStatus()).entity(response.readEntity(JsonObject.class)).build();
@@ -118,7 +118,7 @@ public class Container extends DockerClient {
         Response response = getResponse(target);
         ResponseFrame frame = new ResponseFrame();
         try {
-            if (response.getStatus() == ACCEPTED.getStatusCode()) {
+            if (response.getStatus() == OK.getStatusCode()) {
                 String entity = response.readEntity(String.class);
                 frame.setMessage(entity);
             } else if (response.getStatus() == NOT_FOUND.getStatusCode()) {
@@ -141,7 +141,7 @@ public class Container extends DockerClient {
         Response response = getResponse(target);
 
         try {
-            if (response.getStatus() == ACCEPTED.getStatusCode())
+            if (response.getStatus() == OK.getStatusCode())
                 return Response.ok(response.readEntity(JsonArray.class)).build();
             else
                 return Response.status(response.getStatus())
@@ -251,7 +251,6 @@ public class Container extends DockerClient {
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
 
-        JsonStructure structure;
         try {
             if (entity.isEmpty()) {
                 return Response.ok(Json.createObjectBuilder().add("message", containerId + " killed.").build())
