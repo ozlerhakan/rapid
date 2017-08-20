@@ -6,6 +6,8 @@ import javax.json.JsonObject;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -36,25 +38,25 @@ public class TestContainerStart extends ContainerConfig {
         Response createResponse = postResponse(create, body);
 
         // ubuntu:latest neeeded
-        assertEquals(200, createResponse.getStatus());
+        assertEquals(CREATED.getStatusCode(), createResponse.getStatus());
         final JsonObject responseContent = createResponse.readEntity(JsonObject.class);
         createResponse.close();
 
         final String containerId = responseContent.getJsonString("Id").getString();
 
         final Response start = postResponse(target("containers").path(containerId).path("start"));
-        assertEquals(200, start.getStatus());
+        assertEquals(NO_CONTENT.getStatusCode(), start.getStatus());
         start.close();
 
         final Response restart = postResponse(target("containers").path(containerId).path("restart"));
         // return body is empty
-        assertEquals(200, start.getStatus());
+        assertEquals(NO_CONTENT.getStatusCode(), start.getStatus());
         start.close();
 
         final WebTarget delete = target("containers").path(containerId).queryParam("v", true).queryParam("force", true);
         Response stopped = deleteResponse(delete);
         // return body is empty
-        assertEquals(200, stopped.getStatus());
+        assertEquals(NO_CONTENT.getStatusCode(), stopped.getStatus());
         stopped.close();
 
     }

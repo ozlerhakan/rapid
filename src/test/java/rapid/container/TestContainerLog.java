@@ -8,6 +8,7 @@ import javax.json.JsonString;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -23,6 +24,6 @@ public class TestContainerLog extends ContainerConfig {
         final JsonString expectedId = container.getJsonString("Id");
 
         Response log = getResponse(target("containers").path(expectedId.getString()).path("logs").queryParam("stdout", true));
-        assertEquals(200, log.getStatus());
+        assertEquals(ACCEPTED.getStatusCode(), log.getStatus());
     }
 }
