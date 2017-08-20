@@ -50,8 +50,8 @@ public class TestContainerStart extends ContainerConfig {
 
         final Response restart = postResponse(target("containers").path(containerId).path("restart"));
         // return body is empty
-        assertEquals(OK.getStatusCode(), start.getStatus());
-        start.close();
+        assertEquals(OK.getStatusCode(), restart.getStatus());
+        restart.close();
 
         final WebTarget delete = target("containers").path(containerId).queryParam("v", true).queryParam("force", true);
         Response stopped = deleteResponse(delete);
