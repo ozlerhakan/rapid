@@ -32,7 +32,7 @@ public class TestContainerList extends ContainerConfig {
         assertEquals(OK.getStatusCode(), response.getStatus());
         final JsonArray responseContent = response.readEntity(JsonArray.class);
         int expected = 1;
-        assertThat(expected, is(1));
+        assertThat(expected, is(responseContent.size()));
         response.close();
     }
 
