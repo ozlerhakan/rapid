@@ -6,6 +6,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.junit.Assert.assertEquals;
@@ -44,17 +45,17 @@ public class TestContainerKill extends ContainerConfig {
         createResponse.close();
 
         final Response start = postResponse(target("containers").path(containerId).path("start"));
-        assertEquals(NO_CONTENT.getStatusCode(), start.getStatus());
+        assertEquals(ACCEPTED.getStatusCode(), start.getStatus());
         start.close();
 
         final Response kill = postResponse(target("containers").path(containerId).path("kill").queryParam("signal", "KILL"));
         // return body is empty
-        assertEquals(NO_CONTENT.getStatusCode(), start.getStatus());
+        assertEquals(ACCEPTED.getStatusCode(), start.getStatus());
         start.close();
 
         final WebTarget target = target("containers").path(containerId).queryParam("v", true).queryParam("force", true);
         Response response = deleteResponse(target);
-        assertEquals(NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(ACCEPTED.getStatusCode(), response.getStatus());
 
     }
 

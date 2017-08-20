@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 
 import java.util.concurrent.ExecutionException;
 
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.hamcrest.CoreMatchers.is;
@@ -153,7 +154,7 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
         Response response = postResponse(target, body);
 
         // ubuntu:latest needed
-        assertEquals(CREATED.getStatusCode(), response.getStatus());
+        assertEquals(ACCEPTED.getStatusCode(), response.getStatus());
         final JsonObject responseContent = response.readEntity(JsonObject.class);
 
         assertThat(responseContent.containsKey("Id"), is(true));
@@ -166,10 +167,8 @@ public class TestContainerCreateAndDelete extends ContainerConfig {
     public void shouldDeleteContainer() throws ExecutionException, InterruptedException {
         final WebTarget target = target("containers").path(id).queryParam("v", true).queryParam("force", true);
         Response response = deleteAsycResponse(target);
-        System.out.println(response);
         // ubuntu:latest neeeded
-        assertEquals(NO_CONTENT.getStatusCode(), response.getStatus());
-        final JsonObject responseContent = response.readEntity(JsonObject.class);
+        assertEquals(ACCEPTED.getStatusCode(), response.getStatus());
         response.close();
     }
 

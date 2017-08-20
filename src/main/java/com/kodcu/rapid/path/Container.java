@@ -166,8 +166,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", id + " started.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", id + " started.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -197,8 +196,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", containerId + " stopped.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", containerId + " stopped.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -228,8 +226,7 @@ public class Container extends DockerClient {
         JsonStructure structure;
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", containerId + " restarted.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", containerId + " restarted.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -257,8 +254,7 @@ public class Container extends DockerClient {
         JsonStructure structure;
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", containerId + " killed.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", containerId + " killed.").build())
                         .build();
             } else {
                 return Response
@@ -304,7 +300,7 @@ public class Container extends DockerClient {
         String entity = response.readEntity(String.class);
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus()).entity(Json.createObjectBuilder().add("message", containerId + " renamed as " + name).build())
+                return Response.ok(Json.createObjectBuilder().add("message", containerId + " renamed as " + name).build())
                         .build();
             } else {
                 return Response.status(response.getStatus()).entity(Json.createReader(new StringReader(entity)).read()).build();
@@ -328,8 +324,7 @@ public class Container extends DockerClient {
         JsonStructure structure;
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", containerId + " paused.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", containerId + " paused.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -354,8 +349,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", containerId + " unpaused.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", containerId + " unpaused.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -383,8 +377,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.status(response.getStatus())
-                        .entity(Json.createObjectBuilder().add("message", containerId + " deleted.").build())
+                return Response.ok(Json.createObjectBuilder().add("message", containerId + " deleted.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
