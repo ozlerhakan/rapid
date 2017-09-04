@@ -3,10 +3,10 @@
 image:images/logo.jpg[]
 ++++
 <p align="center">
-    <a href="https://travis-ci.org/ozlerhakan/rapid"><img src="https://travis-ci.org/ozlerhakan/rapid.svg?branch=master" alt="Travis"></a>
-    <a href="https://hub.docker.com/r/ozlerhakan/rapid"><img src="https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg" alt="devDependency Status"></a>
-    <a href="https://gitter.im/rapidui/rapid"><img src="https://badges.gitter.im/Join%20Chat.svg"></a>
-    <a href="https://img.shields.io/badge/license-MIT-blue.svg"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+    <a href="https://travis-ci.org/ozlerhakan/rapid"><img src="https://img.shields.io/travis/ozlerhakan/rapid/master.svg?style=flat-square" alt="Travis"></a>
+    <a href="https://hub.docker.com/r/ozlerhakan/rapid"><img src="https://img.shields.io/docker/pulls/ozlerhakan/rapid.svg?style=flat-square" alt="devDependency Status"></a>
+    <a href="https://gitter.im/rapidui/rapid"><img src="https://img.shields.io/badge/gitter-join%20chat-blue.svg?style=flat-square"></a>
+    <a href="https://img.shields.io/badge/license-MIT-green.svg"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License"></a>
     <a href="https://github.com/igrigorik/ga-beacon"><img src="https://ga-beacon.appspot.com/UA-103631106-1/welcome-page?flat" alt="Analytics" /></a>
 </p>
 ++++
