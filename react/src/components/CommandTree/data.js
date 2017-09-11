@@ -344,6 +344,7 @@ export default {
                 "  \"AutoLockManagers\": false,\n" +
                 "  \"ForceNewCluster\": false,\n" +
                 "  \"ListenAddr\": \"192.168.56.101:2377\",\n" +
+                "  \"DataPathAddr\": \"192.168.56.101\",\n" +
                 "  \"Spec\": {\n" +
                 "    \"CAConfig\": {},\n" +
                 "    \"Dispatcher\": {},\n" +
@@ -363,6 +364,7 @@ export default {
                     name: 'Join an existing swarm', example: "POST swarm/join\n{\n" +
                 "  \"ListenAddr\": \"0.0.0.0:2377\",\n" +
                 "  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n" +
+                "  \"DataPathAddr\": \"192.168.56.101\",\n" +
                 "  \"RemoteAddrs\": [\n" +
                 "    \"node1:2377\"\n" +
                 "  ],\n" +
