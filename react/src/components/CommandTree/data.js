@@ -364,7 +364,7 @@ export default {
                     name: 'Join an existing swarm', example: "POST swarm/join\n{\n" +
                 "  \"ListenAddr\": \"0.0.0.0:2377\",\n" +
                 "  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n" +
-                "  \"DataPathAddr\": \"192.168.56.101\",\n" +
+                "  \"DataPathAddr\": \"192.168.1.1\",\n" +
                 "  \"RemoteAddrs\": [\n" +
                 "    \"node1:2377\"\n" +
                 "  ],\n" +
