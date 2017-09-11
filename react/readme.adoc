@@ -1,4 +1,4 @@
-## Rapid front-end
+## Rapid Front-end
 
 ## Development Mode
 

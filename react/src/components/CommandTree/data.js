@@ -621,6 +621,12 @@ export default {
                 "]"
                 }
             ]
-        }
+        },
+        {
+            name: 'Distribution',
+            children: [
+                {name: 'Get image information from the registry', example: "GET distribution/ozlerhakan/rapid/json"}
+            ]
+        },
     ]
 };
