@@ -556,6 +556,31 @@ export default {
             ]
         },
         {
+            name: 'Configs',
+            children: [
+                {name: 'List configs', example: "GET configs?filters={\"name\":{\"my-config-name\":true}}"},
+                {
+                    name: 'Create a config', example: "POST configs/create\n{\n" +
+                "  \"Name\": \"server.conf\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"foo\": \"bar\"\n" +
+                "  },\n" +
+                "  \"Data\": \"VEhJUyBJUyBOT1QgQSBSRUFMIENFUlRJRklDQVRFCg==\"\n" +
+                "}"
+                },
+                {
+                    name: 'Update a config', example: "POST configs/id/update?version=15\n{\n" +
+                "  \"Name\": \"server.conf\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"foo\": \"doo\"\n" +
+                "  }\n" +
+                "}"
+                },
+                {name: 'Inspect a config', example: "GET configs/id"},
+                {name: 'Delete a config', example: "DELETE configs/id"}
+            ]
+        },
+        {
             name: 'Plugins',
             children: [
                 {name: 'List plugins', example: "GET plugins"},
