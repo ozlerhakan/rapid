@@ -4,7 +4,6 @@ import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonStructure;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;

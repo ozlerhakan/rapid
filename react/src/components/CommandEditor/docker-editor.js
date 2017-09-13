@@ -30,7 +30,7 @@ export const init = (ace) => {
                 },
                 {
                     token: "variable",
-                    regex: " *(?:GET|POST|DELETE)[ |\t](images|containers|swarm|networks|volumes|_ping|system\\/df|version|info|auth|secrets|nodes|services|tasks|plugins)(?=\\/)?"
+                    regex: " *(?:GET|POST|DELETE)[ |\t](images|containers|swarm|networks|volumes|configs|distribution|_ping|system\\/df|version|info|auth|secrets|nodes|services|tasks|plugins)(?=\\/)?"
                 },
                 {
                     token: "variable",

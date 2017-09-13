@@ -25,7 +25,6 @@ public abstract class DockerClient {
 
     private static final String DEFAULT_UNIX_ENDPOINT = "unix:///var/run/docker.sock";
     private Client client;
-    private URI originalUri;
     private URI sanitizeUri;
 
     public DockerClient() {
@@ -33,7 +32,7 @@ public abstract class DockerClient {
     }
 
     private void init() {
-        originalUri = URI.create(DEFAULT_UNIX_ENDPOINT);
+        final URI originalUri = URI.create(DEFAULT_UNIX_ENDPOINT);
         sanitizeUri = UnixFactory.sanitizeUri(originalUri);
 
         final RegistryBuilder<ConnectionSocketFactory> registryBuilder =
@@ -60,8 +59,7 @@ public abstract class DockerClient {
     }
 
     protected WebTarget resource() {
-        final WebTarget target = client.target(sanitizeUri);
-        return target;
+        return client.target(sanitizeUri);
     }
 
 

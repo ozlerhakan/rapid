@@ -344,6 +344,7 @@ export default {
                 "  \"AutoLockManagers\": false,\n" +
                 "  \"ForceNewCluster\": false,\n" +
                 "  \"ListenAddr\": \"192.168.56.101:2377\",\n" +
+                "  \"DataPathAddr\": \"192.168.56.101\",\n" +
                 "  \"Spec\": {\n" +
                 "    \"CAConfig\": {},\n" +
                 "    \"Dispatcher\": {},\n" +
@@ -363,6 +364,7 @@ export default {
                     name: 'Join an existing swarm', example: "POST swarm/join\n{\n" +
                 "  \"ListenAddr\": \"0.0.0.0:2377\",\n" +
                 "  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n" +
+                "  \"DataPathAddr\": \"192.168.1.1\",\n" +
                 "  \"RemoteAddrs\": [\n" +
                 "    \"node1:2377\"\n" +
                 "  ],\n" +
@@ -554,6 +556,31 @@ export default {
             ]
         },
         {
+            name: 'Configs',
+            children: [
+                {name: 'List configs', example: "GET configs?filters={\"name\":{\"my-config-name\":true}}"},
+                {
+                    name: 'Create a config', example: "POST configs/create\n{\n" +
+                "  \"Name\": \"server.conf\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"foo\": \"bar\"\n" +
+                "  },\n" +
+                "  \"Data\": \"VEhJUyBJUyBOT1QgQSBSRUFMIENFUlRJRklDQVRFCg==\"\n" +
+                "}"
+                },
+                {
+                    name: 'Update a config', example: "POST configs/id/update?version=15\n{\n" +
+                "  \"Name\": \"server.conf\",\n" +
+                "  \"Labels\": {\n" +
+                "    \"foo\": \"doo\"\n" +
+                "  }\n" +
+                "}"
+                },
+                {name: 'Inspect a config', example: "GET configs/id"},
+                {name: 'Delete a config', example: "DELETE configs/id"}
+            ]
+        },
+        {
             name: 'Plugins',
             children: [
                 {name: 'List plugins', example: "GET plugins"},
@@ -621,6 +648,12 @@ export default {
                 "]"
                 }
             ]
-        }
+        },
+        {
+            name: 'Distribution',
+            children: [
+                {name: 'Get image information from the registry', example: "GET distribution/ozlerhakan/rapid/json"}
+            ]
+        },
     ]
 };

@@ -1,6 +1,8 @@
 package com.kodcu.rapid.app;
 
+import com.kodcu.rapid.path.Config;
 import com.kodcu.rapid.path.Container;
+import com.kodcu.rapid.path.Distribution;
 import com.kodcu.rapid.path.Image;
 import com.kodcu.rapid.path.Network;
 import com.kodcu.rapid.path.Node;
@@ -37,6 +39,8 @@ public class AppConfig extends Application {
         resources.add(Task.class);
         resources.add(Plugin.class);
         resources.add(Secret.class);
+        resources.add(Distribution.class);
+        resources.add(Config.class);
         resources.add(JsonProvider.class);
         return resources;
     }

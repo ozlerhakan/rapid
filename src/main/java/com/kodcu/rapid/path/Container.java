@@ -6,7 +6,6 @@ import com.kodcu.rapid.pojo.ResponseFrame;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -21,6 +20,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
 
+import static com.kodcu.rapid.util.Constants.CONTAINERS;
+import static com.kodcu.rapid.util.Constants.MESSAGE;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
@@ -40,7 +41,7 @@ public class Container extends DockerClient {
                                    @DefaultValue("false") @QueryParam("size") String size,
                                    @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
-        WebTarget target = resource().path("containers").path("json").queryParam("all", all).queryParam("size", size);
+        WebTarget target = resource().path(CONTAINERS).path("json").queryParam("all", all).queryParam("size", size);
 
         if (limit != 0)
             target = target.queryParam("limit", limit);
@@ -65,7 +66,7 @@ public class Container extends DockerClient {
     public Response inspectContainer(@PathParam("id") String containerId,
                                      @DefaultValue("false") @QueryParam("size") String size) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId).path("json")
                 .queryParam("size", size);
 
@@ -82,7 +83,7 @@ public class Container extends DockerClient {
     public Response containerTopProcess(@PathParam("id") String containerId,
                                         @DefaultValue("-ef") @QueryParam("ps_args") String ps) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId).path("top")
                 .queryParam("ps", ps);
 
@@ -105,7 +106,7 @@ public class Container extends DockerClient {
                                           @DefaultValue("false") @QueryParam("timestamps") String timestamps,
                                           @DefaultValue("all") @QueryParam("tail") String tail) {
 
-        WebTarget target = resource().path("containers").path(containerId).path("logs");
+        WebTarget target = resource().path(CONTAINERS).path(containerId).path("logs");
 
         // follow = false always
         target = target.queryParam("follow", false)
@@ -137,7 +138,7 @@ public class Container extends DockerClient {
     @Path("{id}/changes")
     public Response getContainerChanges(@PathParam("id") String containerId) {
 
-        WebTarget target = resource().path("containers").path(containerId).path("changes");
+        WebTarget target = resource().path(CONTAINERS).path(containerId).path("changes");
         Response response = getResponse(target);
 
         try {
@@ -157,7 +158,7 @@ public class Container extends DockerClient {
     public Response startContainer(@PathParam("id") String id,
                                    @QueryParam("detachKeys") String detachKeys) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(id)
                 .path("start");
 
@@ -166,7 +167,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", id + " started.").build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, id + " started.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -184,7 +185,7 @@ public class Container extends DockerClient {
     public Response stopContainer(@PathParam("id") String containerId,
                                   @QueryParam("t") String t) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .path("stop");
 
@@ -196,7 +197,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", containerId + " stopped.").build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, containerId + " stopped.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -213,7 +214,7 @@ public class Container extends DockerClient {
     public Response restartContainer(@PathParam("id") String containerId,
                                      @QueryParam("t") String t) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .path("restart");
 
@@ -223,10 +224,9 @@ public class Container extends DockerClient {
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
 
-        JsonStructure structure;
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", containerId + " restarted.").build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, containerId + " restarted.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -243,7 +243,7 @@ public class Container extends DockerClient {
     public Response killContainer(@PathParam("id") String containerId,
                                   @DefaultValue("SIGKILL") @QueryParam("signal") String signal) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .path("kill")
                 .queryParam("signal", signal);
@@ -253,7 +253,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", containerId + " killed.").build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, containerId + " killed.").build())
                         .build();
             } else {
                 return Response
@@ -271,7 +271,7 @@ public class Container extends DockerClient {
     public Response updateContainer(@PathParam("id") String containerId,
                                     JsonObject content) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .path("update");
 
@@ -290,7 +290,7 @@ public class Container extends DockerClient {
     public Response renameContainer(@PathParam("id") String containerId,
                                     @QueryParam("name") String name) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .path("rename")
                 .queryParam("name", name);
@@ -299,7 +299,7 @@ public class Container extends DockerClient {
         String entity = response.readEntity(String.class);
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", containerId + " renamed as " + name).build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, containerId + " renamed as " + name).build())
                         .build();
             } else {
                 return Response.status(response.getStatus()).entity(Json.createReader(new StringReader(entity)).read()).build();
@@ -313,17 +313,16 @@ public class Container extends DockerClient {
     @Path("{id}/pause")
     public Response pauseContainer(@PathParam("id") String containerId) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .path("pause");
 
         Response response = postResponse(target);
         String entity = response.readEntity(String.class);
 
-        JsonStructure structure;
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", containerId + " paused.").build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, containerId + " paused.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -339,7 +338,7 @@ public class Container extends DockerClient {
     @Path("{id}/unpause")
     public Response unpauseeContainer(@PathParam("id") String containerId) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .path("unpause");
 
@@ -348,7 +347,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", containerId + " unpaused.").build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, containerId + " unpaused.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -366,7 +365,7 @@ public class Container extends DockerClient {
                                     @DefaultValue("false") @QueryParam("v") String v,
                                     @DefaultValue("false") @QueryParam("force") String force) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path(containerId)
                 .queryParam("v", v)
                 .queryParam("force", force);
@@ -376,7 +375,7 @@ public class Container extends DockerClient {
 
         try {
             if (entity.isEmpty()) {
-                return Response.ok(Json.createObjectBuilder().add("message", containerId + " deleted.").build())
+                return Response.ok(Json.createObjectBuilder().add(MESSAGE, containerId + " deleted.").build())
                         .build();
             } else {
                 return Response.status(response.getStatus())
@@ -392,7 +391,7 @@ public class Container extends DockerClient {
     @Path("prune")
     public Response prune(@QueryParam("filter") String filter) {
 
-        WebTarget target = resource().path("containers")
+        WebTarget target = resource().path(CONTAINERS)
                 .path("prune");
 
         if (Objects.nonNull(filter))
@@ -413,7 +412,7 @@ public class Container extends DockerClient {
     @Path("create")
     public Response createContainer(@QueryParam("name") String name, JsonObject content) {
 
-        WebTarget target = resource().path("containers").path("create");
+        WebTarget target = resource().path(CONTAINERS).path("create");
 
         if (Objects.nonNull(name))
             target = target.queryParam("name", name);

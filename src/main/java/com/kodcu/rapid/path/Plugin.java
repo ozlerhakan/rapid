@@ -15,8 +15,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Objects;
 
 import static com.kodcu.rapid.util.Networking.deleteResponse;
@@ -42,7 +40,7 @@ public class Plugin extends DockerClient {
 
     @GET
     @Path("privileges")
-    public JsonStructure privilegedPlugins(@QueryParam("name") String name) throws UnsupportedEncodingException {
+    public JsonStructure privilegedPlugins(@QueryParam("name") String name) {
 
         WebTarget target = resource().path("plugins").path("privileges");
 
