@@ -3,9 +3,7 @@ package com.kodcu.rapid.path;
 import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -20,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Objects;
 
+import static com.kodcu.rapid.util.Constants.NODES;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
@@ -54,7 +53,7 @@ public class Node extends DockerClient {
     @Path("{id}")
     public Response getNode(@PathParam("id") String id) {
 
-        WebTarget target = resource().path("nodes").path(id);
+        WebTarget target = resource().path(NODES).path(id);
 
         Response response = getResponse(target);
         try {
@@ -73,10 +72,9 @@ public class Node extends DockerClient {
     public Response deleteNode(@PathParam("id") String id,
                                @DefaultValue("false") @QueryParam("force") String force) {
 
-        WebTarget target = resource().path("nodes").path(id).queryParam("force", force);
+        WebTarget target = resource().path(NODES).path(id).queryParam("force", force);
         Response response = deleteResponse(target);
 
-        JsonStructure result;
         try {
             if (response.getStatus() == ACCEPTED.getStatusCode())
                 return Response.status(response.getStatus())
@@ -97,7 +95,7 @@ public class Node extends DockerClient {
                                @QueryParam("version") String version,
                                JsonObject content) {
 
-        WebTarget target = resource().path("nodes").path(id).path("update");
+        WebTarget target = resource().path(NODES).path(id).path("update");
 
         if (Objects.nonNull(version))
             target = target.queryParam("version", version);

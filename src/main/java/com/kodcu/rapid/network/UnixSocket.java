@@ -16,6 +16,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 import java.util.Queue;
 
+import static com.kodcu.rapid.util.Constants.UNIMPLEMENTED;
+
 /**
  * Created by Hakan on 2/11/2016.
  */
@@ -51,7 +53,7 @@ public class UnixSocket extends Socket {
 
     @Override
     public void bind(final SocketAddress bindpoint) throws IOException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class UnixSocket extends Socket {
 
     @Override
     public SocketChannel getChannel() {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
@@ -128,6 +130,7 @@ public class UnixSocket extends Socket {
 
     @Override
     public void setTcpNoDelay(final boolean on) throws SocketException {
+        // not supported
     }
 
     @Override
@@ -149,17 +152,17 @@ public class UnixSocket extends Socket {
 
     @Override
     public void sendUrgentData(final int data) throws IOException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public void setOOBInline(final boolean on) throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public boolean getOOBInline() throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
@@ -179,22 +182,22 @@ public class UnixSocket extends Socket {
 
     @Override
     public synchronized void setSendBufferSize(final int size) throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public synchronized int getSendBufferSize() throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public synchronized void setReceiveBufferSize(final int size) throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public synchronized int getReceiveBufferSize() throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
@@ -209,12 +212,12 @@ public class UnixSocket extends Socket {
 
     @Override
     public void setTrafficClass(final int tc) throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public int getTrafficClass() throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
@@ -224,7 +227,7 @@ public class UnixSocket extends Socket {
 
     @Override
     public boolean getReuseAddress() throws SocketException {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
@@ -235,6 +238,7 @@ public class UnixSocket extends Socket {
                 try {
                     wait(lingerTime * (long) 1000);
                 } catch (InterruptedException ignored) {
+                    Thread.currentThread().interrupt();
                 }
                 sleeping = false;
             }
@@ -279,18 +283,18 @@ public class UnixSocket extends Socket {
 
     @Override
     public boolean isInputShutdown() {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public boolean isOutputShutdown() {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     @Override
     public void setPerformancePreferences(final int connectionTime, final int latency,
                                           final int bandwidth) {
-        throw new UnsupportedOperationException("Unimplemented");
+        throw new UnsupportedOperationException(UNIMPLEMENTED);
     }
 
     interface SocketOptionSetter {

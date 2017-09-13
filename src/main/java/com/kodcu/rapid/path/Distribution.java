@@ -9,7 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

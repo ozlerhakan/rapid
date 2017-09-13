@@ -3,9 +3,7 @@ package com.kodcu.rapid.path;
 import com.kodcu.rapid.config.DockerClient;
 
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

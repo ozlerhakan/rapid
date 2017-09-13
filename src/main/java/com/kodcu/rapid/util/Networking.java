@@ -2,7 +2,6 @@ package com.kodcu.rapid.util;
 
 import org.eclipse.jetty.http.MimeTypes;
 
-import javax.json.JsonObject;
 import javax.json.JsonStructure;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;

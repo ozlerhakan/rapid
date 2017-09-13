@@ -6,7 +6,6 @@ import com.kodcu.rapid.pojo.ResponseFrame;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonStructure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -23,6 +22,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.kodcu.rapid.util.Constants.FILTERS;
+import static com.kodcu.rapid.util.Constants.IMAGES;
 import static com.kodcu.rapid.util.Networking.deleteResponse;
 import static com.kodcu.rapid.util.Networking.getResponse;
 import static com.kodcu.rapid.util.Networking.postResponse;
@@ -39,12 +40,12 @@ public class Image extends DockerClient {
                                @DefaultValue("false") @QueryParam("digests") String digests,
                                @QueryParam("filters") String filters) throws UnsupportedEncodingException {
 
-        WebTarget target = resource().path("images").path("json")
+        WebTarget target = resource().path(IMAGES).path("json")
                 .queryParam("all", all)
                 .queryParam("digests", digests);
 
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
+            target = target.queryParam(FILTERS, URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
         try {
@@ -60,7 +61,7 @@ public class Image extends DockerClient {
     @Path("{id}/json")
     public Response inspectImage(@PathParam("id") String id) {
 
-        WebTarget target = resource().path("images").path(id).path("json");
+        WebTarget target = resource().path(IMAGES).path(id).path("json");
 
         Response response = getResponse(target);
         try {
@@ -76,7 +77,7 @@ public class Image extends DockerClient {
     @Path("{id}/history")
     public Response historyImage(@PathParam("id") String id) {
 
-        WebTarget target = resource().path("images").path(id).path("history");
+        WebTarget target = resource().path(IMAGES).path(id).path("history");
 
         Response response = getResponse(target);
 
@@ -95,12 +96,12 @@ public class Image extends DockerClient {
     @Path("search")
     public Response searchImages(@QueryParam("term") String term,
                                  @DefaultValue("25") @QueryParam("limit") int limit,
-                                 @QueryParam("filters") String filters) throws UnsupportedEncodingException {
+                                 @QueryParam(FILTERS) String filters) throws UnsupportedEncodingException {
 
-        WebTarget target = resource().path("images").path("search").queryParam("term", term).queryParam("limit", limit);
+        WebTarget target = resource().path(IMAGES).path("search").queryParam("term", term).queryParam("limit", limit);
 
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
+            target = target.queryParam(FILTERS, URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
         try {
@@ -125,7 +126,7 @@ public class Image extends DockerClient {
                                 @DefaultValue("false") @QueryParam("pause") String pause,
                                 JsonObject content) {
 
-        WebTarget target = resource().path("images").path("commit").queryParam("pause", pause);
+        WebTarget target = resource().path(IMAGES).path("commit").queryParam("pause", pause);
 
         if (Objects.nonNull(container))
             target = target.queryParam("container", container);
@@ -155,7 +156,7 @@ public class Image extends DockerClient {
                                   @QueryParam("repo") String repo,
                                   @QueryParam("tag") String tag) {
 
-        WebTarget target = resource().path("images")
+        WebTarget target = resource().path(IMAGES)
                 .path(id).path("tag")
                 .queryParam("tag", tag).queryParam("repo", repo);
 
@@ -177,12 +178,12 @@ public class Image extends DockerClient {
 
     @POST
     @Path("prune")
-    public Response pruneImages(@QueryParam("filters") String filters) throws UnsupportedEncodingException {
+    public Response pruneImages(@QueryParam(FILTERS) String filters) throws UnsupportedEncodingException {
 
-        WebTarget target = resource().path("images").path("prune");
+        WebTarget target = resource().path(IMAGES).path("prune");
 
         if (Objects.nonNull(filters))
-            target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
+            target = target.queryParam(FILTERS, URLEncoder.encode(filters, "UTF-8"));
 
         Response response = postResponse(target);
         try {
@@ -199,7 +200,7 @@ public class Image extends DockerClient {
                                 @DefaultValue("false") @QueryParam("force") String force,
                                 @DefaultValue("false") @QueryParam("noprune") String noprune) {
 
-        WebTarget target = resource().path("images")
+        WebTarget target = resource().path(IMAGES)
                 .path(id)
                 .queryParam("force", force)
                 .queryParam("noprune", noprune);
@@ -220,7 +221,7 @@ public class Image extends DockerClient {
     public ResponseFrame createImage(@QueryParam("fromImage") String fromImage,
                                      @QueryParam("tag") String tag) {
 
-        WebTarget target = resource().path("images").path("create")
+        WebTarget target = resource().path(IMAGES).path("create")
                 .queryParam("fromImage", fromImage)
                 .queryParam("tag", tag);
 
