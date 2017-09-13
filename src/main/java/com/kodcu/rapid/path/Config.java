@@ -5,6 +5,7 @@ import com.kodcu.rapid.config.DockerClient;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -38,10 +39,11 @@ public class Config extends DockerClient {
             target = target.queryParam("filters", URLEncoder.encode(filters, "UTF-8"));
 
         Response response = getResponse(target);
-        try {
-            String raw = response.readEntity(String.class);
+        String raw = response.readEntity(String.class);
+
+        try (JsonReader json = Json.createReader(new StringReader(raw))) {
             return Response.status(response.getStatus())
-                    .entity(Json.createReader(new StringReader(raw)).read())
+                    .entity(json.read())
                     .build();
         } finally {
             response.close();
@@ -72,20 +74,18 @@ public class Config extends DockerClient {
         WebTarget target = resource().path(CONFIGS).path(configId);
         Response response = deleteResponse(target);
 
-        try {
-            String entity = response.readEntity(String.class);
+        String entity = response.readEntity(String.class);
 
-            if (entity.isEmpty()) {
-                JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-                jsonObject.add("id", configId);
-                jsonObject.add("message", "the config is deleted.");
+        if (entity.isEmpty()) {
+            JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+            jsonObject.add("id", configId);
+            jsonObject.add("message", "the config is deleted.");
 
-                return Response.ok(jsonObject.build()).build();
-            }
+            return Response.ok(jsonObject.build()).build();
+        }
 
-            return Response.status(response.getStatus()).entity(Json.createReader(new StringReader(entity)).read()).build();
-        } finally {
-            response.close();
+        try (JsonReader json = Json.createReader(new StringReader(entity))) {
+            return Response.status(response.getStatus()).entity(json.read()).build();
         }
     }
 
@@ -130,7 +130,9 @@ public class Config extends DockerClient {
                 return Response.ok(jsonObject.build()).build();
             }
 
-            return Response.status(response.getStatus()).entity(Json.createReader(new StringReader(entity)).read()).build();
+            try (JsonReader json = Json.createReader(new StringReader(entity))) {
+                return Response.status(response.getStatus()).entity(json.read()).build();
+            }
         } finally {
             response.close();
         }
