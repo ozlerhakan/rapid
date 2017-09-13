@@ -24,11 +24,11 @@ public final class Networking {
     }
 
     public static Response postResponse(WebTarget target, JsonStructure content) {
-        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).method("POST", Entity.entity(content, MediaType.APPLICATION_JSON));
+        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).post(Entity.entity(content, MediaType.APPLICATION_JSON));
     }
 
     public static Response postResponse(WebTarget target, String content) {
-        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).method("POST", Entity.entity(content, MediaType.APPLICATION_JSON));
+        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).post(Entity.entity(content, MediaType.APPLICATION_JSON));
     }
 
     public static Response postResponse(WebTarget target) {
@@ -36,15 +36,15 @@ public final class Networking {
     }
 
     public static Response deleteResponse(WebTarget target){
-        return target.request().method("DELETE");
+        return target.request().delete();
     }
 
     public static Response getAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
-        return target.request(APPLICATION_JSON_TYPE).async().method("GET").get();
+        return target.request(APPLICATION_JSON_TYPE).async().get().get();
     }
 
     public static Response postAsycResponse(WebTarget target, String content) throws ExecutionException, InterruptedException {
-        return target.request(APPLICATION_JSON_TYPE).async().method("POST", Entity.entity(content, MediaType.APPLICATION_JSON)).get();
+        return target.request(APPLICATION_JSON_TYPE).async().post(Entity.entity(content, MediaType.APPLICATION_JSON)).get();
     }
 
     public static Response postAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
@@ -52,6 +52,6 @@ public final class Networking {
     }
 
     public static Response deleteAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
-        return target.request().async().method("DELETE").get();
+        return target.request().async().delete().get();
     }
 }
