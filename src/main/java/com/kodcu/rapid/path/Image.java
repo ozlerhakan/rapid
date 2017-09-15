@@ -219,7 +219,7 @@ public class Image extends DockerClient {
     @POST
     @Path("create")
     public ResponseFrame createImage(@QueryParam("fromImage") String fromImage,
-                                     @QueryParam("tag") String tag) {
+                                     @DefaultValue("latest") @QueryParam("tag") String tag) {
 
         WebTarget target = resource().path(IMAGES).path("create")
                 .queryParam("fromImage", fromImage)
