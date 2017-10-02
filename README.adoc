@@ -1,6 +1,7 @@
 :experimental:
 
-image:images/logo.jpg[]
+image::images/duke-rapid-logo.jpg[]
+
 ++++
 <p align="center">
     <a href="https://travis-ci.org/ozlerhakan/rapid"><img src="https://img.shields.io/travis/ozlerhakan/rapid/master.svg?style=flat-square" alt="Travis"></a>
@@ -13,7 +14,7 @@ image:images/logo.jpg[]
 
 image::images/screen.gif[]
 
-Rapid Docker Interface provides a connection between Docker queries and your Docker Host. Rapid changes the way of using Docker Engine API with ease. The Command Editor is your new Docker client communicating with the Engine. You can easily request supported Docker queries of https://docs.docker.com/engine/reference/api/docker_remote_api/[Docker Remote API].
+Rapid Docker Interface provides a connection between Docker queries and your Docker Host. Rapid changes the way of using Docker Engine API with ease. The Command Editor is your new Docker client communicating with the Engine. You can easily request supported Docker queries of https://docs.docker.com/engine/reference/api/docker_remote_api/[Docker Remote API]. Rapid Dashboard was distinguished as a Duke's Choice Award 2017 Winner in October at JavaOne.  
 
 == Installation
 
