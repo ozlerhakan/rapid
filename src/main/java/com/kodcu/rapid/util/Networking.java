@@ -1,14 +1,12 @@
 package com.kodcu.rapid.util;
 
-import org.eclipse.jetty.http.MimeTypes;
-
 import javax.json.JsonStructure;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.concurrent.ExecutionException;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 /**
@@ -20,19 +18,19 @@ public final class Networking {
     }
 
     public static Response getResponse(WebTarget target) {
-        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).get();
+        return target.request(APPLICATION_JSON).get();
     }
 
     public static Response postResponse(WebTarget target, JsonStructure content) {
-        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).post(Entity.entity(content, MediaType.APPLICATION_JSON));
+        return target.request(APPLICATION_JSON).post(Entity.entity(content, APPLICATION_JSON));
     }
 
     public static Response postResponse(WebTarget target, String content) {
-        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).post(Entity.entity(content, MediaType.APPLICATION_JSON));
+        return target.request(APPLICATION_JSON).post(Entity.entity(content, APPLICATION_JSON));
     }
 
     public static Response postResponse(WebTarget target) {
-        return target.request(String.valueOf(MimeTypes.Type.APPLICATION_JSON_UTF_8)).method("POST");
+        return target.request(APPLICATION_JSON).method("POST");
     }
 
     public static Response deleteResponse(WebTarget target){
@@ -44,7 +42,7 @@ public final class Networking {
     }
 
     public static Response postAsycResponse(WebTarget target, String content) throws ExecutionException, InterruptedException {
-        return target.request(APPLICATION_JSON_TYPE).async().post(Entity.entity(content, MediaType.APPLICATION_JSON)).get();
+        return target.request(APPLICATION_JSON_TYPE).async().post(Entity.entity(content, APPLICATION_JSON)).get();
     }
 
     public static Response postAsycResponse(WebTarget target) throws ExecutionException, InterruptedException {
