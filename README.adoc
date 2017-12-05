@@ -20,10 +20,8 @@ Rapid Docker Interface provides a connection between Docker queries and your Doc
 
 Supported tags:
 
-*  `_1.30_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.30/Dockerfile)_]
-*  `_1.29_` https://github.com/ozlerhakan/rapid/blob/1d20d2e1465e457d5728568b411c3ac11fe98fd0/Dockerfile[_(1.29/Dockerfile)_]
-*  `_1.30-arm_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(1.30/Dockerfile.arm)_]
-*  `_1.29-arm_` https://github.com/ozlerhakan/rapid/blob/1d20d2e1465e457d5728568b411c3ac11fe98fd0/Dockerfile.arm[_(1.27/Dockerfile.arm)_]
+*  `_1.32_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.30/Dockerfile)_]
+*  `_1.32-armhf_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(1.30/Dockerfile.arm)_]
 
 The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080 and we need to give access to the host’s Docker daemon by mapping to the Docker socket:
 
@@ -57,6 +55,10 @@ image:https://cdn.rawgit.com/play-with-docker/stacks/cff22438/assets/images/butt
 
 |===
 |Docker Version |API & Tag Version  |Changes
+
+|17.07.x
+|1.31, latest
+|https://docs.docker.com/engine/api/version-history/#v1-31-api-changes[API changes]
 
 |17.06.x
 |1.30, latest
@@ -101,36 +103,36 @@ The following cURL commands are all valid so as to paste them into the command e
 ----
 curl --unix-socket /var/run/docker.sock \
  -H "Content-Type: application/json" \
- -X POST http:/v1.26/containers/create \
+ -X POST http:/v1.32/containers/create \
  -d '
  {"Image": "alpine", "Cmd": ["echo", "hello world"]}
  '
 
 curl --unix-socket /var/run/docker.sock -H "Content-Type: application/json" \
-  -X POST http:/v1.26/containers/create \
+  -X POST http:/v1.32/containers/create \
   -d '{"Image": "alpine", "Cmd": ["echo", "hello world"]}'
 
 curl --unix-socket /var/run/docker.sock \
  -H "Content-Type: application/json" \
- -X POST http:/v1.26/containers/create \
+ -X POST http:/v1.32/containers/create \
  -d '{"Image": "alpine", "Cmd": ["echo", "hello world"]}'
 
-curl --unix-socket /var/run/docker.sock -X GET http:/v1.26/containers/json
+curl --unix-socket /var/run/docker.sock -X GET http:/v1.32/containers/json
 
-curl --unix-socket /var/run/docker.sock -X GET http:/v1.26/images/json
+curl --unix-socket /var/run/docker.sock -X GET http:/v1.32/images/json
 
-curl --unix-socket /var/run/docker.sock -XGET http:/v1.26/containers/json
+curl --unix-socket /var/run/docker.sock -XGET http:/v1.32/containers/json
 
-curl --unix-socket /var/run/docker.sock -XGET "http:/v1.26/containers/1c6594faf5/logs?stdout=1"
+curl --unix-socket /var/run/docker.sock -XGET "http:/v1.32/containers/1c6594faf5/logs?stdout=1"
 
-curl --unix-socket /var/run/docker.sock  -H "Content-Type: application/json"  -X POST http:/v1.26/containers/create -d'
+curl --unix-socket /var/run/docker.sock  -H "Content-Type: application/json"  -X POST http:/v1.32/containers/create -d'
  {"Image": "alpine", "Cmd": ["echo", "hello world"]}
  '
 
-curl --unix-socket /var/run/docker.sock  -H "Content-Type: application/json"  -XPOST http:/v1.26/containers/create -d' {"Image": "alpine", "Cmd": ["echo", "hello world"]}'
+curl --unix-socket /var/run/docker.sock  -H "Content-Type: application/json"  -XPOST http:/v1.32/containers/create -d' {"Image": "alpine", "Cmd": ["echo", "hello world"]}'
 
 curl --unix-socket /var/run/docker.sock\
-  -X POST "http:/v1.26/commit?container=0888269a9d&repo=helloworld"
+  -X POST "http:/v1.32/commit?container=0888269a9d&repo=helloworld"
 ----
 
 The kbd:[&#8984;+&#8679;+C] shortcut enables you to convert the selection to the equivalent cURL command and copy it to clipboard.
@@ -149,7 +151,7 @@ POST containers/create?name=mycontainer
 
 .the equivalent cURL command of the query above
 ----
-curl --unix-socket /var/run/docker.sock -XPOST "http:/v1.26/containers/create?name=mycontainer" -H "Content-Type: application/json" -d'
+curl --unix-socket /var/run/docker.sock -XPOST "http:/v1.32/containers/create?name=mycontainer" -H "Content-Type: application/json" -d'
 {
     "Image": "alpine",
     "Cmd": [
