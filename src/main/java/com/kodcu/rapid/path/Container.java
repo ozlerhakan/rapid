@@ -62,7 +62,6 @@ public class Container extends DockerClient {
 
     @GET
     @Path("{id}/json")
-    // inspect
     public Response inspectContainer(@PathParam("id") String containerId,
                                      @DefaultValue("false") @QueryParam("size") String size) {
 
