@@ -9,8 +9,8 @@ services:
 - docker
 env:
   global:
-    - RAPID_FULL="ozlerhakan/rapid:1.30"
-    - RAPID_ARM="ozlerhakan/rapid:1.30-armhf"
+    - RAPID_FULL="ozlerhakan/rapid:1.32"
+    - RAPID_ARM="ozlerhakan/rapid:1.32-armhf"
 script: mvn install
 before_install:
 - docker pull ubuntu:latest
