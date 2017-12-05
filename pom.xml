@@ -57,16 +57,16 @@
     </developers>
 
     <dependencies>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-processing</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.glassfish.jersey.media</groupId>-->
+            <!--<artifactId>jersey-media-json-processing</artifactId>-->
+            <!--<version>${jersey.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.glassfish.jersey.media</groupId>-->
+            <!--<artifactId>jersey-media-json-jackson</artifactId>-->
+            <!--<version>${jersey.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
@@ -82,11 +82,11 @@
             <artifactId>jersey-test-framework-provider-jetty</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.glassfish.jersey.core</groupId>-->
+            <!--<artifactId>jersey-client</artifactId>-->
+            <!--<version>${jersey.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.github.jnr</groupId>
             <artifactId>jnr-unixsocket</artifactId>
@@ -97,6 +97,12 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>8.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
