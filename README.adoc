@@ -20,8 +20,8 @@ Rapid Docker Interface provides a connection between Docker queries and your Doc
 
 Supported tags:
 
-*  `_1.32_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.30/Dockerfile)_]
-*  `_1.32-armhf_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(1.30/Dockerfile.arm)_]
+*  `_1.32_`, `_latest_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile[_(1.32/Dockerfile)_]
+*  `_1.32-armhf_` https://github.com/ozlerhakan/rapid/blob/master/Dockerfile.arm[_(1.32/Dockerfile.arm)_]
 
 The command below will pull the latest image of Rapid into your local docker host and start a container as daemon listening internally on port 8080 and we need to give access to the host’s Docker daemon by mapping to the Docker socket:
 
